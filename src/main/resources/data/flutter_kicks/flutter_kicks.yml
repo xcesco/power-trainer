@@ -1,0 +1,12 @@
+uuid: 2865bf95-3ced-49b6-beaf-cce1aa02ad61
+name: Flutter kicks
+image: flutter_kicks.jpg
+video_url:
+description:
+  - language: en_EN
+    value: Lie down on your back and place your hands under your glutes. Start the movement by lifting the left leg hiher than the right leg. Then lower the left leg as you lift the right leg. Continue alternating.
+  - language: it_IT
+    value: Sdraiati sulla schiena e metti le mani sotto i glutei. Inizia il movimento sollevando la gamba sinistra più in alto della gamba destra. Quindi abbassa la gamba sinistra mentre sollevi la gamba destra. Continua ad alternare.
+equipment:
+muscles:
+  - abdominals
