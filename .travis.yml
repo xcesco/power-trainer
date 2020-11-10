@@ -2,3 +2,4 @@ language: java
 
 before_install:
   – chmod +x mvnw
+  – chmod +r ./.mvn/*
