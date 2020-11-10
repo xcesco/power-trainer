@@ -1,0 +1,16 @@
+uuid: be4a3a4f-bb31-4d16-bde4-99b0f3ba9b1f
+name: Plank
+image: plank.jpg
+video_urls:
+  - https://www.youtube.com/watch?v=ZyWEXjdAGCQ
+description:
+  -
+    language: en_EN
+    value: Get into a prone position on the floor, supporting your weight on your toes and your foreamrs. Your arms are bent directly below the shoulder. Keep your body straight at all times, and hold this position as long as possible
+  -
+    language: it_IT
+    value: Assumi una posizione prona sul pavimento, sostenendo il peso sulle dita dei piedi e sugli anteriori. Le tue braccia sono piegate direttamente sotto la spalla. Mantieni il tuo corpo sempre dritto e mantieni questa posizione il più a lungo possibile.
+equipments:
+muscles:
+    - abdominals
+last_update: 2020-11-10

@@ -17,6 +17,8 @@
 	<properties>
 		<java.version>11</java.version>
 		<testcontainers.version>1.14.3</testcontainers.version>
+
+		<jackson.version>2.11.3</jackson.version>
 	</properties>
 
 	<dependencies>
@@ -101,6 +103,19 @@
 			<groupId>org.testcontainers</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-yaml</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 	</dependencies>
 
