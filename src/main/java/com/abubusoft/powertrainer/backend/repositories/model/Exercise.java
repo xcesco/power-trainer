@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 @Entity
 @Table(name = "pt_exercises",
@@ -32,7 +33,7 @@ public class Exercise {
 
   @Lob
   @Basic
-  private ArrayList<ExerciseDescription> description;
+  private LinkedHashMap<LanguageType, String> descriptions=new LinkedHashMap<>();
 
   @Lob
   @Basic
@@ -94,12 +95,12 @@ public class Exercise {
     this.muscles = muscles;
   }
 
-  public ArrayList<ExerciseDescription> getDescription() {
-    return description;
+  public LinkedHashMap<LanguageType, String> getDescriptions() {
+    return descriptions;
   }
 
-  public void setDescription(ArrayList<ExerciseDescription> description) {
-    this.description = description;
+  public void setDescriptions(LinkedHashMap<LanguageType, String> description) {
+    this.descriptions = description;
   }
 
   public ArrayList<String> getEquipments() {
