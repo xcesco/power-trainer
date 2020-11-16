@@ -17,11 +17,14 @@ import java.io.IOException;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
+
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/META-INF/resources/static/")
                 .resourceChain(true)
+
                 .addResolver(new PathResourceResolver() {
                     @Override
                     protected Resource getResource(String resourcePath, Resource location) throws IOException {
@@ -62,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .permitAll()
 
                 // configurazione interfaccia swagger
-                .antMatchers("/api-docs", "/swagger-ui.html")
+                .antMatchers("/api-docs", "/swagger.html")
                 .permitAll()
 
                 // servizi WEB public

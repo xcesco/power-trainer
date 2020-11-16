@@ -1,6 +1,5 @@
-package com.abubusoft.powertrainer.backend;
+package com.abubusoft.powertrainer.backend.repositories;
 
-import com.abubusoft.powertrainer.backend.repositories.BeanPopulatorFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -14,4 +13,5 @@ public class RepositoriesConfiguration {
     factory.setResources(new Resource[]{new ClassPathResource("data/exercise_repository.yml")});
     return factory;
   }
+
 }
