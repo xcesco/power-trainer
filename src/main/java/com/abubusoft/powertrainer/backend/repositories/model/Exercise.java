@@ -2,44 +2,48 @@ package com.abubusoft.powertrainer.backend.repositories.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
+import javax.persistence.*;
+import java.util.ArrayList;
 
+@Entity
+@Table(name = "pt_exercises",
+        indexes = {
+                @Index(name = "pt_exercises_index_uuid", columnList = "UUID", unique = true)
+        })
 public class Exercise {
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Id
+  private long id;
   private String UUID;
   private String name;
   private String image;
+
+  @Lob
+  @Basic
   @JsonProperty("video_urls")
-  private List<String> videoUrls;
+  private ArrayList<String> videoUrls;
   @JsonProperty("last_update")
   private String lastUpdate;
 
-  public List<String> getMuscles() {
-    return muscles;
+  @Lob
+  @Column
+  @Basic
+  private ArrayList<String> muscles;
+
+  @Lob
+  @Basic
+  private ArrayList<ExerciseDescription> description;
+
+  @Lob
+  @Basic
+  private ArrayList<String> equipments;
+
+  public long getId() {
+    return id;
   }
 
-  public void setMuscles(List<String> muscles) {
-    this.muscles = muscles;
-  }
-
-  private List<String> muscles;
-  private List<ExerciseDescription> description;
-
-  public List<String> getEquipments() {
-    return equipments;
-  }
-
-  public void setEquipments(List<String> equipments) {
-    this.equipments = equipments;
-  }
-
-  private List<String> equipments;
-
-  public List<String> getVideoUrls() {
-    return videoUrls;
-  }
-
-  public void setVideoUrls(List<String> videoUrls) {
-    this.videoUrls = videoUrls;
+  public void setId(long id) {
+    this.id = id;
   }
 
   public String getUUID() {
@@ -66,12 +70,12 @@ public class Exercise {
     this.image = image;
   }
 
-  public List<ExerciseDescription> getDescription() {
-    return description;
+  public ArrayList<String> getVideoUrls() {
+    return videoUrls;
   }
 
-  public void setDescription(List<ExerciseDescription> description) {
-    this.description = description;
+  public void setVideoUrls(ArrayList<String> videoUrls) {
+    this.videoUrls = videoUrls;
   }
 
   public String getLastUpdate() {
@@ -80,6 +84,30 @@ public class Exercise {
 
   public void setLastUpdate(String lastUpdate) {
     this.lastUpdate = lastUpdate;
+  }
+
+  public ArrayList<String> getMuscles() {
+    return muscles;
+  }
+
+  public void setMuscles(ArrayList<String> muscles) {
+    this.muscles = muscles;
+  }
+
+  public ArrayList<ExerciseDescription> getDescription() {
+    return description;
+  }
+
+  public void setDescription(ArrayList<ExerciseDescription> description) {
+    this.description = description;
+  }
+
+  public ArrayList<String> getEquipments() {
+    return equipments;
+  }
+
+  public void setEquipments(ArrayList<String> equipments) {
+    this.equipments = equipments;
   }
 
 }
