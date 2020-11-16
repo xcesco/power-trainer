@@ -1,6 +1,8 @@
 package com.abubusoft.powertrainer.backend.repositories.model;
 
-public class ExerciseDescription {
+import java.io.Serializable;
+
+public class ExerciseDescription implements Serializable {
   public String getLanguage() {
     return language;
   }
