@@ -1,21 +1,22 @@
 package com.abubusoft.powertrainer.backend.repositories.model;
 
+import com.abubusoft.powertrainer.backend.model.LanguageType;
+import com.abubusoft.powertrainer.backend.model.MuscleType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+
 
 @Entity
 @Table(name = "pt_exercises",
         indexes = {
                 @Index(name = "pt_exercises_index_uuid", columnList = "UUID", unique = true)
         })
-public class Exercise {
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Id
-  private long id;
-  private String UUID;
+public class Exercise extends BaseEntity {
+
   private String name;
   private String image;
 
@@ -26,10 +27,8 @@ public class Exercise {
   @JsonProperty("last_update")
   private String lastUpdate;
 
-  @Lob
-  @Column
-  @Basic
-  private ArrayList<String> muscles = new ArrayList<>();
+  @ElementCollection
+  private List<MuscleType> muscles = new ArrayList<MuscleType>();
 
   @Lob
   @Basic
@@ -38,22 +37,6 @@ public class Exercise {
   @Lob
   @Basic
   private ArrayList<String> equipments = new ArrayList<>();
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-  public String getUUID() {
-    return UUID;
-  }
-
-  public void setUUID(String UUID) {
-    this.UUID = UUID;
-  }
 
   public String getName() {
     return name;
@@ -87,11 +70,11 @@ public class Exercise {
     this.lastUpdate = lastUpdate;
   }
 
-  public ArrayList<String> getMuscles() {
+  public List<MuscleType> getMuscles() {
     return muscles;
   }
 
-  public void setMuscles(ArrayList<String> muscles) {
+  public void setMuscles(List<MuscleType> muscles) {
     this.muscles = muscles;
   }
 

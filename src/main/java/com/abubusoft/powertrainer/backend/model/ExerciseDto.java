@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ExerciseDto implements Serializable {
-  public ExerciseDto(String UUID, String name, List<String> videoUrls, String lastUpdate, List<String> muscles, String description, List<String> equipments) {
+  public ExerciseDto(String UUID, String name, List<String> videoUrls, String lastUpdate, List<MuscleType> muscles, String description, List<String> equipments) {
     this.UUID = UUID;
     this.name = name;
     this.videoUrls = videoUrls != null ? videoUrls : Collections.emptyList();
@@ -31,7 +31,7 @@ public class ExerciseDto implements Serializable {
     return lastUpdate;
   }
 
-  public List<String> getMuscles() {
+  public List<MuscleType> getMuscles() {
     return muscles;
   }
 
@@ -47,7 +47,7 @@ public class ExerciseDto implements Serializable {
   private final String name;
   private final List<String> videoUrls;
   private final String lastUpdate;
-  private final List<String> muscles;
+  private final List<MuscleType> muscles;
   private final String description;
   private final List<String> equipments;
 }

@@ -1,5 +1,6 @@
 package com.abubusoft.powertrainer.backend.repositories;
 
+import com.abubusoft.powertrainer.backend.model.MuscleType;
 import com.abubusoft.powertrainer.backend.repositories.model.Exercise;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,9 +16,8 @@ public interface ExercisesRepository extends PagingAndSortingRepository<Exercise
   @Query("SELECT e FROM Exercise e WHERE UPPER(e.name) like UPPER(concat('%',:name,'%')) ")
   Page<Exercise> findByName(@Param("name") String name, Pageable pageable);
 
-  @Query("SELECT e FROM Exercise e WHERE :muscle in (e.muscles) ")
-  Page<Exercise> findByMuscle(@Param("muscle") String muscle, Pageable pageable);
-
+  @Query("SELECT e FROM Exercise e WHERE :muscle MEMBER OF e.muscles ")
+  Page<Exercise> findByMuscle(@Param("muscle") MuscleType muscle, Pageable pageable);
 
   Optional<Exercise> findByUUID(String UUID);
 }

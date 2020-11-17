@@ -1,9 +1,10 @@
 package com.abubusoft.powertrainer.backend.service.impl;
 
 import com.abubusoft.powertrainer.backend.model.ExerciseDto;
+import com.abubusoft.powertrainer.backend.model.MuscleType;
 import com.abubusoft.powertrainer.backend.repositories.ExercisesRepository;
 import com.abubusoft.powertrainer.backend.repositories.model.Exercise;
-import com.abubusoft.powertrainer.backend.repositories.model.LanguageType;
+import com.abubusoft.powertrainer.backend.model.LanguageType;
 import com.abubusoft.powertrainer.backend.service.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileUrlResource;
@@ -62,7 +63,7 @@ public class ExerciceServiceImpl implements ExerciseService {
   }
 
   @Override
-  public Page<ExerciseDto> findByMuscle(String muscle, LanguageType language, Pageable pageable) {
+  public Page<ExerciseDto> findByMuscle(MuscleType muscle, LanguageType language, Pageable pageable) {
     return exercisesRepository
             .findByMuscle(muscle, pageable)
             .map(item -> ExerciseMapper.INSTANCE

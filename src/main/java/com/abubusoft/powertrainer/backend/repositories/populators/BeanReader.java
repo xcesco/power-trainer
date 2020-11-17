@@ -1,7 +1,6 @@
 package com.abubusoft.powertrainer.backend.repositories.populators;
 
 import com.abubusoft.powertrainer.backend.repositories.model.Exercise;
-import com.abubusoft.powertrainer.backend.repositories.model.ExerciseResource;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -11,7 +10,6 @@ import org.springframework.lang.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

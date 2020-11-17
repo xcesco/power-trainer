@@ -1,4 +1,4 @@
-package com.abubusoft.powertrainer.backend.repositories.model;
+package com.abubusoft.powertrainer.backend.repositories.populators;
 
 import java.util.Objects;
 import java.util.StringJoiner;

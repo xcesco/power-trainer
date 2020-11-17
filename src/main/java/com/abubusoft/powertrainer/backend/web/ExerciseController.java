@@ -1,7 +1,8 @@
 package com.abubusoft.powertrainer.backend.web;
 
 import com.abubusoft.powertrainer.backend.model.ExerciseDto;
-import com.abubusoft.powertrainer.backend.repositories.model.LanguageType;
+import com.abubusoft.powertrainer.backend.model.LanguageType;
+import com.abubusoft.powertrainer.backend.model.MuscleType;
 import com.abubusoft.powertrainer.backend.service.ExerciseService;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,31 +30,23 @@ public class ExerciseController {
   @PageableAsQueryParam
   @GetMapping("/")
   public ResponseEntity<Page<ExerciseDto>> getAll(@PageableDefault Pageable page, @RequestParam(name = "lang", defaultValue = DEFAULT_LANGUAGE) LanguageType language) {
-    Page<ExerciseDto> result = exerciseService.findAll(language, page);
-
-    if (result != null) {
-      return ResponseEntity.ok(result);
-    } else {
-      return ResponseEntity.notFound().build();
-    }
+    return buildResponse(exerciseService.findAll(language, page));
   }
 
   @PageableAsQueryParam
-  @GetMapping("/search")
+  @GetMapping("/searchByName")
   public ResponseEntity<Page<ExerciseDto>> getByName(@PageableDefault Pageable page, String name, @RequestParam(name = "lang", defaultValue = DEFAULT_LANGUAGE) LanguageType language) {
-    Page<ExerciseDto> result = exerciseService.findByName(name, language, page);
-
-    if (result != null) {
-      return ResponseEntity.ok(result);
-    } else {
-      return ResponseEntity.notFound().build();
-    }
+    return buildResponse(exerciseService.findByName(name, language, page));
   }
 
   @PageableAsQueryParam
   @GetMapping("/searchByMuscle")
-  public ResponseEntity<Page<ExerciseDto>> getByMuscle(@PageableDefault Pageable page, String muscle, @RequestParam(name = "lang", defaultValue = DEFAULT_LANGUAGE) LanguageType language) {
-    Page<ExerciseDto> result = exerciseService.findByMuscle(muscle, language, page);
+  public ResponseEntity<Page<ExerciseDto>> getByMuscle(@PageableDefault Pageable page, @RequestParam(name = "muscle") MuscleType muscle, @RequestParam(name = "lang", defaultValue = DEFAULT_LANGUAGE) LanguageType language) {
+    return buildResponse(exerciseService.findByMuscle(muscle, language, page));
+  }
+
+  private ResponseEntity<Page<ExerciseDto>> buildResponse(Page<ExerciseDto> page) {
+    Page<ExerciseDto> result = page;
 
     if (result != null) {
       return ResponseEntity.ok(result);
@@ -80,6 +73,7 @@ public class ExerciseController {
     try {
       String mimeType = Files.probeContentType(resource.getFile().toPath());
       String fileName = resource.getFilename();
+      assert fileName != null;
       String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
       return ResponseEntity
               .ok()

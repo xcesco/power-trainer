@@ -1,7 +1,8 @@
 package com.abubusoft.powertrainer.backend.service;
 
 import com.abubusoft.powertrainer.backend.model.ExerciseDto;
-import com.abubusoft.powertrainer.backend.repositories.model.LanguageType;
+import com.abubusoft.powertrainer.backend.model.LanguageType;
+import com.abubusoft.powertrainer.backend.model.MuscleType;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,5 +16,5 @@ public interface ExerciseService {
 
   Page<ExerciseDto> findByName(String name, LanguageType language, Pageable pageable);
 
-  Page<ExerciseDto> findByMuscle(String muscle, LanguageType language, Pageable pageable);
+  Page<ExerciseDto> findByMuscle(MuscleType muscle, LanguageType language, Pageable pageable);
 }
