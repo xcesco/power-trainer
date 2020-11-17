@@ -1,6 +1,6 @@
 package com.abubusoft.powertrainer.backend;
 
-import com.abubusoft.powertrainer.backend.repositories.BeanReader;
+import com.abubusoft.powertrainer.backend.repositories.populators.BeanReader;
 import com.abubusoft.powertrainer.backend.repositories.model.Exercise;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

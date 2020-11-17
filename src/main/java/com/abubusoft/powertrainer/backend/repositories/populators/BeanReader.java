@@ -1,4 +1,4 @@
-package com.abubusoft.powertrainer.backend.repositories;
+package com.abubusoft.powertrainer.backend.repositories.populators;
 
 import com.abubusoft.powertrainer.backend.repositories.model.Exercise;
 import com.abubusoft.powertrainer.backend.repositories.model.ExerciseResource;
@@ -11,6 +11,7 @@ import org.springframework.lang.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -55,9 +56,11 @@ public class BeanReader implements ResourceReader {
 
     try {
       File resourceFile = new File(Objects.requireNonNull(classLoader.getResource(fileName)).getFile());
-
-      return mapper.readValue(resourceFile, new TypeReference<>() {
+      Exercise result = mapper.readValue(resourceFile, new TypeReference<>() {
       });
+      result.setImage(new File(resourceFile.getParent(), result.getImage()).getAbsolutePath());
+      return result;
+
     } catch (IOException e) {
       e.printStackTrace();
     }

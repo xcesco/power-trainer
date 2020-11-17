@@ -10,11 +10,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-//@RepositoryRestResource(collectionResourceRel = "exercises", path = "exercises")
 @Repository
 public interface ExercisesRepository extends PagingAndSortingRepository<Exercise, Long> {
   @Query("SELECT e FROM Exercise e WHERE UPPER(e.name) like UPPER(concat('%',:name,'%')) ")
   Page<Exercise> findByName(@Param("name") String name, Pageable pageable);
+
+  @Query("SELECT e FROM Exercise e WHERE :muscle in (e.muscles) ")
+  Page<Exercise> findByMuscle(@Param("muscle") String muscle, Pageable pageable);
+
 
   Optional<Exercise> findByUUID(String UUID);
 }

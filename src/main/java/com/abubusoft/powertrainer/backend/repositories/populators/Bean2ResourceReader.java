@@ -1,4 +1,4 @@
-package com.abubusoft.powertrainer.backend.repositories;
+package com.abubusoft.powertrainer.backend.repositories.populators;
 
 import com.abubusoft.powertrainer.backend.repositories.model.Exercise;
 import org.slf4j.Logger;

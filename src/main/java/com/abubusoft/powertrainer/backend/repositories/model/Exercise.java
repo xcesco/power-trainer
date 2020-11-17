@@ -22,22 +22,22 @@ public class Exercise {
   @Lob
   @Basic
   @JsonProperty("video_urls")
-  private ArrayList<String> videoUrls;
+  private ArrayList<String> videoUrls = new ArrayList<>();
   @JsonProperty("last_update")
   private String lastUpdate;
 
   @Lob
   @Column
   @Basic
-  private ArrayList<String> muscles;
+  private ArrayList<String> muscles = new ArrayList<>();
 
   @Lob
   @Basic
-  private LinkedHashMap<LanguageType, String> descriptions=new LinkedHashMap<>();
+  private LinkedHashMap<LanguageType, String> descriptions = new LinkedHashMap<>();
 
   @Lob
   @Basic
-  private ArrayList<String> equipments;
+  private ArrayList<String> equipments = new ArrayList<>();
 
   public long getId() {
     return id;

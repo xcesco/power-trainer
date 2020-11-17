@@ -1,20 +1,18 @@
-package com.abubusoft.powertrainer.backend.service.model;
-
-import org.springframework.hateoas.RepresentationModel;
+package com.abubusoft.powertrainer.backend.model;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
-public class ExerciseDto extends RepresentationModel<ExerciseDto> implements Serializable {
-  public ExerciseDto(String UUID, String name, String image, List<String> videoUrls, String lastUpdate, List<String> muscles, String description, List<String> equipments) {
+public class ExerciseDto implements Serializable {
+  public ExerciseDto(String UUID, String name, List<String> videoUrls, String lastUpdate, List<String> muscles, String description, List<String> equipments) {
     this.UUID = UUID;
     this.name = name;
-    this.image = image;
-    this.videoUrls = videoUrls;
+    this.videoUrls = videoUrls != null ? videoUrls : Collections.emptyList();
     this.lastUpdate = lastUpdate;
-    this.muscles = muscles;
+    this.muscles = muscles != null ? muscles : Collections.emptyList();
     this.description = description;
-    this.equipments = equipments;
+    this.equipments = equipments != null ? equipments : Collections.emptyList();
   }
 
   public String getUUID() {
@@ -23,10 +21,6 @@ public class ExerciseDto extends RepresentationModel<ExerciseDto> implements Ser
 
   public String getName() {
     return name;
-  }
-
-  public String getImage() {
-    return image;
   }
 
   public List<String> getVideoUrls() {
@@ -51,7 +45,6 @@ public class ExerciseDto extends RepresentationModel<ExerciseDto> implements Ser
 
   private final String UUID;
   private final String name;
-  private final String image;
   private final List<String> videoUrls;
   private final String lastUpdate;
   private final List<String> muscles;

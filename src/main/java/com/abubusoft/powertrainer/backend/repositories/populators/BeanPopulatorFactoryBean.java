@@ -1,4 +1,4 @@
-package com.abubusoft.powertrainer.backend.repositories;
+package com.abubusoft.powertrainer.backend.repositories.populators;
 
 import org.springframework.data.repository.init.AbstractRepositoryPopulatorFactoryBean;
 import org.springframework.data.repository.init.ResourceReader;
