@@ -28,7 +28,7 @@ public class ExerciseController {
   }
 
   @PageableAsQueryParam
-  @GetMapping("/")
+  @GetMapping
   public ResponseEntity<Page<ExerciseDto>> getAll(@PageableDefault Pageable page, @RequestParam(name = "lang", defaultValue = DEFAULT_LANGUAGE) LanguageType language) {
     return buildResponse(exerciseService.findAll(language, page));
   }
@@ -46,10 +46,8 @@ public class ExerciseController {
   }
 
   private ResponseEntity<Page<ExerciseDto>> buildResponse(Page<ExerciseDto> page) {
-    Page<ExerciseDto> result = page;
-
-    if (result != null) {
-      return ResponseEntity.ok(result);
+    if (page != null) {
+      return ResponseEntity.ok(page);
     } else {
       return ResponseEntity.notFound().build();
     }
