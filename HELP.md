@@ -1,7 +1,12 @@
-# Read Me First
-The following was discovered as part of building this project:
+# Some useful links
+The following articles/tutorials/whatever were discovered as part of building this project:
 
-* The original package name 'com.abubusoft.power-trainer.backend' is invalid and this project uses 'com.abubusoft.powertrainer.backend' instead.
+- https://stackoverflow.com/questions/34741443/hikaricp-postgresql-driver-claims-to-not-accept-jdbc-url
+- https://devcenter.heroku.com/articles/connecting-to-relational-databases-on-heroku-with-java#using-the-jdbc_database_url-in-a-spring-boot-app
+
+# Config
+
+- https://www.baeldung.com/spring-properties-file-outside-jar
 
 # Getting Started
 

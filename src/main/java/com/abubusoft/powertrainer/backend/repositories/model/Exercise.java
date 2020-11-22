@@ -13,7 +13,8 @@ import java.util.List;
 @Entity
 @Table(name = "pt_exercises",
         indexes = {
-                @Index(name = "pt_exercises_index_uuid", columnList = "UUID", unique = true)
+                @Index(name = "pt_exercises_index_uuid",
+                        columnList = "UUID", unique = true)
         })
 public class Exercise extends BaseEntity {
 
@@ -27,6 +28,7 @@ public class Exercise extends BaseEntity {
   @JsonProperty("last_update")
   private String lastUpdate;
 
+  @CollectionTable(name = "pt_muscles")
   @ElementCollection
   private List<MuscleType> muscles = new ArrayList<MuscleType>();
 
