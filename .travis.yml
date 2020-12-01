@@ -5,5 +5,8 @@ addons:
     organization: "xcesco"
     token: $SONAR_TOKEN # encrypted value of your token
 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
 script:
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=xcesco_power-trainer
