@@ -1,7 +1,4 @@
 language: java
-jdk: oraclejdk11
-os: linux
-dist: precise
 
 addons:
   sonarcloud:
