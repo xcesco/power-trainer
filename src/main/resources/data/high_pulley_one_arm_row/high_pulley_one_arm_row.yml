@@ -1,0 +1,13 @@
+uuid: 48bedf4c-3f67-42ac-9962-cae4c470aa9a
+name: High pulley one arm row
+image: high_pulley_one_arm_row.png
+video_urls:
+  - https://youtu.be/aFQaJ6-T_6o?t=84
+descriptions:
+  en_EN: Attach elastic bands at the top. Pull rubber bands with one arm as far as you can go. Place the leg opposite the arm that works in forwards and that of the arm that works backwards.
+  it_IT: Fissa elastici in alto. Tira elastici con un solo braccio fino a dove si arriva. Posizionare la gamba opposta al braccio che lavora in aventi e quella del braccio che lavora indietro.
+equipments:
+  - ELASTIC_BANDS
+muscles:
+  - LAT
+last_update: 2020-12-01

@@ -4,5 +4,12 @@ import javax.persistence.Table;
 
 
 public enum MuscleType {
-  ABDOMINALS
+  /**
+   * Addominali
+   */
+  ABDOMINALS,
+  /**
+   * Dorsali
+   */
+  LAT;
 }
