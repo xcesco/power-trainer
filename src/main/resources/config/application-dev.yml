@@ -40,6 +40,7 @@ spring:
       auto-commit: false
   h2:
     console:
+      # disable spring boot built-in h2-console since we start it manually with correct configuration
       enabled: false
   jpa:
     database-platform: tech.jhipster.domain.util.FixedH2Dialect
@@ -73,7 +74,7 @@ jhipster:
   # CORS is only enabled by default with the "dev" profile
   cors:
     # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
-    allowed-origins: 'http://localhost:8100'
+    allowed-origins: 'http://localhost:8100,http://localhost:9000'
     allowed-methods: '*'
     allowed-headers: '*'
     exposed-headers: 'Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params'
@@ -83,7 +84,7 @@ jhipster:
     authentication:
       jwt:
         # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-        base64-secret: NGIyYTQzNWUwMTRiNjM1ZjkyNWRmNTI0M2JiMTUzOGUzZTA1NTVhYjQxNDM2ZjI5ZDIzYzdlNTIwMGRhMjAxMmYxMTVlNjg3YWNlMWY5YzQ0Nzg2YTI5MDdhNDIyN2JkMzE3NzZkMWRhZDAwNzExMjAxZTBiOGQ2MzYxOWU5Zjc=
+        base64-secret: MjUyNTY4OTViZjZlOTMyZGM5YWNhNGI2ZjQxNDVlMzVjZDA1YjcyOWNhNjQ1Yzg1OGQ4NjM5YTk2MzA2MmYzM2ZlZmVjOTExNTU1ZmIyYThlZWJlZjY5YzlmMWYwOGJjMmY5MGJmYmNjNzk0MjQ0YjVkMzM5MDEwMmExZjE2MjM=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000

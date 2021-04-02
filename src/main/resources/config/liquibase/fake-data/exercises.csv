@@ -1,0 +1,11 @@
+id;uuid;image;image_content_type;name;description;value_type
+1;d8ecaaf0-a3c7-4432-a485-53d5daa86c11;../fake-data/blob/hipster.png;image/png;Platinum Pound;../fake-data/blob/hipster.txt;DURATION
+2;5f69548f-067e-48da-968d-2b669af7970f;../fake-data/blob/hipster.png;image/png;Concrete;../fake-data/blob/hipster.txt;REPETITIONS
+3;19916ffe-7276-4572-baba-ec29f67d7f08;../fake-data/blob/hipster.png;image/png;IB Table Direct;../fake-data/blob/hipster.txt;WEIGHT
+4;d2ba0fdf-07d4-45a2-8171-1778ec373d40;../fake-data/blob/hipster.png;image/png;metrics Checking;../fake-data/blob/hipster.txt;REPETITIONS
+5;527745dc-6352-457f-8964-51b05ab43d46;../fake-data/blob/hipster.png;image/png;Data Granite Maine;../fake-data/blob/hipster.txt;DISTANCE
+6;e6d8ea6d-249a-45d1-a455-df79e7a61fc7;../fake-data/blob/hipster.png;image/png;hard Mouse Dynamic;../fake-data/blob/hipster.txt;DURATION
+7;2ff8e6d1-79e8-4ce8-a790-9eaf8480a9b9;../fake-data/blob/hipster.png;image/png;New;../fake-data/blob/hipster.txt;DISTANCE
+8;958ac767-3329-4f77-91a0-03e1423847cf;../fake-data/blob/hipster.png;image/png;auxiliary;../fake-data/blob/hipster.txt;DURATION
+9;33a0e00e-23ca-447f-a6f2-0700c13952b6;../fake-data/blob/hipster.png;image/png;Visionary;../fake-data/blob/hipster.txt;DISTANCE
+10;8145898d-49e8-47b1-86df-96a9d1c1ff66;../fake-data/blob/hipster.png;image/png;maximize Virginia;../fake-data/blob/hipster.txt;REPETITIONS

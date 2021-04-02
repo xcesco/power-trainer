@@ -42,6 +42,162 @@
           </span>
         </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="calendar"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.calendar">Calendar</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="exercise"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.exercise">Exercise</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="exercise-value"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.exerciseValue">Exercise Value</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="measure-value"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.measureValue">Measure Value</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="measure-type"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.measureType">Measure Type</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="workout-sheet"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.workoutSheet">Workout Sheet</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="workout-sheet-exercise"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.workoutSheetExercise">Workout Sheet Exercise</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="workout"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.workout">Workout</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="muscle-2-exercise"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.muscle2Exercise">Muscle 2 Exercise</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="workout-step"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.workoutStep">Workout Step</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="device"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.device">Device</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="muscle"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.muscle">Muscle</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="note"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.note">Note</span>
+            </a>
+          </li>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </ul>
       </li>
@@ -98,7 +254,7 @@
           </li>
           <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
           <li *ngIf="!inProduction">
-            <a class="dropdown-item" href="./h2-console" target="_tab" (click)="collapseNavbar()">
+            <a class="dropdown-item" href="./h2-console/" target="_tab" (click)="collapseNavbar()">
               <fa-icon icon="database" [fixedWidth]="true"></fa-icon>
               <span jhiTranslate="global.menu.admin.database">Database</span>
             </a>

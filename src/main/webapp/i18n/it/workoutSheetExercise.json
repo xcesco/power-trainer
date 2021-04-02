@@ -1,0 +1,28 @@
+{
+  "powerTrainerApp": {
+    "workoutSheetExercise": {
+      "home": {
+        "title": "WorkoutSheetExercises",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Workout Sheet Exercise",
+        "createOrEditLabel": "Genera o modifica un Workout Sheet Exercise",
+        "notFound": "No Workout Sheet Exercises found"
+      },
+      "created": "&Egrave; stato generato un nuovo Workout Sheet Exercise con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Workout Sheet Exercise identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Workout Sheet Exercise con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Workout Sheet Exercise {{ id }}?"
+      },
+      "detail": {
+        "title": "Workout Sheet Exercise"
+      },
+      "id": "ID",
+      "uuid": "Uuid",
+      "order": "Order",
+      "repetition": "Repetition",
+      "value": "Value",
+      "valueType": "Value Type"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "powerTrainerApp": {
+    "WorkoutStatus": {
+      "null": "",
+      "SCHEDULED": "SCHEDULED",
+      "CANCELLED": "CANCELLED",
+      "DONE": "DONE"
+    }
+  }
+}

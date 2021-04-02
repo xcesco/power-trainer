@@ -1,0 +1,10 @@
+{
+  "powerTrainerApp": {
+    "NoteType": {
+      "null": "",
+      "YOUTUBE": "YOUTUBE",
+      "EMBEDDED": "EMBEDDED",
+      "URL": "URL"
+    }
+  }
+}

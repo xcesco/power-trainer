@@ -1,13 +1,6 @@
-[![Build Status](https://travis-ci.org/xcesco/power-trainer.svg?branch=master)](https://travis-ci.org/xcesco/power-trainer)
-[![codecov](https://codecov.io/gh/xcesco/power-trainer/branch/master/graph/badge.svg)](https://codecov.io/gh/xcesco/power-trainer)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=xcesco_power-trainer&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=xcesco_power-trainer)
-[![Heroku](http://heroku-badge.herokuapp.com/?app=power-trainer&style=flat)](https://power-trainer.herokuapp.com)
-
-![android-icon-144x144](https://user-images.githubusercontent.com/8819631/100796403-de69b700-3420-11eb-9c69-d81d5ed34021.png)
-
 # PowerTrainer
 
-This application was generated using JHipster 7.0.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.0.0](https://www.jhipster.tech/documentation-archive/v7.0.0).
+This application was generated using JHipster 7.0.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.0.1](https://www.jhipster.tech/documentation-archive/v7.0.1).
 
 ## Development
 
@@ -31,12 +24,6 @@ auto-refreshes when files change on your hard drive.
 ```
 ./mvnw
 npm start
-```
-
-If you want to use [HMR](https://webpack.js.org/guides/hot-module-replacement) for instant page updates and data + scroll position preservation on file changes then instead of `npm start` run
-
-```
-npm run start-hmr
 ```
 
 Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
@@ -227,13 +214,13 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
 [jhipster homepage and latest documentation]: https://www.jhipster.tech
-[jhipster 7.0.0 archive]: https://www.jhipster.tech/documentation-archive/v7.0.0
-[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v7.0.0/development/
-[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v7.0.0/docker-compose
-[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v7.0.0/production/
-[running tests page]: https://www.jhipster.tech/documentation-archive/v7.0.0/running-tests/
-[code quality page]: https://www.jhipster.tech/documentation-archive/v7.0.0/code-quality/
-[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v7.0.0/setting-up-ci/
+[jhipster 7.0.1 archive]: https://www.jhipster.tech/documentation-archive/v7.0.1
+[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v7.0.1/development/
+[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v7.0.1/docker-compose
+[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v7.0.1/production/
+[running tests page]: https://www.jhipster.tech/documentation-archive/v7.0.1/running-tests/
+[code quality page]: https://www.jhipster.tech/documentation-archive/v7.0.1/code-quality/
+[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v7.0.1/setting-up-ci/
 [node.js]: https://nodejs.org/
 [webpack]: https://webpack.github.io/
 [angular cli]: https://cli.angular.io/
@@ -245,4 +232,4 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [definitelytyped]: https://definitelytyped.org/
 [openapi-generator]: https://openapi-generator.tech
 [swagger-editor]: https://editor.swagger.io
-[doing api-first development]: https://www.jhipster.tech/documentation-archive/v7.0.0/doing-api-first-development/
+[doing api-first development]: https://www.jhipster.tech/documentation-archive/v7.0.1/doing-api-first-development/

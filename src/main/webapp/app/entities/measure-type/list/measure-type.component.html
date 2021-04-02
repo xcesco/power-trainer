@@ -1,0 +1,119 @@
+<div>
+  <h2 id="page-heading" data-cy="MeasureTypeHeading">
+    <span jhiTranslate="powerTrainerApp.measureType.home.title">Measure Types</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="powerTrainerApp.measureType.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-measure-type"
+        [routerLink]="['/measure-type/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="powerTrainerApp.measureType.home.createLabel"> Create a new Measure Type </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="measureTypes?.length === 0">
+    <span jhiTranslate="powerTrainerApp.measureType.home.notFound">No measureTypes found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="measureTypes && measureTypes.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="uuid">
+            <span jhiTranslate="powerTrainerApp.measureType.uuid">Uuid</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="name">
+            <span jhiTranslate="powerTrainerApp.measureType.name">Name</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="image">
+            <span jhiTranslate="powerTrainerApp.measureType.image">Image</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="note">
+            <span jhiTranslate="powerTrainerApp.measureType.note">Note</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let measureType of measureTypes; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/measure-type', measureType.id, 'view']">{{ measureType.id }}</a>
+          </td>
+          <td>{{ measureType.uuid }}</td>
+          <td>{{ measureType.name }}</td>
+          <td>
+            <a *ngIf="measureType.image" (click)="openFile(measureType.image, measureType.imageContentType)">
+              <img
+                [src]="'data:' + measureType.imageContentType + ';base64,' + measureType.image"
+                style="max-height: 30px"
+                alt="measureType image"
+              />
+            </a>
+            <span *ngIf="measureType.image">{{ measureType.imageContentType }}, {{ byteSize(measureType.image) }}</span>
+          </td>
+          <td>{{ measureType.note }}</td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/measure-type', measureType.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/measure-type', measureType.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(measureType)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="measureTypes && measureTypes.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

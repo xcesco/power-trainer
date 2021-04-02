@@ -1,0 +1,28 @@
+{
+  "powerTrainerApp": {
+    "note": {
+      "home": {
+        "title": "Notes",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Note",
+        "createOrEditLabel": "Genera o modifica un Note",
+        "notFound": "No Notes found"
+      },
+      "created": "&Egrave; stato generato un nuovo Note con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Note identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Note con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Note {{ id }}?"
+      },
+      "detail": {
+        "title": "Note"
+      },
+      "id": "ID",
+      "uuid": "Uuid",
+      "type": "Type",
+      "url": "Url",
+      "image": "Image",
+      "description": "Description"
+    }
+  }
+}

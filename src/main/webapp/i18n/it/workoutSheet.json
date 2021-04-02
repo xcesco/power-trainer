@@ -1,0 +1,34 @@
+{
+  "powerTrainerApp": {
+    "workoutSheet": {
+      "home": {
+        "title": "WorkoutSheets",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Workout Sheet",
+        "createOrEditLabel": "Genera o modifica un Workout Sheet",
+        "notFound": "No Workout Sheets found"
+      },
+      "created": "&Egrave; stato generato un nuovo Workout Sheet con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Workout Sheet identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Workout Sheet con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Workout Sheet {{ id }}?"
+      },
+      "detail": {
+        "title": "Workout Sheet"
+      },
+      "id": "ID",
+      "uuid": "Uuid",
+      "name": "Name",
+      "image": "Image",
+      "description": "Description",
+      "prepareTime": "Prepare Time",
+      "coolDownTime": "Cool Down Time",
+      "cycles": "Cycles",
+      "cycleRestTime": "Cycle Rest Time",
+      "set": "Set",
+      "setRestTime": "Set Rest Time",
+      "type": "Type"
+    }
+  }
+}

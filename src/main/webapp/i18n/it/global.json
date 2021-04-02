@@ -7,6 +7,19 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entità",
+        "calendar": "Calendar",
+        "exercise": "Exercise",
+        "exerciseValue": "Exercise Value",
+        "measureValue": "Measure Value",
+        "measureType": "Measure Type",
+        "workoutSheet": "Workout Sheet",
+        "workoutSheetExercise": "Workout Sheet Exercise",
+        "workout": "Workout",
+        "muscle2Exercise": "Muscle 2 Exercise",
+        "workoutStep": "Workout Step",
+        "device": "Device",
+        "muscle": "Muscle",
+        "note": "Note",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

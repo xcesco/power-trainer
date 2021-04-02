@@ -1,0 +1,38 @@
+{
+  "name": "WorkoutSheetExercise",
+  "fields": [
+    {
+      "fieldName": "uuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique", "required"]
+    },
+    {
+      "fieldName": "order",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "repetition",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "value",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "valueType",
+      "fieldType": "ValueType",
+      "fieldValues": "DURATION,WEIGHT,DISTANCE,REPETITIONS"
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "workout_sheet_exercises",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["PowerTrainer"],
+  "changelogDate": "20210402165800"
+}

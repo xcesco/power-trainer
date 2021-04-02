@@ -1,0 +1,9 @@
+{
+  "powerTrainerApp": {
+    "WorkoutType": {
+      "null": "",
+      "SEQUENCE": "SEQUENCE",
+      "SUPERSET": "SUPERSET"
+    }
+  }
+}

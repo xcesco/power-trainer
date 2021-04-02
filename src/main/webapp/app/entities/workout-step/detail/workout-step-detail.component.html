@@ -1,0 +1,56 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="workoutStep">
+      <h2 data-cy="workoutStepDetailsHeading"><span jhiTranslate="powerTrainerApp.workoutStep.detail.title">Workout Step</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ workoutStep.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutStep.uuid">Uuid</span></dt>
+        <dd>
+          <span>{{ workoutStep.uuid }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutStep.order">Order</span></dt>
+        <dd>
+          <span>{{ workoutStep.order }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutStep.value">Value</span></dt>
+        <dd>
+          <span>{{ workoutStep.value }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutStep.valueType">Value Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'powerTrainerApp.ValueType.' + workoutStep.valueType }}">{{ workoutStep.valueType }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutStep.executionTime">Execution Time</span></dt>
+        <dd>
+          <span>{{ workoutStep.executionTime }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutStep.type">Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'powerTrainerApp.WorkoutStepType.' + workoutStep.type }}">{{ workoutStep.type }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutStep.status">Status</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'powerTrainerApp.WorkoutStatus.' + workoutStep.status }}">{{ workoutStep.status }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/workout-step', workoutStep.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

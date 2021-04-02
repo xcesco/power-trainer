@@ -1,0 +1,217 @@
+application {
+  config {
+    applicationType monolith
+    authenticationType jwt
+    baseName PowerTrainer
+    blueprints []
+    buildTool maven
+    cacheProvider ehcache
+    clientFramework angularX
+    clientPackageManager npm
+    clientTheme materia
+    clientThemeVariant primary
+    creationTimestamp 1617382260009
+    databaseType sql
+    devDatabaseType h2Disk
+    dtoSuffix DTO
+    enableHibernateCache true
+    enableSwaggerCodegen true
+    enableTranslation true
+    jhiPrefix jhi
+    jhipsterVersion "7.0.1"
+    jwtSecretKey "MjUyNTY4OTViZjZlOTMyZGM5YWNhNGI2ZjQxNDVlMzVjZDA1YjcyOWNhNjQ1Yzg1OGQ4NjM5YTk2MzA2MmYzM2ZlZmVjOTExNTU1ZmIyYThlZWJlZjY5YzlmMWYwOGJjMmY5MGJmYmNjNzk0MjQ0YjVkMzM5MDEwMmExZjE2MjM="
+    languages [en, it]
+    messageBroker false
+    nativeLanguage en
+    otherModules []
+    packageName com.abubusoft.powertrainer
+    prodDatabaseType postgresql
+    reactive false
+    searchEngine false
+    serverPort 8080
+    serviceDiscoveryType false
+    skipClient false
+    skipServer false
+    skipUserManagement false
+    testFrameworks []
+    websocket false
+    withAdminUi true
+  }
+
+  entities *
+}
+
+
+entity Calendar(calendars) {
+	uuid	UUID	unique required     ,
+	name 	String	required
+}
+
+entity Exercise(exercises) {
+	uuid		UUID        unique required ,
+	image		ImageBlob                   ,
+    name		String      required        ,
+    description TextBlob                    ,
+    valueType	ValueType
+}
+
+entity ExerciseValue(exerciValues) {
+	uuid	UUID	    unique required ,
+	value	Integer     required        ,
+    date	LocalDate   required
+}
+
+enum ValueType {
+	DURATION        ,
+    WEIGHT          ,
+    DISTANCE        ,
+    REPETITIONS
+}
+
+entity MeasureValue(bodyStatus) {
+	uuid	UUID            unique required ,
+    date	ZonedDateTime   required        ,
+    value   Integer         required        ,
+    note	TextBlob
+}
+
+entity MeasureType(bodyStatusType) {
+	uuid	UUID    unique required ,
+	name    String  required        ,
+	image	ImageBlob               ,
+    note	TextBlob
+}
+
+
+entity WorkoutSheet(workoutSheets) {
+	uuid	UUID	unique required ,
+	name			String required , // nome
+    image			ImageBlob       ,
+    description		TextBlob        ,
+
+	prepareTime		Integer         ,	// tempo di preparazione (s)
+    coolDownTime	Integer         ,	// tempo di defaticamento (s)
+    cycles			Integer         ,	// # di cicli di esercizi
+    cycleRestTime	Integer         ,	// tempo di riposo tra cicli
+    set				Integer         ,	// per ogni ciclo, quante volte devo ripetere un esercizio
+    setRestTime		Integer         ,   // tempo di riposo tra esercizi
+    type			WorkoutType	        // tipo di workout
+}
+
+entity WorkoutSheetExercise(workoutSheetExercises) {
+	uuid			UUID	unique required ,
+	order			Integer                 ,
+    repetition		Integer                 ,
+    value			Integer                 ,
+    valueType		ValueType
+}
+
+enum WorkoutType {
+	SEQUENCE    ,	// le serie dei vari esercizi vengono fatte in sequenza
+    SUPERSET	    // una serie per ogni esercizio
+}
+
+/*
+ * Il workout viene generato a partire da un workout sheet
+ * o manualmente. Gli step vengono inseriti manualmente o
+ * sempre dallo sheet vengono generati per l'occasione
+ */
+entity Workout(workouts) {
+	uuid			UUID	unique required ,
+	name			String                  , // nome
+	image			ImageBlob               ,
+    type			WorkoutType             ,	// tipo di workout
+
+    executionTime	Integer                 , // tempo di esecuzione
+    previewTime		Integer                 , // tempo di esecuzione previsto
+
+    status			WorkoutStatus           ,
+
+    date	        ZonedDateTime           ,
+    note	        String
+}
+
+entity Muscle2Exercise {
+
+}
+
+entity WorkoutStep {
+	uuid			UUID    unique required     ,
+	order			Integer                     ,
+    value			Integer                     ,
+    valueType		ValueType                   ,
+    executionTime	Integer                     ,   // tempo di esecuzione
+    type			WorkoutStepType             ,
+    status			WorkoutStatus
+}
+
+enum WorkoutStepType {
+	PREPARE_TIME    ,
+    COOL_DOWN_TIME  ,
+	CYCLE_REST      ,
+	REPETITION_REST ,
+    EXERCISE
+}
+
+enum WorkoutStatus {
+	SCHEDULED       ,
+    CANCELLED       ,
+    DONE
+}
+
+enum ExerciseType {
+  ANEROBIC          ,
+  AEROBIC           ,
+  STRETCHING
+}
+
+entity Device (devices) {
+    owner 		String required         ,
+    deviceId 	String required unique
+}
+
+entity Muscle(muscles) {
+	uuid	UUID	unique required ,
+    name	String      required    ,
+    image	ImageBlob               ,
+    note	String
+}
+
+entity Note(notes) {
+	uuid		UUID	    unique required ,
+	type		NoteType    required        ,
+    url			String                      ,
+    image		ImageBlob                   ,
+    description	TextBlob
+}
+
+enum NoteType {
+    YOUTUBE ,
+    EMBEDDED,
+    URL
+}
+
+/*
+relationship OneToMany {
+	  Exercise{rel1} to WorkoutStep{rel2}                           ,
+    Exercise{rel3} to WorkoutSheetExercise{rel4}    ,
+    Exercise{rel5} to ExerciseValue{rel6}                 ,
+    Exercise{rel6} to Note{rel7}                                            ,
+
+    WorkoutSheet{rel8} to WorkoutSheetExercise{rel9}  ,
+    Workout{rel10} to WorkoutStep{rel11}                                            ,
+    WorkoutStep{rel12} to Exercise{rel13}                                         ,
+
+    Calendar{rel14} to Note{rel15}                                               ,
+    Calendar{rel16} to MeasureValue{rel16}                       ,
+    Calendar{rel17} to Workout{rel18}                                      ,
+
+    MeasureType{rel19} to MeasureValue{rel20}              ,
+
+    Exercise{rel21} to Muscle2Exercise{rel22}              ,
+    Muscle{rel22} to Muscle2Exercise{rel23}
+} */
+
+paginate * with pagination
+service * with serviceImpl
+filter *

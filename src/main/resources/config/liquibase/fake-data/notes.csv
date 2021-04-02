@@ -1,0 +1,11 @@
+id;uuid;type;url;image;image_content_type;description
+1;65cea97f-92b3-455c-83ce-64c50fd6c257;EMBEDDED;http://cruz.info;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt
+2;ee671d27-f1b3-4ff7-98e4-75b54773644e;YOUTUBE;http://taya.org;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt
+3;96282b74-43d2-4b2a-aa26-721b2acb6f77;YOUTUBE;http://antwon.biz;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt
+4;084de110-9419-4822-b667-839472df2e8b;YOUTUBE;https://jamil.net;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt
+5;f2c951a2-9a72-4b28-80ee-624f4f1da9e0;YOUTUBE;http://titus.net;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt
+6;08b07f76-d8da-44bc-9310-ec37b716a41e;URL;http://marquis.name;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt
+7;ad6564f4-ee0f-40ef-a1f5-acb7730a39a1;URL;https://kira.net;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt
+8;33d48b64-02f6-48a6-9a30-32d87cb8212d;EMBEDDED;https://emmet.biz;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt
+9;f90ed94e-d058-4993-96af-046a43659802;YOUTUBE;http://conner.name;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt
+10;7bb133c4-ede5-4dab-8696-acd4111bcf19;YOUTUBE;https://golden.org;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt

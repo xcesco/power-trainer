@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="exerciseValue">
+      <h2 data-cy="exerciseValueDetailsHeading"><span jhiTranslate="powerTrainerApp.exerciseValue.detail.title">Exercise Value</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ exerciseValue.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.uuid">Uuid</span></dt>
+        <dd>
+          <span>{{ exerciseValue.uuid }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.value">Value</span></dt>
+        <dd>
+          <span>{{ exerciseValue.value }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.date">Date</span></dt>
+        <dd>
+          <span>{{ exerciseValue.date | formatMediumDate }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/exercise-value', exerciseValue.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

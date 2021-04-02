@@ -1,0 +1,30 @@
+{
+  "powerTrainerApp": {
+    "workoutStep": {
+      "home": {
+        "title": "WorkoutSteps",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Workout Step",
+        "createOrEditLabel": "Genera o modifica un Workout Step",
+        "notFound": "No Workout Steps found"
+      },
+      "created": "&Egrave; stato generato un nuovo Workout Step con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Workout Step identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Workout Step con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Workout Step {{ id }}?"
+      },
+      "detail": {
+        "title": "Workout Step"
+      },
+      "id": "ID",
+      "uuid": "Uuid",
+      "order": "Order",
+      "value": "Value",
+      "valueType": "Value Type",
+      "executionTime": "Execution Time",
+      "type": "Type",
+      "status": "Status"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "powerTrainerApp": {
+    "workout": {
+      "home": {
+        "title": "Workouts",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Workout",
+        "createOrEditLabel": "Genera o modifica un Workout",
+        "notFound": "No Workouts found"
+      },
+      "created": "&Egrave; stato generato un nuovo Workout con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Workout identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Workout con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Workout {{ id }}?"
+      },
+      "detail": {
+        "title": "Workout"
+      },
+      "id": "ID",
+      "uuid": "Uuid",
+      "name": "Name",
+      "image": "Image",
+      "type": "Type",
+      "executionTime": "Execution Time",
+      "previewTime": "Preview Time",
+      "status": "Status",
+      "date": "Date",
+      "note": "Note"
+    }
+  }
+}

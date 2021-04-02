@@ -1,0 +1,11 @@
+id;uuid;date;value;note
+1;b4bce63d-6f0d-4bb9-a7e6-58967e304b8b;2021-04-02T09:11:42;96416;../fake-data/blob/hipster.txt
+2;e2c9cab8-dbf5-4364-a7c3-6afc10a8fc62;2021-04-02T09:41:20;47306;../fake-data/blob/hipster.txt
+3;d81fdd1a-b4a7-49a6-822c-f4be1a042ac0;2021-04-02T15:12:42;84679;../fake-data/blob/hipster.txt
+4;a76ce2e1-01d3-4930-baca-cf82b108778a;2021-04-02T07:34:05;81394;../fake-data/blob/hipster.txt
+5;abed9973-22fc-4151-bb95-09df670e6c46;2021-04-01T23:09:27;48084;../fake-data/blob/hipster.txt
+6;6ce07750-db79-4bda-adb8-afe691ff4207;2021-04-02T13:56:24;69947;../fake-data/blob/hipster.txt
+7;64f5f941-0614-4daa-ac55-937e95f5866c;2021-04-02T10:35:09;61806;../fake-data/blob/hipster.txt
+8;d962735e-f6c6-4b5f-8599-e33fd8d670bf;2021-04-01T22:12:07;31841;../fake-data/blob/hipster.txt
+9;07a21afe-bdb8-4b12-947b-5b1a707cc245;2021-04-01T21:58:59;73548;../fake-data/blob/hipster.txt
+10;83e4d739-c556-4d2b-ab60-102d3541b606;2021-04-02T11:14:04;48587;../fake-data/blob/hipster.txt

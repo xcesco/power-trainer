@@ -1,0 +1,25 @@
+{
+  "powerTrainerApp": {
+    "device": {
+      "home": {
+        "title": "Devices",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Device",
+        "createOrEditLabel": "Genera o modifica un Device",
+        "notFound": "No Devices found"
+      },
+      "created": "&Egrave; stato generato un nuovo Device con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Device identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Device con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Device {{ id }}?"
+      },
+      "detail": {
+        "title": "Device"
+      },
+      "id": "ID",
+      "owner": "Owner",
+      "deviceId": "Device Id"
+    }
+  }
+}

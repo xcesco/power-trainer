@@ -1,0 +1,36 @@
+{
+  "name": "MeasureType",
+  "fields": [
+    {
+      "fieldName": "uuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique", "required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "image",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image"
+    },
+    {
+      "fieldName": "note",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "body_status_type",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["PowerTrainer"],
+  "changelogDate": "20210402165600"
+}

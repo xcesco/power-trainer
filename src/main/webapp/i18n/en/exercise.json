@@ -1,0 +1,28 @@
+{
+  "powerTrainerApp": {
+    "exercise": {
+      "home": {
+        "title": "Exercises",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Exercise",
+        "createOrEditLabel": "Create or edit a Exercise",
+        "notFound": "No Exercises found"
+      },
+      "created": "A new Exercise is created with identifier {{ param }}",
+      "updated": "A Exercise is updated with identifier {{ param }}",
+      "deleted": "A Exercise is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Exercise {{ id }}?"
+      },
+      "detail": {
+        "title": "Exercise"
+      },
+      "id": "ID",
+      "uuid": "Uuid",
+      "image": "Image",
+      "name": "Name",
+      "description": "Description",
+      "valueType": "Value Type"
+    }
+  }
+}

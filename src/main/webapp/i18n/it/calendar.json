@@ -1,0 +1,25 @@
+{
+  "powerTrainerApp": {
+    "calendar": {
+      "home": {
+        "title": "Calendars",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Calendar",
+        "createOrEditLabel": "Genera o modifica un Calendar",
+        "notFound": "No Calendars found"
+      },
+      "created": "&Egrave; stato generato un nuovo Calendar con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Calendar identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Calendar con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Calendar {{ id }}?"
+      },
+      "detail": {
+        "title": "Calendar"
+      },
+      "id": "ID",
+      "uuid": "Uuid",
+      "name": "Name"
+    }
+  }
+}

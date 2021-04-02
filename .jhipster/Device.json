@@ -1,0 +1,26 @@
+{
+  "name": "Device",
+  "fields": [
+    {
+      "fieldName": "owner",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "deviceId",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "devices",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["PowerTrainer"],
+  "changelogDate": "20210402170200"
+}

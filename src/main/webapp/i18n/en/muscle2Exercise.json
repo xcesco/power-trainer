@@ -1,0 +1,23 @@
+{
+  "powerTrainerApp": {
+    "muscle2Exercise": {
+      "home": {
+        "title": "Muscle 2 Exercises",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Muscle 2 Exercise",
+        "createOrEditLabel": "Create or edit a Muscle 2 Exercise",
+        "notFound": "No Muscle 2 Exercises found"
+      },
+      "created": "A new Muscle 2 Exercise is created with identifier {{ param }}",
+      "updated": "A Muscle 2 Exercise is updated with identifier {{ param }}",
+      "deleted": "A Muscle 2 Exercise is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Muscle 2 Exercise {{ id }}?"
+      },
+      "detail": {
+        "title": "Muscle 2 Exercise"
+      },
+      "id": "ID"
+    }
+  }
+}

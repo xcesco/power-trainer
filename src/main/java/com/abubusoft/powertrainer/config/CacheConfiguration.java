@@ -48,6 +48,19 @@ public class CacheConfiguration {
             createCache(cm, com.abubusoft.powertrainer.domain.User.class.getName());
             createCache(cm, com.abubusoft.powertrainer.domain.Authority.class.getName());
             createCache(cm, com.abubusoft.powertrainer.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.abubusoft.powertrainer.domain.Calendar.class.getName());
+            createCache(cm, com.abubusoft.powertrainer.domain.Exercise.class.getName());
+            createCache(cm, com.abubusoft.powertrainer.domain.ExerciseValue.class.getName());
+            createCache(cm, com.abubusoft.powertrainer.domain.MeasureValue.class.getName());
+            createCache(cm, com.abubusoft.powertrainer.domain.MeasureType.class.getName());
+            createCache(cm, com.abubusoft.powertrainer.domain.WorkoutSheet.class.getName());
+            createCache(cm, com.abubusoft.powertrainer.domain.WorkoutSheetExercise.class.getName());
+            createCache(cm, com.abubusoft.powertrainer.domain.Workout.class.getName());
+            createCache(cm, com.abubusoft.powertrainer.domain.Muscle2Exercise.class.getName());
+            createCache(cm, com.abubusoft.powertrainer.domain.WorkoutStep.class.getName());
+            createCache(cm, com.abubusoft.powertrainer.domain.Device.class.getName());
+            createCache(cm, com.abubusoft.powertrainer.domain.Muscle.class.getName());
+            createCache(cm, com.abubusoft.powertrainer.domain.Note.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

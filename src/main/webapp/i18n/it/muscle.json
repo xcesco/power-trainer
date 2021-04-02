@@ -1,0 +1,27 @@
+{
+  "powerTrainerApp": {
+    "muscle": {
+      "home": {
+        "title": "Muscles",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Muscle",
+        "createOrEditLabel": "Genera o modifica un Muscle",
+        "notFound": "No Muscles found"
+      },
+      "created": "&Egrave; stato generato un nuovo Muscle con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Muscle identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Muscle con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Muscle {{ id }}?"
+      },
+      "detail": {
+        "title": "Muscle"
+      },
+      "id": "ID",
+      "uuid": "Uuid",
+      "name": "Name",
+      "image": "Image",
+      "note": "Note"
+    }
+  }
+}

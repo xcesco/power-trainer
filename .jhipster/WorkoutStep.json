@@ -1,0 +1,48 @@
+{
+  "name": "WorkoutStep",
+  "fields": [
+    {
+      "fieldName": "uuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique", "required"]
+    },
+    {
+      "fieldName": "order",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "value",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "valueType",
+      "fieldType": "ValueType",
+      "fieldValues": "DURATION,WEIGHT,DISTANCE,REPETITIONS"
+    },
+    {
+      "fieldName": "executionTime",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "WorkoutStepType",
+      "fieldValues": "PREPARE_TIME,COOL_DOWN_TIME,CYCLE_REST,REPETITION_REST,EXERCISE"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "WorkoutStatus",
+      "fieldValues": "SCHEDULED,CANCELLED,DONE"
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "workout_step",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["PowerTrainer"],
+  "changelogDate": "20210402170100"
+}

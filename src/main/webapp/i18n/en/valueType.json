@@ -1,0 +1,11 @@
+{
+  "powerTrainerApp": {
+    "ValueType": {
+      "null": "",
+      "DURATION": "DURATION",
+      "WEIGHT": "WEIGHT",
+      "DISTANCE": "DISTANCE",
+      "REPETITIONS": "REPETITIONS"
+    }
+  }
+}

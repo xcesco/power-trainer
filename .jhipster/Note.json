@@ -1,0 +1,41 @@
+{
+  "name": "Note",
+  "fields": [
+    {
+      "fieldName": "uuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique", "required"]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "NoteType",
+      "fieldValues": "YOUTUBE,EMBEDDED,URL",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "url",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "image",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "notes",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["PowerTrainer"],
+  "changelogDate": "20210402170400"
+}

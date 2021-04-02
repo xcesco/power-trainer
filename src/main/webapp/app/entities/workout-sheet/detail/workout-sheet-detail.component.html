@@ -1,0 +1,81 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="workoutSheet">
+      <h2 data-cy="workoutSheetDetailsHeading"><span jhiTranslate="powerTrainerApp.workoutSheet.detail.title">Workout Sheet</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ workoutSheet.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheet.uuid">Uuid</span></dt>
+        <dd>
+          <span>{{ workoutSheet.uuid }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheet.name">Name</span></dt>
+        <dd>
+          <span>{{ workoutSheet.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheet.image">Image</span></dt>
+        <dd>
+          <div *ngIf="workoutSheet.image">
+            <a (click)="openFile(workoutSheet.image, workoutSheet.imageContentType)">
+              <img
+                [src]="'data:' + workoutSheet.imageContentType + ';base64,' + workoutSheet.image"
+                style="max-width: 100%"
+                alt="workoutSheet image"
+              />
+            </a>
+            {{ workoutSheet.imageContentType }}, {{ byteSize(workoutSheet.image) }}
+          </div>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheet.description">Description</span></dt>
+        <dd>
+          <span>{{ workoutSheet.description }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheet.prepareTime">Prepare Time</span></dt>
+        <dd>
+          <span>{{ workoutSheet.prepareTime }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheet.coolDownTime">Cool Down Time</span></dt>
+        <dd>
+          <span>{{ workoutSheet.coolDownTime }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheet.cycles">Cycles</span></dt>
+        <dd>
+          <span>{{ workoutSheet.cycles }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheet.cycleRestTime">Cycle Rest Time</span></dt>
+        <dd>
+          <span>{{ workoutSheet.cycleRestTime }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheet.set">Set</span></dt>
+        <dd>
+          <span>{{ workoutSheet.set }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheet.setRestTime">Set Rest Time</span></dt>
+        <dd>
+          <span>{{ workoutSheet.setRestTime }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheet.type">Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'powerTrainerApp.WorkoutType.' + workoutSheet.type }}">{{ workoutSheet.type }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/workout-sheet', workoutSheet.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

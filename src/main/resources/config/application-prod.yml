@@ -33,9 +33,9 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/PowerTrainer
+    username: PowerTrainer
+    password:
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -72,7 +72,7 @@ spring:
 #     ciphers: TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 ,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA,TLS_RSA_WITH_CAMELLIA_128_CBC_SHA
 # ===================================================================
 server:
-  port: ${PORT:8080}
+  port: 8080
   shutdown: graceful # see https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-graceful-shutdown
   compression:
     enabled: true
@@ -101,7 +101,7 @@ jhipster:
         # - In the JHipster Registry (which includes a Spring Cloud Config server)
         # - In a separate `application-prod.yml` file, in the same folder as your executable JAR file
         # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` environment variable
-        base64-secret: NGIyYTQzNWUwMTRiNjM1ZjkyNWRmNTI0M2JiMTUzOGUzZTA1NTVhYjQxNDM2ZjI5ZDIzYzdlNTIwMGRhMjAxMmYxMTVlNjg3YWNlMWY5YzQ0Nzg2YTI5MDdhNDIyN2JkMzE3NzZkMWRhZDAwNzExMjAxZTBiOGQ2MzYxOWU5Zjc=
+        base64-secret: MjUyNTY4OTViZjZlOTMyZGM5YWNhNGI2ZjQxNDVlMzVjZDA1YjcyOWNhNjQ1Yzg1OGQ4NjM5YTk2MzA2MmYzM2ZlZmVjOTExNTU1ZmIyYThlZWJlZjY5YzlmMWYwOGJjMmY5MGJmYmNjNzk0MjQ0YjVkMzM5MDEwMmExZjE2MjM=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000

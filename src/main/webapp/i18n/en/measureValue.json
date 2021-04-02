@@ -1,0 +1,27 @@
+{
+  "powerTrainerApp": {
+    "measureValue": {
+      "home": {
+        "title": "Measure Values",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Measure Value",
+        "createOrEditLabel": "Create or edit a Measure Value",
+        "notFound": "No Measure Values found"
+      },
+      "created": "A new Measure Value is created with identifier {{ param }}",
+      "updated": "A Measure Value is updated with identifier {{ param }}",
+      "deleted": "A Measure Value is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Measure Value {{ id }}?"
+      },
+      "detail": {
+        "title": "Measure Value"
+      },
+      "id": "ID",
+      "uuid": "Uuid",
+      "date": "Date",
+      "value": "Value",
+      "note": "Note"
+    }
+  }
+}

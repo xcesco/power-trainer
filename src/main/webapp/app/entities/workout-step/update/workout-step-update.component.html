@@ -1,0 +1,105 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-workout-step-heading"
+        data-cy="WorkoutStepCreateUpdateHeading"
+        jhiTranslate="powerTrainerApp.workoutStep.home.createOrEditLabel"
+      >
+        Create or edit a Workout Step
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutStep.uuid" for="field_uuid">Uuid</label>
+          <input type="text" class="form-control" name="uuid" id="field_uuid" data-cy="uuid" formControlName="uuid" />
+          <div *ngIf="editForm.get('uuid')!.invalid && (editForm.get('uuid')!.dirty || editForm.get('uuid')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('uuid')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutStep.order" for="field_order">Order</label>
+          <input type="number" class="form-control" name="order" id="field_order" data-cy="order" formControlName="order" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutStep.value" for="field_value">Value</label>
+          <input type="number" class="form-control" name="value" id="field_value" data-cy="value" formControlName="value" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutStep.valueType" for="field_valueType">Value Type</label>
+          <select class="form-control" name="valueType" formControlName="valueType" id="field_valueType" data-cy="valueType">
+            <option [ngValue]="null">{{ 'powerTrainerApp.ValueType.null' | translate }}</option>
+            <option value="DURATION">{{ 'powerTrainerApp.ValueType.DURATION' | translate }}</option>
+            <option value="WEIGHT">{{ 'powerTrainerApp.ValueType.WEIGHT' | translate }}</option>
+            <option value="DISTANCE">{{ 'powerTrainerApp.ValueType.DISTANCE' | translate }}</option>
+            <option value="REPETITIONS">{{ 'powerTrainerApp.ValueType.REPETITIONS' | translate }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutStep.executionTime" for="field_executionTime"
+            >Execution Time</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="executionTime"
+            id="field_executionTime"
+            data-cy="executionTime"
+            formControlName="executionTime"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutStep.type" for="field_type">Type</label>
+          <select class="form-control" name="type" formControlName="type" id="field_type" data-cy="type">
+            <option [ngValue]="null">{{ 'powerTrainerApp.WorkoutStepType.null' | translate }}</option>
+            <option value="PREPARE_TIME">{{ 'powerTrainerApp.WorkoutStepType.PREPARE_TIME' | translate }}</option>
+            <option value="COOL_DOWN_TIME">{{ 'powerTrainerApp.WorkoutStepType.COOL_DOWN_TIME' | translate }}</option>
+            <option value="CYCLE_REST">{{ 'powerTrainerApp.WorkoutStepType.CYCLE_REST' | translate }}</option>
+            <option value="REPETITION_REST">{{ 'powerTrainerApp.WorkoutStepType.REPETITION_REST' | translate }}</option>
+            <option value="EXERCISE">{{ 'powerTrainerApp.WorkoutStepType.EXERCISE' | translate }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutStep.status" for="field_status">Status</label>
+          <select class="form-control" name="status" formControlName="status" id="field_status" data-cy="status">
+            <option [ngValue]="null">{{ 'powerTrainerApp.WorkoutStatus.null' | translate }}</option>
+            <option value="SCHEDULED">{{ 'powerTrainerApp.WorkoutStatus.SCHEDULED' | translate }}</option>
+            <option value="CANCELLED">{{ 'powerTrainerApp.WorkoutStatus.CANCELLED' | translate }}</option>
+            <option value="DONE">{{ 'powerTrainerApp.WorkoutStatus.DONE' | translate }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+{
+  "powerTrainerApp": {
+    "exerciseValue": {
+      "home": {
+        "title": "Exercise Values",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Exercise Value",
+        "createOrEditLabel": "Create or edit a Exercise Value",
+        "notFound": "No Exercise Values found"
+      },
+      "created": "A new Exercise Value is created with identifier {{ param }}",
+      "updated": "A Exercise Value is updated with identifier {{ param }}",
+      "deleted": "A Exercise Value is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Exercise Value {{ id }}?"
+      },
+      "detail": {
+        "title": "Exercise Value"
+      },
+      "id": "ID",
+      "uuid": "Uuid",
+      "value": "Value",
+      "date": "Date"
+    }
+  }
+}
