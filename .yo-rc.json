@@ -4,7 +4,7 @@
     "otherModules": [],
     "applicationType": "monolith",
     "baseName": "PowerTrainer",
-    "jhipsterVersion": "7.0.1",
+    "jhipsterVersion": "7.0.0",
     "skipClient": false,
     "skipServer": false,
     "skipUserManagement": false,
