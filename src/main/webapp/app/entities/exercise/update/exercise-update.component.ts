@@ -3,13 +3,15 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import { IExercise, Exercise } from '../exercise.model';
 import { ExerciseService } from '../service/exercise.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { IMuscle } from 'app/entities/muscle/muscle.model';
+import { MuscleService } from 'app/entities/muscle/service/muscle.service';
 
 @Component({
   selector: 'jhi-exercise-update',
@@ -17,6 +19,8 @@ import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 })
 export class ExerciseUpdateComponent implements OnInit {
   isSaving = false;
+
+  musclesSharedCollection: IMuscle[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -26,12 +30,15 @@ export class ExerciseUpdateComponent implements OnInit {
     name: [null, [Validators.required]],
     description: [],
     valueType: [],
+    owner: [null, [Validators.required]],
+    muscles: [],
   });
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected exerciseService: ExerciseService,
+    protected muscleService: MuscleService,
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -40,6 +47,8 @@ export class ExerciseUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ exercise }) => {
       this.updateForm(exercise);
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -84,6 +93,21 @@ export class ExerciseUpdateComponent implements OnInit {
     }
   }
 
+  trackMuscleById(index: number, item: IMuscle): number {
+    return item.id!;
+  }
+
+  getSelectedMuscle(option: IMuscle, selectedVals?: IMuscle[]): IMuscle {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IExercise>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -112,7 +136,26 @@ export class ExerciseUpdateComponent implements OnInit {
       name: exercise.name,
       description: exercise.description,
       valueType: exercise.valueType,
+      owner: exercise.owner,
+      muscles: exercise.muscles,
     });
+
+    this.musclesSharedCollection = this.muscleService.addMuscleToCollectionIfMissing(
+      this.musclesSharedCollection,
+      ...(exercise.muscles ?? [])
+    );
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.muscleService
+      .query()
+      .pipe(map((res: HttpResponse<IMuscle[]>) => res.body ?? []))
+      .pipe(
+        map((muscles: IMuscle[]) =>
+          this.muscleService.addMuscleToCollectionIfMissing(muscles, ...(this.editForm.get('muscles')!.value ?? []))
+        )
+      )
+      .subscribe((muscles: IMuscle[]) => (this.musclesSharedCollection = muscles));
   }
 
   protected createFromForm(): IExercise {
@@ -125,6 +168,8 @@ export class ExerciseUpdateComponent implements OnInit {
       name: this.editForm.get(['name'])!.value,
       description: this.editForm.get(['description'])!.value,
       valueType: this.editForm.get(['valueType'])!.value,
+      owner: this.editForm.get(['owner'])!.value,
+      muscles: this.editForm.get(['muscles'])!.value,
     };
   }
 }

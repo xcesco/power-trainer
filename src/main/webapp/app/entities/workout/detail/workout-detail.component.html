@@ -55,6 +55,12 @@
         <dd>
           <span>{{ workout.note }}</span>
         </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workout.calendar">Calendar</span></dt>
+        <dd>
+          <div *ngIf="workout.calendar">
+            <a [routerLink]="['/calendar', workout.calendar?.id, 'view']">{{ workout.calendar?.id }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

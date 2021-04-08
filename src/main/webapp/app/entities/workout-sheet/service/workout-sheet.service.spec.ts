@@ -28,6 +28,7 @@ describe('Service Tests', () => {
         imageContentType: 'image/png',
         image: 'AAAAAAA',
         description: 'AAAAAAA',
+        owner: 'AAAAAAA',
         prepareTime: 0,
         coolDownTime: 0,
         cycles: 0,
@@ -74,6 +75,7 @@ describe('Service Tests', () => {
             name: 'BBBBBB',
             image: 'BBBBBB',
             description: 'BBBBBB',
+            owner: 'BBBBBB',
             prepareTime: 1,
             coolDownTime: 1,
             cycles: 1,
@@ -100,10 +102,10 @@ describe('Service Tests', () => {
             uuid: 'BBBBBB',
             name: 'BBBBBB',
             description: 'BBBBBB',
-            prepareTime: 1,
+            owner: 'BBBBBB',
+            cycleRestTime: 1,
             set: 1,
             setRestTime: 1,
-            type: 'BBBBBB',
           },
           new WorkoutSheet()
         );
@@ -127,6 +129,7 @@ describe('Service Tests', () => {
             name: 'BBBBBB',
             image: 'BBBBBB',
             description: 'BBBBBB',
+            owner: 'BBBBBB',
             prepareTime: 1,
             coolDownTime: 1,
             cycles: 1,
@@ -185,7 +188,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique WorkoutSheet to an array', () => {
-          const workoutSheetArray: IWorkoutSheet[] = [{ id: 123 }, { id: 456 }, { id: 19575 }];
+          const workoutSheetArray: IWorkoutSheet[] = [{ id: 123 }, { id: 456 }, { id: 97906 }];
           const workoutSheetCollection: IWorkoutSheet[] = [{ id: 123 }];
           expectedResult = service.addWorkoutSheetToCollectionIfMissing(workoutSheetCollection, ...workoutSheetArray);
           expect(expectedResult).toHaveLength(3);

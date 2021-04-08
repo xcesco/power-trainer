@@ -48,6 +48,9 @@
           <th scope="col" jhiSortBy="valueType">
             <span jhiTranslate="powerTrainerApp.exercise.valueType">Value Type</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="owner">
+            <span jhiTranslate="powerTrainerApp.exercise.owner">Owner</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -70,6 +73,7 @@
           <td>{{ exercise.name }}</td>
           <td>{{ exercise.description }}</td>
           <td jhiTranslate="{{ 'powerTrainerApp.ValueType.' + exercise.valueType }}">{{ exercise.valueType }}</td>
+          <td>{{ exercise.owner }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

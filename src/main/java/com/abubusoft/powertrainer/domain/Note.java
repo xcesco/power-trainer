@@ -1,6 +1,7 @@
 package com.abubusoft.powertrainer.domain;
 
 import com.abubusoft.powertrainer.domain.enumeration.NoteType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.UUID;
 import javax.persistence.*;
@@ -47,6 +48,10 @@ public class Note implements Serializable {
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "description")
     private String description;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "exerciseTools", "notes", "muscles" }, allowSetters = true)
+    private Exercise exercise;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -138,6 +143,19 @@ public class Note implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Exercise getExercise() {
+        return this.exercise;
+    }
+
+    public Note exercise(Exercise exercise) {
+        this.setExercise(exercise);
+        return this;
+    }
+
+    public void setExercise(Exercise exercise) {
+        this.exercise = exercise;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

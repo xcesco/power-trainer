@@ -49,6 +49,8 @@ public class WorkoutSheetCriteria implements Serializable, Criteria {
 
     private StringFilter name;
 
+    private StringFilter owner;
+
     private IntegerFilter prepareTime;
 
     private IntegerFilter coolDownTime;
@@ -63,12 +65,15 @@ public class WorkoutSheetCriteria implements Serializable, Criteria {
 
     private WorkoutTypeFilter type;
 
+    private LongFilter workoutSheetExerciseId;
+
     public WorkoutSheetCriteria() {}
 
     public WorkoutSheetCriteria(WorkoutSheetCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.uuid = other.uuid == null ? null : other.uuid.copy();
         this.name = other.name == null ? null : other.name.copy();
+        this.owner = other.owner == null ? null : other.owner.copy();
         this.prepareTime = other.prepareTime == null ? null : other.prepareTime.copy();
         this.coolDownTime = other.coolDownTime == null ? null : other.coolDownTime.copy();
         this.cycles = other.cycles == null ? null : other.cycles.copy();
@@ -76,6 +81,7 @@ public class WorkoutSheetCriteria implements Serializable, Criteria {
         this.set = other.set == null ? null : other.set.copy();
         this.setRestTime = other.setRestTime == null ? null : other.setRestTime.copy();
         this.type = other.type == null ? null : other.type.copy();
+        this.workoutSheetExerciseId = other.workoutSheetExerciseId == null ? null : other.workoutSheetExerciseId.copy();
     }
 
     @Override
@@ -126,6 +132,21 @@ public class WorkoutSheetCriteria implements Serializable, Criteria {
 
     public void setName(StringFilter name) {
         this.name = name;
+    }
+
+    public StringFilter getOwner() {
+        return owner;
+    }
+
+    public StringFilter owner() {
+        if (owner == null) {
+            owner = new StringFilter();
+        }
+        return owner;
+    }
+
+    public void setOwner(StringFilter owner) {
+        this.owner = owner;
     }
 
     public IntegerFilter getPrepareTime() {
@@ -233,6 +254,21 @@ public class WorkoutSheetCriteria implements Serializable, Criteria {
         this.type = type;
     }
 
+    public LongFilter getWorkoutSheetExerciseId() {
+        return workoutSheetExerciseId;
+    }
+
+    public LongFilter workoutSheetExerciseId() {
+        if (workoutSheetExerciseId == null) {
+            workoutSheetExerciseId = new LongFilter();
+        }
+        return workoutSheetExerciseId;
+    }
+
+    public void setWorkoutSheetExerciseId(LongFilter workoutSheetExerciseId) {
+        this.workoutSheetExerciseId = workoutSheetExerciseId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -246,19 +282,34 @@ public class WorkoutSheetCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(uuid, that.uuid) &&
             Objects.equals(name, that.name) &&
+            Objects.equals(owner, that.owner) &&
             Objects.equals(prepareTime, that.prepareTime) &&
             Objects.equals(coolDownTime, that.coolDownTime) &&
             Objects.equals(cycles, that.cycles) &&
             Objects.equals(cycleRestTime, that.cycleRestTime) &&
             Objects.equals(set, that.set) &&
             Objects.equals(setRestTime, that.setRestTime) &&
-            Objects.equals(type, that.type)
+            Objects.equals(type, that.type) &&
+            Objects.equals(workoutSheetExerciseId, that.workoutSheetExerciseId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uuid, name, prepareTime, coolDownTime, cycles, cycleRestTime, set, setRestTime, type);
+        return Objects.hash(
+            id,
+            uuid,
+            name,
+            owner,
+            prepareTime,
+            coolDownTime,
+            cycles,
+            cycleRestTime,
+            set,
+            setRestTime,
+            type,
+            workoutSheetExerciseId
+        );
     }
 
     // prettier-ignore
@@ -268,6 +319,7 @@ public class WorkoutSheetCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (uuid != null ? "uuid=" + uuid + ", " : "") +
             (name != null ? "name=" + name + ", " : "") +
+            (owner != null ? "owner=" + owner + ", " : "") +
             (prepareTime != null ? "prepareTime=" + prepareTime + ", " : "") +
             (coolDownTime != null ? "coolDownTime=" + coolDownTime + ", " : "") +
             (cycles != null ? "cycles=" + cycles + ", " : "") +
@@ -275,6 +327,7 @@ public class WorkoutSheetCriteria implements Serializable, Criteria {
             (set != null ? "set=" + set + ", " : "") +
             (setRestTime != null ? "setRestTime=" + setRestTime + ", " : "") +
             (type != null ? "type=" + type + ", " : "") +
+            (workoutSheetExerciseId != null ? "workoutSheetExerciseId=" + workoutSheetExerciseId + ", " : "") +
             "}";
     }
 }

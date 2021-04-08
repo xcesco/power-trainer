@@ -36,8 +36,8 @@
           <th scope="col" jhiSortBy="owner">
             <span jhiTranslate="powerTrainerApp.device.owner">Owner</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="deviceId">
-            <span jhiTranslate="powerTrainerApp.device.deviceId">Device Id</span> <fa-icon icon="sort"></fa-icon>
+          <th scope="col" jhiSortBy="deviceUuid">
+            <span jhiTranslate="powerTrainerApp.device.deviceUuid">Device Uuid</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
         </tr>
@@ -48,7 +48,7 @@
             <a [routerLink]="['/device', device.id, 'view']">{{ device.id }}</a>
           </td>
           <td>{{ device.owner }}</td>
-          <td>{{ device.deviceId }}</td>
+          <td>{{ device.deviceUuid }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button type="submit" [routerLink]="['/device', device.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">

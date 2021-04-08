@@ -1,3 +1,4 @@
+import { IExercise } from 'app/entities/exercise/exercise.model';
 import { NoteType } from 'app/entities/enumerations/note-type.model';
 
 export interface INote {
@@ -8,6 +9,7 @@ export interface INote {
   imageContentType?: string | null;
   image?: string | null;
   description?: string | null;
+  exercise?: IExercise | null;
 }
 
 export class Note implements INote {
@@ -18,7 +20,8 @@ export class Note implements INote {
     public url?: string | null,
     public imageContentType?: string | null,
     public image?: string | null,
-    public description?: string | null
+    public description?: string | null,
+    public exercise?: IExercise | null
   ) {}
 }
 

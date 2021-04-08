@@ -55,6 +55,9 @@ public class WorkoutSheetServiceImpl implements WorkoutSheetService {
                     if (workoutSheet.getDescription() != null) {
                         existingWorkoutSheet.setDescription(workoutSheet.getDescription());
                     }
+                    if (workoutSheet.getOwner() != null) {
+                        existingWorkoutSheet.setOwner(workoutSheet.getOwner());
+                    }
                     if (workoutSheet.getPrepareTime() != null) {
                         existingWorkoutSheet.setPrepareTime(workoutSheet.getPrepareTime());
                     }

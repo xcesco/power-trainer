@@ -24,19 +24,35 @@
         <dd>
           <span>{{ workoutSheetExercise.order }}</span>
         </dd>
-        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.repetition">Repetition</span></dt>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.repetitions">Repetitions</span></dt>
         <dd>
-          <span>{{ workoutSheetExercise.repetition }}</span>
+          <span>{{ workoutSheetExercise.repetitions }}</span>
         </dd>
-        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.value">Value</span></dt>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseUuid">Exercise Uuid</span></dt>
         <dd>
-          <span>{{ workoutSheetExercise.value }}</span>
+          <span>{{ workoutSheetExercise.exerciseUuid }}</span>
         </dd>
-        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.valueType">Value Type</span></dt>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseName">Exercise Name</span></dt>
         <dd>
-          <span jhiTranslate="{{ 'powerTrainerApp.ValueType.' + workoutSheetExercise.valueType }}">{{
-            workoutSheetExercise.valueType
+          <span>{{ workoutSheetExercise.exerciseName }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseValue">Exercise Value</span></dt>
+        <dd>
+          <span>{{ workoutSheetExercise.exerciseValue }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseValueType">Exercise Value Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'powerTrainerApp.ValueType.' + workoutSheetExercise.exerciseValueType }}">{{
+            workoutSheetExercise.exerciseValueType
           }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.workoutSheet">Workout Sheet</span></dt>
+        <dd>
+          <div *ngIf="workoutSheetExercise.workoutSheet">
+            <a [routerLink]="['/workout-sheet', workoutSheetExercise.workoutSheet?.id, 'view']">{{
+              workoutSheetExercise.workoutSheet?.id
+            }}</a>
+          </div>
         </dd>
       </dl>
 

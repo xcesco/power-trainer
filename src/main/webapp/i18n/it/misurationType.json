@@ -1,0 +1,28 @@
+{
+  "powerTrainerApp": {
+    "misurationType": {
+      "home": {
+        "title": "MisurationTypes",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Misuration Type",
+        "createOrEditLabel": "Genera o modifica un Misuration Type",
+        "notFound": "No Misuration Types found"
+      },
+      "created": "&Egrave; stato generato un nuovo Misuration Type con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Misuration Type identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Misuration Type con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Misuration Type {{ id }}?"
+      },
+      "detail": {
+        "title": "Misuration Type"
+      },
+      "id": "ID",
+      "uuid": "Uuid",
+      "name": "Name",
+      "image": "Image",
+      "description": "Description",
+      "misuration": "Misuration"
+    }
+  }
+}

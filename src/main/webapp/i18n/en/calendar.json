@@ -19,7 +19,11 @@
       },
       "id": "ID",
       "uuid": "Uuid",
-      "name": "Name"
+      "name": "Name",
+      "owner": "Owner",
+      "exerciseValue": "Exercise Value",
+      "misuration": "Misuration",
+      "workout": "Workout"
     }
   }
 }

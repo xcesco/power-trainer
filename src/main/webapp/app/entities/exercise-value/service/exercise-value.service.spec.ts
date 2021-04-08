@@ -2,7 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import * as dayjs from 'dayjs';
 
-import { DATE_FORMAT } from 'app/config/input.constants';
+import { DATE_TIME_FORMAT } from 'app/config/input.constants';
+import { ValueType } from 'app/entities/enumerations/value-type.model';
 import { IExerciseValue, ExerciseValue } from '../exercise-value.model';
 
 import { ExerciseValueService } from './exercise-value.service';
@@ -27,8 +28,11 @@ describe('Service Tests', () => {
       elemDefault = {
         id: 0,
         uuid: 'AAAAAAA',
-        value: 0,
         date: currentDate,
+        exerciseUuid: 'AAAAAAA',
+        exerciseName: 'AAAAAAA',
+        exerciseValue: 0,
+        exerciseValueType: ValueType.DURATION,
       };
     });
 
@@ -36,7 +40,7 @@ describe('Service Tests', () => {
       it('should find an element', () => {
         const returnedFromService = Object.assign(
           {
-            date: currentDate.format(DATE_FORMAT),
+            date: currentDate.format(DATE_TIME_FORMAT),
           },
           elemDefault
         );
@@ -52,7 +56,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 0,
-            date: currentDate.format(DATE_FORMAT),
+            date: currentDate.format(DATE_TIME_FORMAT),
           },
           elemDefault
         );
@@ -76,8 +80,11 @@ describe('Service Tests', () => {
           {
             id: 1,
             uuid: 'BBBBBB',
-            value: 1,
-            date: currentDate.format(DATE_FORMAT),
+            date: currentDate.format(DATE_TIME_FORMAT),
+            exerciseUuid: 'BBBBBB',
+            exerciseName: 'BBBBBB',
+            exerciseValue: 1,
+            exerciseValueType: 'BBBBBB',
           },
           elemDefault
         );
@@ -100,8 +107,8 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             uuid: 'BBBBBB',
-            value: 1,
-            date: currentDate.format(DATE_FORMAT),
+            date: currentDate.format(DATE_TIME_FORMAT),
+            exerciseUuid: 'BBBBBB',
           },
           new ExerciseValue()
         );
@@ -127,8 +134,11 @@ describe('Service Tests', () => {
           {
             id: 1,
             uuid: 'BBBBBB',
-            value: 1,
-            date: currentDate.format(DATE_FORMAT),
+            date: currentDate.format(DATE_TIME_FORMAT),
+            exerciseUuid: 'BBBBBB',
+            exerciseName: 'BBBBBB',
+            exerciseValue: 1,
+            exerciseValueType: 'BBBBBB',
           },
           elemDefault
         );
@@ -185,7 +195,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique ExerciseValue to an array', () => {
-          const exerciseValueArray: IExerciseValue[] = [{ id: 123 }, { id: 456 }, { id: 9190 }];
+          const exerciseValueArray: IExerciseValue[] = [{ id: 123 }, { id: 456 }, { id: 56221 }];
           const exerciseValueCollection: IExerciseValue[] = [{ id: 123 }];
           expectedResult = service.addExerciseValueToCollectionIfMissing(exerciseValueCollection, ...exerciseValueArray);
           expect(expectedResult).toHaveLength(3);

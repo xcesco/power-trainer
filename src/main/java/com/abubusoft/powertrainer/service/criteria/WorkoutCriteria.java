@@ -80,6 +80,10 @@ public class WorkoutCriteria implements Serializable, Criteria {
 
     private StringFilter note;
 
+    private LongFilter workoutStepId;
+
+    private LongFilter calendarId;
+
     public WorkoutCriteria() {}
 
     public WorkoutCriteria(WorkoutCriteria other) {
@@ -92,6 +96,8 @@ public class WorkoutCriteria implements Serializable, Criteria {
         this.status = other.status == null ? null : other.status.copy();
         this.date = other.date == null ? null : other.date.copy();
         this.note = other.note == null ? null : other.note.copy();
+        this.workoutStepId = other.workoutStepId == null ? null : other.workoutStepId.copy();
+        this.calendarId = other.calendarId == null ? null : other.calendarId.copy();
     }
 
     @Override
@@ -234,6 +240,36 @@ public class WorkoutCriteria implements Serializable, Criteria {
         this.note = note;
     }
 
+    public LongFilter getWorkoutStepId() {
+        return workoutStepId;
+    }
+
+    public LongFilter workoutStepId() {
+        if (workoutStepId == null) {
+            workoutStepId = new LongFilter();
+        }
+        return workoutStepId;
+    }
+
+    public void setWorkoutStepId(LongFilter workoutStepId) {
+        this.workoutStepId = workoutStepId;
+    }
+
+    public LongFilter getCalendarId() {
+        return calendarId;
+    }
+
+    public LongFilter calendarId() {
+        if (calendarId == null) {
+            calendarId = new LongFilter();
+        }
+        return calendarId;
+    }
+
+    public void setCalendarId(LongFilter calendarId) {
+        this.calendarId = calendarId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -252,13 +288,15 @@ public class WorkoutCriteria implements Serializable, Criteria {
             Objects.equals(previewTime, that.previewTime) &&
             Objects.equals(status, that.status) &&
             Objects.equals(date, that.date) &&
-            Objects.equals(note, that.note)
+            Objects.equals(note, that.note) &&
+            Objects.equals(workoutStepId, that.workoutStepId) &&
+            Objects.equals(calendarId, that.calendarId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uuid, name, type, executionTime, previewTime, status, date, note);
+        return Objects.hash(id, uuid, name, type, executionTime, previewTime, status, date, note, workoutStepId, calendarId);
     }
 
     // prettier-ignore
@@ -274,6 +312,8 @@ public class WorkoutCriteria implements Serializable, Criteria {
             (status != null ? "status=" + status + ", " : "") +
             (date != null ? "date=" + date + ", " : "") +
             (note != null ? "note=" + note + ", " : "") +
+            (workoutStepId != null ? "workoutStepId=" + workoutStepId + ", " : "") +
+            (calendarId != null ? "calendarId=" + calendarId + ", " : "") +
             "}";
     }
 }

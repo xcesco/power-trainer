@@ -9,6 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { WorkoutStepService } from '../service/workout-step.service';
 import { IWorkoutStep, WorkoutStep } from '../workout-step.model';
+import { IWorkout } from 'app/entities/workout/workout.model';
+import { WorkoutService } from 'app/entities/workout/service/workout.service';
 
 import { WorkoutStepUpdateComponent } from './workout-step-update.component';
 
@@ -18,6 +20,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<WorkoutStepUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let workoutStepService: WorkoutStepService;
+    let workoutService: WorkoutService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -31,18 +34,41 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(WorkoutStepUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       workoutStepService = TestBed.inject(WorkoutStepService);
+      workoutService = TestBed.inject(WorkoutService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
+      it('Should call Workout query and add missing value', () => {
+        const workoutStep: IWorkoutStep = { id: 456 };
+        const workout: IWorkout = { id: 18134 };
+        workoutStep.workout = workout;
+
+        const workoutCollection: IWorkout[] = [{ id: 71273 }];
+        spyOn(workoutService, 'query').and.returnValue(of(new HttpResponse({ body: workoutCollection })));
+        const additionalWorkouts = [workout];
+        const expectedCollection: IWorkout[] = [...additionalWorkouts, ...workoutCollection];
+        spyOn(workoutService, 'addWorkoutToCollectionIfMissing').and.returnValue(expectedCollection);
+
+        activatedRoute.data = of({ workoutStep });
+        comp.ngOnInit();
+
+        expect(workoutService.query).toHaveBeenCalled();
+        expect(workoutService.addWorkoutToCollectionIfMissing).toHaveBeenCalledWith(workoutCollection, ...additionalWorkouts);
+        expect(comp.workoutsSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should update editForm', () => {
         const workoutStep: IWorkoutStep = { id: 456 };
+        const workout: IWorkout = { id: 87941 };
+        workoutStep.workout = workout;
 
         activatedRoute.data = of({ workoutStep });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(workoutStep));
+        expect(comp.workoutsSharedCollection).toContain(workout);
       });
     });
 
@@ -107,6 +133,16 @@ describe('Component Tests', () => {
         expect(workoutStepService.update).toHaveBeenCalledWith(workoutStep);
         expect(comp.isSaving).toEqual(false);
         expect(comp.previousState).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('Tracking relationships identifiers', () => {
+      describe('trackWorkoutById', () => {
+        it('Should return tracked Workout primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackWorkoutById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
       });
     });
   });

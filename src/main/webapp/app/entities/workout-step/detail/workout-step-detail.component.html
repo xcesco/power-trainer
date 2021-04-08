@@ -22,14 +22,6 @@
         <dd>
           <span>{{ workoutStep.order }}</span>
         </dd>
-        <dt><span jhiTranslate="powerTrainerApp.workoutStep.value">Value</span></dt>
-        <dd>
-          <span>{{ workoutStep.value }}</span>
-        </dd>
-        <dt><span jhiTranslate="powerTrainerApp.workoutStep.valueType">Value Type</span></dt>
-        <dd>
-          <span jhiTranslate="{{ 'powerTrainerApp.ValueType.' + workoutStep.valueType }}">{{ workoutStep.valueType }}</span>
-        </dd>
         <dt><span jhiTranslate="powerTrainerApp.workoutStep.executionTime">Execution Time</span></dt>
         <dd>
           <span>{{ workoutStep.executionTime }}</span>
@@ -41,6 +33,28 @@
         <dt><span jhiTranslate="powerTrainerApp.workoutStep.status">Status</span></dt>
         <dd>
           <span jhiTranslate="{{ 'powerTrainerApp.WorkoutStatus.' + workoutStep.status }}">{{ workoutStep.status }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutStep.exerciseUuid">Exercise Uuid</span></dt>
+        <dd>
+          <span>{{ workoutStep.exerciseUuid }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutStep.exerciseName">Exercise Name</span></dt>
+        <dd>
+          <span>{{ workoutStep.exerciseName }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutStep.exerciseValue">Exercise Value</span></dt>
+        <dd>
+          <span>{{ workoutStep.exerciseValue }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutStep.exerciseValueType">Exercise Value Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'powerTrainerApp.ValueType.' + workoutStep.exerciseValueType }}">{{ workoutStep.exerciseValueType }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutStep.workout">Workout</span></dt>
+        <dd>
+          <div *ngIf="workoutStep.workout">
+            <a [routerLink]="['/workout', workoutStep.workout?.id, 'view']">{{ workoutStep.workout?.id }}</a>
+          </div>
         </dd>
       </dl>
 

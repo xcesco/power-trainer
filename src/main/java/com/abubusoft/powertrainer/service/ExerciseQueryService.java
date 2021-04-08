@@ -90,6 +90,30 @@ public class ExerciseQueryService extends QueryService<Exercise> {
             if (criteria.getValueType() != null) {
                 specification = specification.and(buildSpecification(criteria.getValueType(), Exercise_.valueType));
             }
+            if (criteria.getOwner() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getOwner(), Exercise_.owner));
+            }
+            if (criteria.getExerciseToolId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getExerciseToolId(),
+                            root -> root.join(Exercise_.exerciseTools, JoinType.LEFT).get(ExerciseTool_.id)
+                        )
+                    );
+            }
+            if (criteria.getNoteId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getNoteId(), root -> root.join(Exercise_.notes, JoinType.LEFT).get(Note_.id))
+                    );
+            }
+            if (criteria.getMuscleId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getMuscleId(), root -> root.join(Exercise_.muscles, JoinType.LEFT).get(Muscle_.id))
+                    );
+            }
         }
         return specification;
     }

@@ -51,6 +51,8 @@ public class NoteCriteria implements Serializable, Criteria {
 
     private StringFilter url;
 
+    private LongFilter exerciseId;
+
     public NoteCriteria() {}
 
     public NoteCriteria(NoteCriteria other) {
@@ -58,6 +60,7 @@ public class NoteCriteria implements Serializable, Criteria {
         this.uuid = other.uuid == null ? null : other.uuid.copy();
         this.type = other.type == null ? null : other.type.copy();
         this.url = other.url == null ? null : other.url.copy();
+        this.exerciseId = other.exerciseId == null ? null : other.exerciseId.copy();
     }
 
     @Override
@@ -125,6 +128,21 @@ public class NoteCriteria implements Serializable, Criteria {
         this.url = url;
     }
 
+    public LongFilter getExerciseId() {
+        return exerciseId;
+    }
+
+    public LongFilter exerciseId() {
+        if (exerciseId == null) {
+            exerciseId = new LongFilter();
+        }
+        return exerciseId;
+    }
+
+    public void setExerciseId(LongFilter exerciseId) {
+        this.exerciseId = exerciseId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -138,13 +156,14 @@ public class NoteCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(uuid, that.uuid) &&
             Objects.equals(type, that.type) &&
-            Objects.equals(url, that.url)
+            Objects.equals(url, that.url) &&
+            Objects.equals(exerciseId, that.exerciseId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uuid, type, url);
+        return Objects.hash(id, uuid, type, url, exerciseId);
     }
 
     // prettier-ignore
@@ -155,6 +174,7 @@ public class NoteCriteria implements Serializable, Criteria {
             (uuid != null ? "uuid=" + uuid + ", " : "") +
             (type != null ? "type=" + type + ", " : "") +
             (url != null ? "url=" + url + ", " : "") +
+            (exerciseId != null ? "exerciseId=" + exerciseId + ", " : "") +
             "}";
     }
 }

@@ -19,8 +19,12 @@
       },
       "id": "ID",
       "uuid": "Uuid",
-      "value": "Value",
-      "date": "Date"
+      "date": "Date",
+      "exerciseUuid": "Exercise Uuid",
+      "exerciseName": "Exercise Name",
+      "exerciseValue": "Exercise Value",
+      "exerciseValueType": "Exercise Value Type",
+      "calendar": "Calendar"
     }
   }
 }

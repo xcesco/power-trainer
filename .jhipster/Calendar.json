@@ -10,9 +10,33 @@
       "fieldName": "name",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "owner",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "exerciseValue",
+      "otherEntityRelationshipName": "calendar",
+      "relationshipName": "exerciseValue"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "misuration",
+      "otherEntityRelationshipName": "calendar",
+      "relationshipName": "misuration"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "workout",
+      "otherEntityRelationshipName": "calendar",
+      "relationshipName": "workout"
+    }
+  ],
   "entityTableName": "calendars",
   "dto": "no",
   "pagination": "pagination",
@@ -22,5 +46,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": ["PowerTrainer"],
-  "changelogDate": "20210402165200"
+  "changelogDate": "20210402165400"
 }

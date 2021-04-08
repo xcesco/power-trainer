@@ -24,7 +24,7 @@ describe('Service Tests', () => {
       elemDefault = {
         id: 0,
         uuid: 'AAAAAAA',
-        type: NoteType.YOUTUBE,
+        type: NoteType.VIDEO,
         url: 'AAAAAAA',
         imageContentType: 'image/png',
         image: 'AAAAAAA',

@@ -2,8 +2,11 @@ package com.abubusoft.powertrainer.domain;
 
 import com.abubusoft.powertrainer.domain.enumeration.WorkoutStatus;
 import com.abubusoft.powertrainer.domain.enumeration.WorkoutType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -58,6 +61,15 @@ public class Workout implements Serializable {
 
     @Column(name = "note")
     private String note;
+
+    @OneToMany(mappedBy = "workout")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "workout" }, allowSetters = true)
+    private Set<WorkoutStep> workoutSteps = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "exerciseValues", "misurations", "workouts" }, allowSetters = true)
+    private Calendar calendar;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -201,6 +213,50 @@ public class Workout implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public Set<WorkoutStep> getWorkoutSteps() {
+        return this.workoutSteps;
+    }
+
+    public Workout workoutSteps(Set<WorkoutStep> workoutSteps) {
+        this.setWorkoutSteps(workoutSteps);
+        return this;
+    }
+
+    public Workout addWorkoutStep(WorkoutStep workoutStep) {
+        this.workoutSteps.add(workoutStep);
+        workoutStep.setWorkout(this);
+        return this;
+    }
+
+    public Workout removeWorkoutStep(WorkoutStep workoutStep) {
+        this.workoutSteps.remove(workoutStep);
+        workoutStep.setWorkout(null);
+        return this;
+    }
+
+    public void setWorkoutSteps(Set<WorkoutStep> workoutSteps) {
+        if (this.workoutSteps != null) {
+            this.workoutSteps.forEach(i -> i.setWorkout(null));
+        }
+        if (workoutSteps != null) {
+            workoutSteps.forEach(i -> i.setWorkout(this));
+        }
+        this.workoutSteps = workoutSteps;
+    }
+
+    public Calendar getCalendar() {
+        return this.calendar;
+    }
+
+    public Workout calendar(Calendar calendar) {
+        this.setCalendar(calendar);
+        return this;
+    }
+
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

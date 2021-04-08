@@ -3,7 +3,7 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
@@ -13,6 +13,8 @@ import { WorkoutService } from '../service/workout.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { ICalendar } from 'app/entities/calendar/calendar.model';
+import { CalendarService } from 'app/entities/calendar/service/calendar.service';
 
 @Component({
   selector: 'jhi-workout-update',
@@ -20,6 +22,8 @@ import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 })
 export class WorkoutUpdateComponent implements OnInit {
   isSaving = false;
+
+  calendarsSharedCollection: ICalendar[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -33,12 +37,14 @@ export class WorkoutUpdateComponent implements OnInit {
     status: [],
     date: [],
     note: [],
+    calendar: [],
   });
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected workoutService: WorkoutService,
+    protected calendarService: CalendarService,
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -52,6 +58,8 @@ export class WorkoutUpdateComponent implements OnInit {
       }
 
       this.updateForm(workout);
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -96,6 +104,10 @@ export class WorkoutUpdateComponent implements OnInit {
     }
   }
 
+  trackCalendarById(index: number, item: ICalendar): number {
+    return item.id!;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IWorkout>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -128,7 +140,25 @@ export class WorkoutUpdateComponent implements OnInit {
       status: workout.status,
       date: workout.date ? workout.date.format(DATE_TIME_FORMAT) : null,
       note: workout.note,
+      calendar: workout.calendar,
     });
+
+    this.calendarsSharedCollection = this.calendarService.addCalendarToCollectionIfMissing(
+      this.calendarsSharedCollection,
+      workout.calendar
+    );
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.calendarService
+      .query()
+      .pipe(map((res: HttpResponse<ICalendar[]>) => res.body ?? []))
+      .pipe(
+        map((calendars: ICalendar[]) =>
+          this.calendarService.addCalendarToCollectionIfMissing(calendars, this.editForm.get('calendar')!.value)
+        )
+      )
+      .subscribe((calendars: ICalendar[]) => (this.calendarsSharedCollection = calendars));
   }
 
   protected createFromForm(): IWorkout {
@@ -145,6 +175,7 @@ export class WorkoutUpdateComponent implements OnInit {
       status: this.editForm.get(['status'])!.value,
       date: this.editForm.get(['date'])!.value ? dayjs(this.editForm.get(['date'])!.value, DATE_TIME_FORMAT) : undefined,
       note: this.editForm.get(['note'])!.value,
+      calendar: this.editForm.get(['calendar'])!.value,
     };
   }
 }

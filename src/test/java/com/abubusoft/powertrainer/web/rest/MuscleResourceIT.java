@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.abubusoft.powertrainer.IntegrationTest;
+import com.abubusoft.powertrainer.domain.Exercise;
 import com.abubusoft.powertrainer.domain.Muscle;
 import com.abubusoft.powertrainer.repository.MuscleRepository;
 import com.abubusoft.powertrainer.service.criteria.MuscleCriteria;
@@ -434,6 +435,25 @@ class MuscleResourceIT {
 
         // Get all the muscleList where note does not contain UPDATED_NOTE
         defaultMuscleShouldBeFound("note.doesNotContain=" + UPDATED_NOTE);
+    }
+
+    @Test
+    @Transactional
+    void getAllMusclesByExerciseIsEqualToSomething() throws Exception {
+        // Initialize the database
+        muscleRepository.saveAndFlush(muscle);
+        Exercise exercise = ExerciseResourceIT.createEntity(em);
+        em.persist(exercise);
+        em.flush();
+        muscle.addExercise(exercise);
+        muscleRepository.saveAndFlush(muscle);
+        Long exerciseId = exercise.getId();
+
+        // Get all the muscleList where exercise equals to exerciseId
+        defaultMuscleShouldBeFound("exerciseId.equals=" + exerciseId);
+
+        // Get all the muscleList where exercise equals to (exerciseId + 1)
+        defaultMuscleShouldNotBeFound("exerciseId.equals=" + (exerciseId + 1));
     }
 
     /**

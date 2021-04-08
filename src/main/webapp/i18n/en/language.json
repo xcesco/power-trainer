@@ -1,0 +1,26 @@
+{
+  "powerTrainerApp": {
+    "language": {
+      "home": {
+        "title": "Languages",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Language",
+        "createOrEditLabel": "Create or edit a Language",
+        "notFound": "No Languages found"
+      },
+      "created": "A new Language is created with identifier {{ param }}",
+      "updated": "A Language is updated with identifier {{ param }}",
+      "deleted": "A Language is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Language {{ id }}?"
+      },
+      "detail": {
+        "title": "Language"
+      },
+      "id": "ID",
+      "code": "Code",
+      "name": "Name",
+      "translation": "Translation"
+    }
+  }
+}

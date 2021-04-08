@@ -43,8 +43,8 @@ public class DeviceServiceImpl implements DeviceService {
                     if (device.getOwner() != null) {
                         existingDevice.setOwner(device.getOwner());
                     }
-                    if (device.getDeviceId() != null) {
-                        existingDevice.setDeviceId(device.getDeviceId());
+                    if (device.getDeviceUuid() != null) {
+                        existingDevice.setDeviceUuid(device.getDeviceUuid());
                     }
 
                     return existingDevice;

@@ -42,7 +42,20 @@
       "fieldType": "String"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "workoutStep",
+      "otherEntityRelationshipName": "workout",
+      "relationshipName": "workoutStep"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "calendar",
+      "otherEntityRelationshipName": "workout",
+      "relationshipName": "calendar"
+    }
+  ],
   "entityTableName": "workouts",
   "dto": "no",
   "pagination": "pagination",
@@ -52,5 +65,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": ["PowerTrainer"],
-  "changelogDate": "20210402165900"
+  "changelogDate": "20210402170200"
 }

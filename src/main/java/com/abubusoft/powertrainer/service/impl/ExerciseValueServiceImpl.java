@@ -43,11 +43,20 @@ public class ExerciseValueServiceImpl implements ExerciseValueService {
                     if (exerciseValue.getUuid() != null) {
                         existingExerciseValue.setUuid(exerciseValue.getUuid());
                     }
-                    if (exerciseValue.getValue() != null) {
-                        existingExerciseValue.setValue(exerciseValue.getValue());
-                    }
                     if (exerciseValue.getDate() != null) {
                         existingExerciseValue.setDate(exerciseValue.getDate());
+                    }
+                    if (exerciseValue.getExerciseUuid() != null) {
+                        existingExerciseValue.setExerciseUuid(exerciseValue.getExerciseUuid());
+                    }
+                    if (exerciseValue.getExerciseName() != null) {
+                        existingExerciseValue.setExerciseName(exerciseValue.getExerciseName());
+                    }
+                    if (exerciseValue.getExerciseValue() != null) {
+                        existingExerciseValue.setExerciseValue(exerciseValue.getExerciseValue());
+                    }
+                    if (exerciseValue.getExerciseValueType() != null) {
+                        existingExerciseValue.setExerciseValueType(exerciseValue.getExerciseValueType());
                     }
 
                     return existingExerciseValue;

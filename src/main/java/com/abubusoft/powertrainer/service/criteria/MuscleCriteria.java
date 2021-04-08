@@ -33,6 +33,8 @@ public class MuscleCriteria implements Serializable, Criteria {
 
     private StringFilter note;
 
+    private LongFilter exerciseId;
+
     public MuscleCriteria() {}
 
     public MuscleCriteria(MuscleCriteria other) {
@@ -40,6 +42,7 @@ public class MuscleCriteria implements Serializable, Criteria {
         this.uuid = other.uuid == null ? null : other.uuid.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.note = other.note == null ? null : other.note.copy();
+        this.exerciseId = other.exerciseId == null ? null : other.exerciseId.copy();
     }
 
     @Override
@@ -107,6 +110,21 @@ public class MuscleCriteria implements Serializable, Criteria {
         this.note = note;
     }
 
+    public LongFilter getExerciseId() {
+        return exerciseId;
+    }
+
+    public LongFilter exerciseId() {
+        if (exerciseId == null) {
+            exerciseId = new LongFilter();
+        }
+        return exerciseId;
+    }
+
+    public void setExerciseId(LongFilter exerciseId) {
+        this.exerciseId = exerciseId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -120,13 +138,14 @@ public class MuscleCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(uuid, that.uuid) &&
             Objects.equals(name, that.name) &&
-            Objects.equals(note, that.note)
+            Objects.equals(note, that.note) &&
+            Objects.equals(exerciseId, that.exerciseId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uuid, name, note);
+        return Objects.hash(id, uuid, name, note, exerciseId);
     }
 
     // prettier-ignore
@@ -137,6 +156,7 @@ public class MuscleCriteria implements Serializable, Criteria {
             (uuid != null ? "uuid=" + uuid + ", " : "") +
             (name != null ? "name=" + name + ", " : "") +
             (note != null ? "note=" + note + ", " : "") +
+            (exerciseId != null ? "exerciseId=" + exerciseId + ", " : "") +
             "}";
     }
 }

@@ -1,0 +1,28 @@
+{
+  "powerTrainerApp": {
+    "exerciseTool": {
+      "home": {
+        "title": "ExerciseTools",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Exercise Tool",
+        "createOrEditLabel": "Genera o modifica un Exercise Tool",
+        "notFound": "No Exercise Tools found"
+      },
+      "created": "&Egrave; stato generato un nuovo Exercise Tool con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Exercise Tool identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Exercise Tool con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Exercise Tool {{ id }}?"
+      },
+      "detail": {
+        "title": "Exercise Tool"
+      },
+      "id": "ID",
+      "uuid": "Uuid",
+      "image": "Image",
+      "name": "Name",
+      "description": "Description",
+      "exercise": "Exercise"
+    }
+  }
+}

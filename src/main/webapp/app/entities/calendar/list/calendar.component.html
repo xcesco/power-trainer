@@ -39,6 +39,9 @@
           <th scope="col" jhiSortBy="name">
             <span jhiTranslate="powerTrainerApp.calendar.name">Name</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="owner">
+            <span jhiTranslate="powerTrainerApp.calendar.owner">Owner</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -49,6 +52,7 @@
           </td>
           <td>{{ calendar.uuid }}</td>
           <td>{{ calendar.name }}</td>
+          <td>{{ calendar.owner }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

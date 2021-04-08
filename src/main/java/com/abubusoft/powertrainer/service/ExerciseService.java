@@ -34,6 +34,14 @@ public interface ExerciseService {
     Page<Exercise> findAll(Pageable pageable);
 
     /**
+     * Get all the exercises with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<Exercise> findAllWithEagerRelationships(Pageable pageable);
+
+    /**
      * Get the "id" exercise.
      *
      * @param id the id of the entity.

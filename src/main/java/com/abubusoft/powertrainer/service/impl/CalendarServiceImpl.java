@@ -46,6 +46,9 @@ public class CalendarServiceImpl implements CalendarService {
                     if (calendar.getName() != null) {
                         existingCalendar.setName(calendar.getName());
                     }
+                    if (calendar.getOwner() != null) {
+                        existingCalendar.setOwner(calendar.getOwner());
+                    }
 
                     return existingCalendar;
                 }

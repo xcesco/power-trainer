@@ -9,6 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { NoteService } from '../service/note.service';
 import { INote, Note } from '../note.model';
+import { IExercise } from 'app/entities/exercise/exercise.model';
+import { ExerciseService } from 'app/entities/exercise/service/exercise.service';
 
 import { NoteUpdateComponent } from './note-update.component';
 
@@ -18,6 +20,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<NoteUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let noteService: NoteService;
+    let exerciseService: ExerciseService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -31,18 +34,41 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(NoteUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       noteService = TestBed.inject(NoteService);
+      exerciseService = TestBed.inject(ExerciseService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
+      it('Should call Exercise query and add missing value', () => {
+        const note: INote = { id: 456 };
+        const exercise: IExercise = { id: 75307 };
+        note.exercise = exercise;
+
+        const exerciseCollection: IExercise[] = [{ id: 43974 }];
+        spyOn(exerciseService, 'query').and.returnValue(of(new HttpResponse({ body: exerciseCollection })));
+        const additionalExercises = [exercise];
+        const expectedCollection: IExercise[] = [...additionalExercises, ...exerciseCollection];
+        spyOn(exerciseService, 'addExerciseToCollectionIfMissing').and.returnValue(expectedCollection);
+
+        activatedRoute.data = of({ note });
+        comp.ngOnInit();
+
+        expect(exerciseService.query).toHaveBeenCalled();
+        expect(exerciseService.addExerciseToCollectionIfMissing).toHaveBeenCalledWith(exerciseCollection, ...additionalExercises);
+        expect(comp.exercisesSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should update editForm', () => {
         const note: INote = { id: 456 };
+        const exercise: IExercise = { id: 28518 };
+        note.exercise = exercise;
 
         activatedRoute.data = of({ note });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(note));
+        expect(comp.exercisesSharedCollection).toContain(exercise);
       });
     });
 
@@ -107,6 +133,16 @@ describe('Component Tests', () => {
         expect(noteService.update).toHaveBeenCalledWith(note);
         expect(comp.isSaving).toEqual(false);
         expect(comp.previousState).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('Tracking relationships identifiers', () => {
+      describe('trackExerciseById', () => {
+        it('Should return tracked Exercise primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackExerciseById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
       });
     });
   });

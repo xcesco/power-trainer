@@ -23,7 +23,7 @@ describe('Service Tests', () => {
       elemDefault = {
         id: 0,
         owner: 'AAAAAAA',
-        deviceId: 'AAAAAAA',
+        deviceUuid: 'AAAAAAA',
       };
     });
 
@@ -60,7 +60,7 @@ describe('Service Tests', () => {
           {
             id: 1,
             owner: 'BBBBBB',
-            deviceId: 'BBBBBB',
+            deviceUuid: 'BBBBBB',
           },
           elemDefault
         );
@@ -93,7 +93,7 @@ describe('Service Tests', () => {
           {
             id: 1,
             owner: 'BBBBBB',
-            deviceId: 'BBBBBB',
+            deviceUuid: 'BBBBBB',
           },
           elemDefault
         );

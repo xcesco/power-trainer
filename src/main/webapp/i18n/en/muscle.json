@@ -21,7 +21,8 @@
       "uuid": "Uuid",
       "name": "Name",
       "image": "Image",
-      "note": "Note"
+      "note": "Note",
+      "exercise": "Exercise"
     }
   }
 }

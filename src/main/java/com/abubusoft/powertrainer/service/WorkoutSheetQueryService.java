@@ -87,6 +87,9 @@ public class WorkoutSheetQueryService extends QueryService<WorkoutSheet> {
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), WorkoutSheet_.name));
             }
+            if (criteria.getOwner() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getOwner(), WorkoutSheet_.owner));
+            }
             if (criteria.getPrepareTime() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPrepareTime(), WorkoutSheet_.prepareTime));
             }
@@ -107,6 +110,15 @@ public class WorkoutSheetQueryService extends QueryService<WorkoutSheet> {
             }
             if (criteria.getType() != null) {
                 specification = specification.and(buildSpecification(criteria.getType(), WorkoutSheet_.type));
+            }
+            if (criteria.getWorkoutSheetExerciseId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getWorkoutSheetExerciseId(),
+                            root -> root.join(WorkoutSheet_.workoutSheetExercises, JoinType.LEFT).get(WorkoutSheetExercise_.id)
+                        )
+                    );
             }
         }
         return specification;

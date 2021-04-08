@@ -33,34 +33,153 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheetExercise.repetition" for="field_repetition"
-            >Repetition</label
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheetExercise.repetitions" for="field_repetitions"
+            >Repetitions</label
           >
           <input
             type="number"
             class="form-control"
-            name="repetition"
-            id="field_repetition"
-            data-cy="repetition"
-            formControlName="repetition"
+            name="repetitions"
+            id="field_repetitions"
+            data-cy="repetitions"
+            formControlName="repetitions"
           />
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheetExercise.value" for="field_value">Value</label>
-          <input type="number" class="form-control" name="value" id="field_value" data-cy="value" formControlName="value" />
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseUuid" for="field_exerciseUuid"
+            >Exercise Uuid</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="exerciseUuid"
+            id="field_exerciseUuid"
+            data-cy="exerciseUuid"
+            formControlName="exerciseUuid"
+          />
+          <div
+            *ngIf="editForm.get('exerciseUuid')!.invalid && (editForm.get('exerciseUuid')!.dirty || editForm.get('exerciseUuid')!.touched)"
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('exerciseUuid')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheetExercise.valueType" for="field_valueType"
-            >Value Type</label
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseName" for="field_exerciseName"
+            >Exercise Name</label
           >
-          <select class="form-control" name="valueType" formControlName="valueType" id="field_valueType" data-cy="valueType">
+          <input
+            type="text"
+            class="form-control"
+            name="exerciseName"
+            id="field_exerciseName"
+            data-cy="exerciseName"
+            formControlName="exerciseName"
+          />
+          <div
+            *ngIf="editForm.get('exerciseName')!.invalid && (editForm.get('exerciseName')!.dirty || editForm.get('exerciseName')!.touched)"
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('exerciseName')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseValue" for="field_exerciseValue"
+            >Exercise Value</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="exerciseValue"
+            id="field_exerciseValue"
+            data-cy="exerciseValue"
+            formControlName="exerciseValue"
+          />
+          <div
+            *ngIf="
+              editForm.get('exerciseValue')!.invalid && (editForm.get('exerciseValue')!.dirty || editForm.get('exerciseValue')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('exerciseValue')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('exerciseValue')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label
+            class="form-control-label"
+            jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseValueType"
+            for="field_exerciseValueType"
+            >Exercise Value Type</label
+          >
+          <select
+            class="form-control"
+            name="exerciseValueType"
+            formControlName="exerciseValueType"
+            id="field_exerciseValueType"
+            data-cy="exerciseValueType"
+          >
             <option [ngValue]="null">{{ 'powerTrainerApp.ValueType.null' | translate }}</option>
             <option value="DURATION">{{ 'powerTrainerApp.ValueType.DURATION' | translate }}</option>
             <option value="WEIGHT">{{ 'powerTrainerApp.ValueType.WEIGHT' | translate }}</option>
             <option value="DISTANCE">{{ 'powerTrainerApp.ValueType.DISTANCE' | translate }}</option>
             <option value="REPETITIONS">{{ 'powerTrainerApp.ValueType.REPETITIONS' | translate }}</option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('exerciseValueType')!.invalid &&
+              (editForm.get('exerciseValueType')!.dirty || editForm.get('exerciseValueType')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('exerciseValueType')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheetExercise.workoutSheet" for="field_workoutSheet"
+            >Workout Sheet</label
+          >
+          <select class="form-control" id="field_workoutSheet" data-cy="workoutSheet" name="workoutSheet" formControlName="workoutSheet">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                workoutSheetOption.id === editForm.get('workoutSheet')!.value?.id ? editForm.get('workoutSheet')!.value : workoutSheetOption
+              "
+              *ngFor="let workoutSheetOption of workoutSheetsSharedCollection; trackBy: trackWorkoutSheetById"
+            >
+              {{ workoutSheetOption.id }}
+            </option>
           </select>
         </div>
       </div>

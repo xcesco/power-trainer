@@ -1,11 +1,11 @@
 export interface IDevice {
   id?: number;
   owner?: string;
-  deviceId?: string;
+  deviceUuid?: string;
 }
 
 export class Device implements IDevice {
-  constructor(public id?: number, public owner?: string, public deviceId?: string) {}
+  constructor(public id?: number, public owner?: string, public deviceUuid?: string) {}
 }
 
 export function getDeviceIdentifier(device: IDevice): number | undefined {

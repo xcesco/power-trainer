@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { ValueType } from 'app/entities/enumerations/value-type.model';
 import { WorkoutStepType } from 'app/entities/enumerations/workout-step-type.model';
 import { WorkoutStatus } from 'app/entities/enumerations/workout-status.model';
+import { ValueType } from 'app/entities/enumerations/value-type.model';
 import { IWorkoutStep, WorkoutStep } from '../workout-step.model';
 
 import { WorkoutStepService } from './workout-step.service';
@@ -27,11 +27,13 @@ describe('Service Tests', () => {
         id: 0,
         uuid: 'AAAAAAA',
         order: 0,
-        value: 0,
-        valueType: ValueType.DURATION,
         executionTime: 0,
         type: WorkoutStepType.PREPARE_TIME,
         status: WorkoutStatus.SCHEDULED,
+        exerciseUuid: 'AAAAAAA',
+        exerciseName: 'AAAAAAA',
+        exerciseValue: 0,
+        exerciseValueType: ValueType.DURATION,
       };
     });
 
@@ -69,11 +71,13 @@ describe('Service Tests', () => {
             id: 1,
             uuid: 'BBBBBB',
             order: 1,
-            value: 1,
-            valueType: 'BBBBBB',
             executionTime: 1,
             type: 'BBBBBB',
             status: 'BBBBBB',
+            exerciseUuid: 'BBBBBB',
+            exerciseName: 'BBBBBB',
+            exerciseValue: 1,
+            exerciseValueType: 'BBBBBB',
           },
           elemDefault
         );
@@ -90,9 +94,9 @@ describe('Service Tests', () => {
       it('should partial update a WorkoutStep', () => {
         const patchObject = Object.assign(
           {
-            valueType: 'BBBBBB',
-            executionTime: 1,
             type: 'BBBBBB',
+            status: 'BBBBBB',
+            exerciseUuid: 'BBBBBB',
           },
           new WorkoutStep()
         );
@@ -114,11 +118,13 @@ describe('Service Tests', () => {
             id: 1,
             uuid: 'BBBBBB',
             order: 1,
-            value: 1,
-            valueType: 'BBBBBB',
             executionTime: 1,
             type: 'BBBBBB',
             status: 'BBBBBB',
+            exerciseUuid: 'BBBBBB',
+            exerciseName: 'BBBBBB',
+            exerciseValue: 1,
+            exerciseValueType: 'BBBBBB',
           },
           elemDefault
         );
@@ -170,7 +176,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique WorkoutStep to an array', () => {
-          const workoutStepArray: IWorkoutStep[] = [{ id: 123 }, { id: 456 }, { id: 41978 }];
+          const workoutStepArray: IWorkoutStep[] = [{ id: 123 }, { id: 456 }, { id: 24587 }];
           const workoutStepCollection: IWorkoutStep[] = [{ id: 123 }];
           expectedResult = service.addWorkoutStepToCollectionIfMissing(workoutStepCollection, ...workoutStepArray);
           expect(expectedResult).toHaveLength(3);

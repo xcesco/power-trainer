@@ -25,9 +25,34 @@
       "fieldName": "valueType",
       "fieldType": "ValueType",
       "fieldValues": "DURATION,WEIGHT,DISTANCE,REPETITIONS"
+    },
+    {
+      "fieldName": "owner",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "exerciseTool",
+      "otherEntityRelationshipName": "exercise",
+      "relationshipName": "exerciseTool"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "note",
+      "otherEntityRelationshipName": "exercise",
+      "relationshipName": "note"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "muscle",
+      "otherEntityRelationshipName": "exercise",
+      "relationshipName": "muscle",
+      "ownerSide": true
+    }
+  ],
   "entityTableName": "exercises",
   "dto": "no",
   "pagination": "pagination",
@@ -37,5 +62,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": ["PowerTrainer"],
-  "changelogDate": "20210402165300"
+  "changelogDate": "20210402165500"
 }

@@ -20,11 +20,14 @@
       "id": "ID",
       "uuid": "Uuid",
       "order": "Order",
-      "value": "Value",
-      "valueType": "Value Type",
       "executionTime": "Execution Time",
       "type": "Type",
-      "status": "Status"
+      "status": "Status",
+      "exerciseUuid": "Exercise Uuid",
+      "exerciseName": "Exercise Name",
+      "exerciseValue": "Exercise Value",
+      "exerciseValueType": "Exercise Value Type",
+      "workout": "Workout"
     }
   }
 }

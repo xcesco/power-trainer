@@ -18,13 +18,33 @@
         <dd>
           <span>{{ exerciseValue.uuid }}</span>
         </dd>
-        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.value">Value</span></dt>
-        <dd>
-          <span>{{ exerciseValue.value }}</span>
-        </dd>
         <dt><span jhiTranslate="powerTrainerApp.exerciseValue.date">Date</span></dt>
         <dd>
-          <span>{{ exerciseValue.date | formatMediumDate }}</span>
+          <span>{{ exerciseValue.date | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.exerciseUuid">Exercise Uuid</span></dt>
+        <dd>
+          <span>{{ exerciseValue.exerciseUuid }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.exerciseName">Exercise Name</span></dt>
+        <dd>
+          <span>{{ exerciseValue.exerciseName }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.exerciseValue">Exercise Value</span></dt>
+        <dd>
+          <span>{{ exerciseValue.exerciseValue }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.exerciseValueType">Exercise Value Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'powerTrainerApp.ValueType.' + exerciseValue.exerciseValueType }}">{{
+            exerciseValue.exerciseValueType
+          }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.calendar">Calendar</span></dt>
+        <dd>
+          <div *ngIf="exerciseValue.calendar">
+            <a [routerLink]="['/calendar', exerciseValue.calendar?.id, 'view']">{{ exerciseValue.calendar?.id }}</a>
+          </div>
         </dd>
       </dl>
 

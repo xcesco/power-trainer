@@ -1,7 +1,10 @@
 package com.abubusoft.powertrainer.domain;
 
 import com.abubusoft.powertrainer.domain.enumeration.WorkoutType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -44,6 +47,9 @@ public class WorkoutSheet implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "owner")
+    private String owner;
+
     @Column(name = "prepare_time")
     private Integer prepareTime;
 
@@ -65,6 +71,11 @@ public class WorkoutSheet implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private WorkoutType type;
+
+    @OneToMany(mappedBy = "workoutSheet")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "workoutSheet" }, allowSetters = true)
+    private Set<WorkoutSheetExercise> workoutSheetExercises = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -143,6 +154,19 @@ public class WorkoutSheet implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getOwner() {
+        return this.owner;
+    }
+
+    public WorkoutSheet owner(String owner) {
+        this.owner = owner;
+        return this;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public Integer getPrepareTime() {
@@ -236,6 +260,37 @@ public class WorkoutSheet implements Serializable {
         this.type = type;
     }
 
+    public Set<WorkoutSheetExercise> getWorkoutSheetExercises() {
+        return this.workoutSheetExercises;
+    }
+
+    public WorkoutSheet workoutSheetExercises(Set<WorkoutSheetExercise> workoutSheetExercises) {
+        this.setWorkoutSheetExercises(workoutSheetExercises);
+        return this;
+    }
+
+    public WorkoutSheet addWorkoutSheetExercise(WorkoutSheetExercise workoutSheetExercise) {
+        this.workoutSheetExercises.add(workoutSheetExercise);
+        workoutSheetExercise.setWorkoutSheet(this);
+        return this;
+    }
+
+    public WorkoutSheet removeWorkoutSheetExercise(WorkoutSheetExercise workoutSheetExercise) {
+        this.workoutSheetExercises.remove(workoutSheetExercise);
+        workoutSheetExercise.setWorkoutSheet(null);
+        return this;
+    }
+
+    public void setWorkoutSheetExercises(Set<WorkoutSheetExercise> workoutSheetExercises) {
+        if (this.workoutSheetExercises != null) {
+            this.workoutSheetExercises.forEach(i -> i.setWorkoutSheet(null));
+        }
+        if (workoutSheetExercises != null) {
+            workoutSheetExercises.forEach(i -> i.setWorkoutSheet(this));
+        }
+        this.workoutSheetExercises = workoutSheetExercises;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -265,6 +320,7 @@ public class WorkoutSheet implements Serializable {
             ", image='" + getImage() + "'" +
             ", imageContentType='" + getImageContentType() + "'" +
             ", description='" + getDescription() + "'" +
+            ", owner='" + getOwner() + "'" +
             ", prepareTime=" + getPrepareTime() +
             ", coolDownTime=" + getCoolDownTime() +
             ", cycles=" + getCycles() +

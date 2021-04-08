@@ -3,13 +3,15 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import { INote, Note } from '../note.model';
 import { NoteService } from '../service/note.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { IExercise } from 'app/entities/exercise/exercise.model';
+import { ExerciseService } from 'app/entities/exercise/service/exercise.service';
 
 @Component({
   selector: 'jhi-note-update',
@@ -17,6 +19,8 @@ import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 })
 export class NoteUpdateComponent implements OnInit {
   isSaving = false;
+
+  exercisesSharedCollection: IExercise[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -26,12 +30,14 @@ export class NoteUpdateComponent implements OnInit {
     image: [],
     imageContentType: [],
     description: [],
+    exercise: [],
   });
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected noteService: NoteService,
+    protected exerciseService: ExerciseService,
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -40,6 +46,8 @@ export class NoteUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ note }) => {
       this.updateForm(note);
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -84,6 +92,10 @@ export class NoteUpdateComponent implements OnInit {
     }
   }
 
+  trackExerciseById(index: number, item: IExercise): number {
+    return item.id!;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<INote>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -112,7 +124,22 @@ export class NoteUpdateComponent implements OnInit {
       image: note.image,
       imageContentType: note.imageContentType,
       description: note.description,
+      exercise: note.exercise,
     });
+
+    this.exercisesSharedCollection = this.exerciseService.addExerciseToCollectionIfMissing(this.exercisesSharedCollection, note.exercise);
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.exerciseService
+      .query()
+      .pipe(map((res: HttpResponse<IExercise[]>) => res.body ?? []))
+      .pipe(
+        map((exercises: IExercise[]) =>
+          this.exerciseService.addExerciseToCollectionIfMissing(exercises, this.editForm.get('exercise')!.value)
+        )
+      )
+      .subscribe((exercises: IExercise[]) => (this.exercisesSharedCollection = exercises));
   }
 
   protected createFromForm(): INote {
@@ -125,6 +152,7 @@ export class NoteUpdateComponent implements OnInit {
       imageContentType: this.editForm.get(['imageContentType'])!.value,
       image: this.editForm.get(['image'])!.value,
       description: this.editForm.get(['description'])!.value,
+      exercise: this.editForm.get(['exercise'])!.value,
     };
   }
 }

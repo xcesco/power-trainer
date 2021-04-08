@@ -90,6 +90,12 @@ public class NoteQueryService extends QueryService<Note> {
             if (criteria.getUrl() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getUrl(), Note_.url));
             }
+            if (criteria.getExerciseId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getExerciseId(), root -> root.join(Note_.exercise, JoinType.LEFT).get(Exercise_.id))
+                    );
+            }
         }
         return specification;
     }

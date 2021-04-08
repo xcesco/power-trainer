@@ -87,6 +87,33 @@ public class CalendarQueryService extends QueryService<Calendar> {
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), Calendar_.name));
             }
+            if (criteria.getOwner() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getOwner(), Calendar_.owner));
+            }
+            if (criteria.getExerciseValueId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getExerciseValueId(),
+                            root -> root.join(Calendar_.exerciseValues, JoinType.LEFT).get(ExerciseValue_.id)
+                        )
+                    );
+            }
+            if (criteria.getMisurationId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getMisurationId(),
+                            root -> root.join(Calendar_.misurations, JoinType.LEFT).get(Misuration_.id)
+                        )
+                    );
+            }
+            if (criteria.getWorkoutId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getWorkoutId(), root -> root.join(Calendar_.workouts, JoinType.LEFT).get(Workout_.id))
+                    );
+            }
         }
         return specification;
     }

@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.abubusoft.powertrainer.IntegrationTest;
+import com.abubusoft.powertrainer.domain.Workout;
 import com.abubusoft.powertrainer.domain.WorkoutStep;
 import com.abubusoft.powertrainer.domain.enumeration.ValueType;
 import com.abubusoft.powertrainer.domain.enumeration.WorkoutStatus;
@@ -41,13 +42,6 @@ class WorkoutStepResourceIT {
     private static final Integer UPDATED_ORDER = 2;
     private static final Integer SMALLER_ORDER = 1 - 1;
 
-    private static final Integer DEFAULT_VALUE = 1;
-    private static final Integer UPDATED_VALUE = 2;
-    private static final Integer SMALLER_VALUE = 1 - 1;
-
-    private static final ValueType DEFAULT_VALUE_TYPE = ValueType.DURATION;
-    private static final ValueType UPDATED_VALUE_TYPE = ValueType.WEIGHT;
-
     private static final Integer DEFAULT_EXECUTION_TIME = 1;
     private static final Integer UPDATED_EXECUTION_TIME = 2;
     private static final Integer SMALLER_EXECUTION_TIME = 1 - 1;
@@ -57,6 +51,19 @@ class WorkoutStepResourceIT {
 
     private static final WorkoutStatus DEFAULT_STATUS = WorkoutStatus.SCHEDULED;
     private static final WorkoutStatus UPDATED_STATUS = WorkoutStatus.CANCELLED;
+
+    private static final UUID DEFAULT_EXERCISE_UUID = UUID.randomUUID();
+    private static final UUID UPDATED_EXERCISE_UUID = UUID.randomUUID();
+
+    private static final String DEFAULT_EXERCISE_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_EXERCISE_NAME = "BBBBBBBBBB";
+
+    private static final Integer DEFAULT_EXERCISE_VALUE = 1;
+    private static final Integer UPDATED_EXERCISE_VALUE = 2;
+    private static final Integer SMALLER_EXERCISE_VALUE = 1 - 1;
+
+    private static final ValueType DEFAULT_EXERCISE_VALUE_TYPE = ValueType.DURATION;
+    private static final ValueType UPDATED_EXERCISE_VALUE_TYPE = ValueType.WEIGHT;
 
     private static final String ENTITY_API_URL = "/api/workout-steps";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -85,11 +92,13 @@ class WorkoutStepResourceIT {
         WorkoutStep workoutStep = new WorkoutStep()
             .uuid(DEFAULT_UUID)
             .order(DEFAULT_ORDER)
-            .value(DEFAULT_VALUE)
-            .valueType(DEFAULT_VALUE_TYPE)
             .executionTime(DEFAULT_EXECUTION_TIME)
             .type(DEFAULT_TYPE)
-            .status(DEFAULT_STATUS);
+            .status(DEFAULT_STATUS)
+            .exerciseUuid(DEFAULT_EXERCISE_UUID)
+            .exerciseName(DEFAULT_EXERCISE_NAME)
+            .exerciseValue(DEFAULT_EXERCISE_VALUE)
+            .exerciseValueType(DEFAULT_EXERCISE_VALUE_TYPE);
         return workoutStep;
     }
 
@@ -103,11 +112,13 @@ class WorkoutStepResourceIT {
         WorkoutStep workoutStep = new WorkoutStep()
             .uuid(UPDATED_UUID)
             .order(UPDATED_ORDER)
-            .value(UPDATED_VALUE)
-            .valueType(UPDATED_VALUE_TYPE)
             .executionTime(UPDATED_EXECUTION_TIME)
             .type(UPDATED_TYPE)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .exerciseUuid(UPDATED_EXERCISE_UUID)
+            .exerciseName(UPDATED_EXERCISE_NAME)
+            .exerciseValue(UPDATED_EXERCISE_VALUE)
+            .exerciseValueType(UPDATED_EXERCISE_VALUE_TYPE);
         return workoutStep;
     }
 
@@ -131,11 +142,13 @@ class WorkoutStepResourceIT {
         WorkoutStep testWorkoutStep = workoutStepList.get(workoutStepList.size() - 1);
         assertThat(testWorkoutStep.getUuid()).isEqualTo(DEFAULT_UUID);
         assertThat(testWorkoutStep.getOrder()).isEqualTo(DEFAULT_ORDER);
-        assertThat(testWorkoutStep.getValue()).isEqualTo(DEFAULT_VALUE);
-        assertThat(testWorkoutStep.getValueType()).isEqualTo(DEFAULT_VALUE_TYPE);
         assertThat(testWorkoutStep.getExecutionTime()).isEqualTo(DEFAULT_EXECUTION_TIME);
         assertThat(testWorkoutStep.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testWorkoutStep.getStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testWorkoutStep.getExerciseUuid()).isEqualTo(DEFAULT_EXERCISE_UUID);
+        assertThat(testWorkoutStep.getExerciseName()).isEqualTo(DEFAULT_EXERCISE_NAME);
+        assertThat(testWorkoutStep.getExerciseValue()).isEqualTo(DEFAULT_EXERCISE_VALUE);
+        assertThat(testWorkoutStep.getExerciseValueType()).isEqualTo(DEFAULT_EXERCISE_VALUE_TYPE);
     }
 
     @Test
@@ -175,6 +188,74 @@ class WorkoutStepResourceIT {
 
     @Test
     @Transactional
+    void checkExerciseUuidIsRequired() throws Exception {
+        int databaseSizeBeforeTest = workoutStepRepository.findAll().size();
+        // set the field null
+        workoutStep.setExerciseUuid(null);
+
+        // Create the WorkoutStep, which fails.
+
+        restWorkoutStepMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStep)))
+            .andExpect(status().isBadRequest());
+
+        List<WorkoutStep> workoutStepList = workoutStepRepository.findAll();
+        assertThat(workoutStepList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkExerciseNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = workoutStepRepository.findAll().size();
+        // set the field null
+        workoutStep.setExerciseName(null);
+
+        // Create the WorkoutStep, which fails.
+
+        restWorkoutStepMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStep)))
+            .andExpect(status().isBadRequest());
+
+        List<WorkoutStep> workoutStepList = workoutStepRepository.findAll();
+        assertThat(workoutStepList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkExerciseValueIsRequired() throws Exception {
+        int databaseSizeBeforeTest = workoutStepRepository.findAll().size();
+        // set the field null
+        workoutStep.setExerciseValue(null);
+
+        // Create the WorkoutStep, which fails.
+
+        restWorkoutStepMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStep)))
+            .andExpect(status().isBadRequest());
+
+        List<WorkoutStep> workoutStepList = workoutStepRepository.findAll();
+        assertThat(workoutStepList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkExerciseValueTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = workoutStepRepository.findAll().size();
+        // set the field null
+        workoutStep.setExerciseValueType(null);
+
+        // Create the WorkoutStep, which fails.
+
+        restWorkoutStepMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStep)))
+            .andExpect(status().isBadRequest());
+
+        List<WorkoutStep> workoutStepList = workoutStepRepository.findAll();
+        assertThat(workoutStepList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllWorkoutSteps() throws Exception {
         // Initialize the database
         workoutStepRepository.saveAndFlush(workoutStep);
@@ -187,11 +268,13 @@ class WorkoutStepResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(workoutStep.getId().intValue())))
             .andExpect(jsonPath("$.[*].uuid").value(hasItem(DEFAULT_UUID.toString())))
             .andExpect(jsonPath("$.[*].order").value(hasItem(DEFAULT_ORDER)))
-            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
-            .andExpect(jsonPath("$.[*].valueType").value(hasItem(DEFAULT_VALUE_TYPE.toString())))
             .andExpect(jsonPath("$.[*].executionTime").value(hasItem(DEFAULT_EXECUTION_TIME)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].exerciseUuid").value(hasItem(DEFAULT_EXERCISE_UUID.toString())))
+            .andExpect(jsonPath("$.[*].exerciseName").value(hasItem(DEFAULT_EXERCISE_NAME)))
+            .andExpect(jsonPath("$.[*].exerciseValue").value(hasItem(DEFAULT_EXERCISE_VALUE)))
+            .andExpect(jsonPath("$.[*].exerciseValueType").value(hasItem(DEFAULT_EXERCISE_VALUE_TYPE.toString())));
     }
 
     @Test
@@ -208,11 +291,13 @@ class WorkoutStepResourceIT {
             .andExpect(jsonPath("$.id").value(workoutStep.getId().intValue()))
             .andExpect(jsonPath("$.uuid").value(DEFAULT_UUID.toString()))
             .andExpect(jsonPath("$.order").value(DEFAULT_ORDER))
-            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE))
-            .andExpect(jsonPath("$.valueType").value(DEFAULT_VALUE_TYPE.toString()))
             .andExpect(jsonPath("$.executionTime").value(DEFAULT_EXECUTION_TIME))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()))
+            .andExpect(jsonPath("$.exerciseUuid").value(DEFAULT_EXERCISE_UUID.toString()))
+            .andExpect(jsonPath("$.exerciseName").value(DEFAULT_EXERCISE_NAME))
+            .andExpect(jsonPath("$.exerciseValue").value(DEFAULT_EXERCISE_VALUE))
+            .andExpect(jsonPath("$.exerciseValueType").value(DEFAULT_EXERCISE_VALUE_TYPE.toString()));
     }
 
     @Test
@@ -387,162 +472,6 @@ class WorkoutStepResourceIT {
 
         // Get all the workoutStepList where order is greater than SMALLER_ORDER
         defaultWorkoutStepShouldBeFound("order.greaterThan=" + SMALLER_ORDER);
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkoutStepsByValueIsEqualToSomething() throws Exception {
-        // Initialize the database
-        workoutStepRepository.saveAndFlush(workoutStep);
-
-        // Get all the workoutStepList where value equals to DEFAULT_VALUE
-        defaultWorkoutStepShouldBeFound("value.equals=" + DEFAULT_VALUE);
-
-        // Get all the workoutStepList where value equals to UPDATED_VALUE
-        defaultWorkoutStepShouldNotBeFound("value.equals=" + UPDATED_VALUE);
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkoutStepsByValueIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        workoutStepRepository.saveAndFlush(workoutStep);
-
-        // Get all the workoutStepList where value not equals to DEFAULT_VALUE
-        defaultWorkoutStepShouldNotBeFound("value.notEquals=" + DEFAULT_VALUE);
-
-        // Get all the workoutStepList where value not equals to UPDATED_VALUE
-        defaultWorkoutStepShouldBeFound("value.notEquals=" + UPDATED_VALUE);
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkoutStepsByValueIsInShouldWork() throws Exception {
-        // Initialize the database
-        workoutStepRepository.saveAndFlush(workoutStep);
-
-        // Get all the workoutStepList where value in DEFAULT_VALUE or UPDATED_VALUE
-        defaultWorkoutStepShouldBeFound("value.in=" + DEFAULT_VALUE + "," + UPDATED_VALUE);
-
-        // Get all the workoutStepList where value equals to UPDATED_VALUE
-        defaultWorkoutStepShouldNotBeFound("value.in=" + UPDATED_VALUE);
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkoutStepsByValueIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        workoutStepRepository.saveAndFlush(workoutStep);
-
-        // Get all the workoutStepList where value is not null
-        defaultWorkoutStepShouldBeFound("value.specified=true");
-
-        // Get all the workoutStepList where value is null
-        defaultWorkoutStepShouldNotBeFound("value.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkoutStepsByValueIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        workoutStepRepository.saveAndFlush(workoutStep);
-
-        // Get all the workoutStepList where value is greater than or equal to DEFAULT_VALUE
-        defaultWorkoutStepShouldBeFound("value.greaterThanOrEqual=" + DEFAULT_VALUE);
-
-        // Get all the workoutStepList where value is greater than or equal to UPDATED_VALUE
-        defaultWorkoutStepShouldNotBeFound("value.greaterThanOrEqual=" + UPDATED_VALUE);
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkoutStepsByValueIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        workoutStepRepository.saveAndFlush(workoutStep);
-
-        // Get all the workoutStepList where value is less than or equal to DEFAULT_VALUE
-        defaultWorkoutStepShouldBeFound("value.lessThanOrEqual=" + DEFAULT_VALUE);
-
-        // Get all the workoutStepList where value is less than or equal to SMALLER_VALUE
-        defaultWorkoutStepShouldNotBeFound("value.lessThanOrEqual=" + SMALLER_VALUE);
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkoutStepsByValueIsLessThanSomething() throws Exception {
-        // Initialize the database
-        workoutStepRepository.saveAndFlush(workoutStep);
-
-        // Get all the workoutStepList where value is less than DEFAULT_VALUE
-        defaultWorkoutStepShouldNotBeFound("value.lessThan=" + DEFAULT_VALUE);
-
-        // Get all the workoutStepList where value is less than UPDATED_VALUE
-        defaultWorkoutStepShouldBeFound("value.lessThan=" + UPDATED_VALUE);
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkoutStepsByValueIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        workoutStepRepository.saveAndFlush(workoutStep);
-
-        // Get all the workoutStepList where value is greater than DEFAULT_VALUE
-        defaultWorkoutStepShouldNotBeFound("value.greaterThan=" + DEFAULT_VALUE);
-
-        // Get all the workoutStepList where value is greater than SMALLER_VALUE
-        defaultWorkoutStepShouldBeFound("value.greaterThan=" + SMALLER_VALUE);
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkoutStepsByValueTypeIsEqualToSomething() throws Exception {
-        // Initialize the database
-        workoutStepRepository.saveAndFlush(workoutStep);
-
-        // Get all the workoutStepList where valueType equals to DEFAULT_VALUE_TYPE
-        defaultWorkoutStepShouldBeFound("valueType.equals=" + DEFAULT_VALUE_TYPE);
-
-        // Get all the workoutStepList where valueType equals to UPDATED_VALUE_TYPE
-        defaultWorkoutStepShouldNotBeFound("valueType.equals=" + UPDATED_VALUE_TYPE);
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkoutStepsByValueTypeIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        workoutStepRepository.saveAndFlush(workoutStep);
-
-        // Get all the workoutStepList where valueType not equals to DEFAULT_VALUE_TYPE
-        defaultWorkoutStepShouldNotBeFound("valueType.notEquals=" + DEFAULT_VALUE_TYPE);
-
-        // Get all the workoutStepList where valueType not equals to UPDATED_VALUE_TYPE
-        defaultWorkoutStepShouldBeFound("valueType.notEquals=" + UPDATED_VALUE_TYPE);
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkoutStepsByValueTypeIsInShouldWork() throws Exception {
-        // Initialize the database
-        workoutStepRepository.saveAndFlush(workoutStep);
-
-        // Get all the workoutStepList where valueType in DEFAULT_VALUE_TYPE or UPDATED_VALUE_TYPE
-        defaultWorkoutStepShouldBeFound("valueType.in=" + DEFAULT_VALUE_TYPE + "," + UPDATED_VALUE_TYPE);
-
-        // Get all the workoutStepList where valueType equals to UPDATED_VALUE_TYPE
-        defaultWorkoutStepShouldNotBeFound("valueType.in=" + UPDATED_VALUE_TYPE);
-    }
-
-    @Test
-    @Transactional
-    void getAllWorkoutStepsByValueTypeIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        workoutStepRepository.saveAndFlush(workoutStep);
-
-        // Get all the workoutStepList where valueType is not null
-        defaultWorkoutStepShouldBeFound("valueType.specified=true");
-
-        // Get all the workoutStepList where valueType is null
-        defaultWorkoutStepShouldNotBeFound("valueType.specified=false");
     }
 
     @Test
@@ -753,6 +682,311 @@ class WorkoutStepResourceIT {
         defaultWorkoutStepShouldNotBeFound("status.specified=false");
     }
 
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseUuidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseUuid equals to DEFAULT_EXERCISE_UUID
+        defaultWorkoutStepShouldBeFound("exerciseUuid.equals=" + DEFAULT_EXERCISE_UUID);
+
+        // Get all the workoutStepList where exerciseUuid equals to UPDATED_EXERCISE_UUID
+        defaultWorkoutStepShouldNotBeFound("exerciseUuid.equals=" + UPDATED_EXERCISE_UUID);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseUuidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseUuid not equals to DEFAULT_EXERCISE_UUID
+        defaultWorkoutStepShouldNotBeFound("exerciseUuid.notEquals=" + DEFAULT_EXERCISE_UUID);
+
+        // Get all the workoutStepList where exerciseUuid not equals to UPDATED_EXERCISE_UUID
+        defaultWorkoutStepShouldBeFound("exerciseUuid.notEquals=" + UPDATED_EXERCISE_UUID);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseUuidIsInShouldWork() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseUuid in DEFAULT_EXERCISE_UUID or UPDATED_EXERCISE_UUID
+        defaultWorkoutStepShouldBeFound("exerciseUuid.in=" + DEFAULT_EXERCISE_UUID + "," + UPDATED_EXERCISE_UUID);
+
+        // Get all the workoutStepList where exerciseUuid equals to UPDATED_EXERCISE_UUID
+        defaultWorkoutStepShouldNotBeFound("exerciseUuid.in=" + UPDATED_EXERCISE_UUID);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseUuidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseUuid is not null
+        defaultWorkoutStepShouldBeFound("exerciseUuid.specified=true");
+
+        // Get all the workoutStepList where exerciseUuid is null
+        defaultWorkoutStepShouldNotBeFound("exerciseUuid.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseName equals to DEFAULT_EXERCISE_NAME
+        defaultWorkoutStepShouldBeFound("exerciseName.equals=" + DEFAULT_EXERCISE_NAME);
+
+        // Get all the workoutStepList where exerciseName equals to UPDATED_EXERCISE_NAME
+        defaultWorkoutStepShouldNotBeFound("exerciseName.equals=" + UPDATED_EXERCISE_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseName not equals to DEFAULT_EXERCISE_NAME
+        defaultWorkoutStepShouldNotBeFound("exerciseName.notEquals=" + DEFAULT_EXERCISE_NAME);
+
+        // Get all the workoutStepList where exerciseName not equals to UPDATED_EXERCISE_NAME
+        defaultWorkoutStepShouldBeFound("exerciseName.notEquals=" + UPDATED_EXERCISE_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseName in DEFAULT_EXERCISE_NAME or UPDATED_EXERCISE_NAME
+        defaultWorkoutStepShouldBeFound("exerciseName.in=" + DEFAULT_EXERCISE_NAME + "," + UPDATED_EXERCISE_NAME);
+
+        // Get all the workoutStepList where exerciseName equals to UPDATED_EXERCISE_NAME
+        defaultWorkoutStepShouldNotBeFound("exerciseName.in=" + UPDATED_EXERCISE_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseName is not null
+        defaultWorkoutStepShouldBeFound("exerciseName.specified=true");
+
+        // Get all the workoutStepList where exerciseName is null
+        defaultWorkoutStepShouldNotBeFound("exerciseName.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseNameContainsSomething() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseName contains DEFAULT_EXERCISE_NAME
+        defaultWorkoutStepShouldBeFound("exerciseName.contains=" + DEFAULT_EXERCISE_NAME);
+
+        // Get all the workoutStepList where exerciseName contains UPDATED_EXERCISE_NAME
+        defaultWorkoutStepShouldNotBeFound("exerciseName.contains=" + UPDATED_EXERCISE_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseName does not contain DEFAULT_EXERCISE_NAME
+        defaultWorkoutStepShouldNotBeFound("exerciseName.doesNotContain=" + DEFAULT_EXERCISE_NAME);
+
+        // Get all the workoutStepList where exerciseName does not contain UPDATED_EXERCISE_NAME
+        defaultWorkoutStepShouldBeFound("exerciseName.doesNotContain=" + UPDATED_EXERCISE_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseValueIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseValue equals to DEFAULT_EXERCISE_VALUE
+        defaultWorkoutStepShouldBeFound("exerciseValue.equals=" + DEFAULT_EXERCISE_VALUE);
+
+        // Get all the workoutStepList where exerciseValue equals to UPDATED_EXERCISE_VALUE
+        defaultWorkoutStepShouldNotBeFound("exerciseValue.equals=" + UPDATED_EXERCISE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseValueIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseValue not equals to DEFAULT_EXERCISE_VALUE
+        defaultWorkoutStepShouldNotBeFound("exerciseValue.notEquals=" + DEFAULT_EXERCISE_VALUE);
+
+        // Get all the workoutStepList where exerciseValue not equals to UPDATED_EXERCISE_VALUE
+        defaultWorkoutStepShouldBeFound("exerciseValue.notEquals=" + UPDATED_EXERCISE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseValueIsInShouldWork() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseValue in DEFAULT_EXERCISE_VALUE or UPDATED_EXERCISE_VALUE
+        defaultWorkoutStepShouldBeFound("exerciseValue.in=" + DEFAULT_EXERCISE_VALUE + "," + UPDATED_EXERCISE_VALUE);
+
+        // Get all the workoutStepList where exerciseValue equals to UPDATED_EXERCISE_VALUE
+        defaultWorkoutStepShouldNotBeFound("exerciseValue.in=" + UPDATED_EXERCISE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseValueIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseValue is not null
+        defaultWorkoutStepShouldBeFound("exerciseValue.specified=true");
+
+        // Get all the workoutStepList where exerciseValue is null
+        defaultWorkoutStepShouldNotBeFound("exerciseValue.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseValueIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseValue is greater than or equal to DEFAULT_EXERCISE_VALUE
+        defaultWorkoutStepShouldBeFound("exerciseValue.greaterThanOrEqual=" + DEFAULT_EXERCISE_VALUE);
+
+        // Get all the workoutStepList where exerciseValue is greater than or equal to UPDATED_EXERCISE_VALUE
+        defaultWorkoutStepShouldNotBeFound("exerciseValue.greaterThanOrEqual=" + UPDATED_EXERCISE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseValueIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseValue is less than or equal to DEFAULT_EXERCISE_VALUE
+        defaultWorkoutStepShouldBeFound("exerciseValue.lessThanOrEqual=" + DEFAULT_EXERCISE_VALUE);
+
+        // Get all the workoutStepList where exerciseValue is less than or equal to SMALLER_EXERCISE_VALUE
+        defaultWorkoutStepShouldNotBeFound("exerciseValue.lessThanOrEqual=" + SMALLER_EXERCISE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseValueIsLessThanSomething() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseValue is less than DEFAULT_EXERCISE_VALUE
+        defaultWorkoutStepShouldNotBeFound("exerciseValue.lessThan=" + DEFAULT_EXERCISE_VALUE);
+
+        // Get all the workoutStepList where exerciseValue is less than UPDATED_EXERCISE_VALUE
+        defaultWorkoutStepShouldBeFound("exerciseValue.lessThan=" + UPDATED_EXERCISE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseValueIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseValue is greater than DEFAULT_EXERCISE_VALUE
+        defaultWorkoutStepShouldNotBeFound("exerciseValue.greaterThan=" + DEFAULT_EXERCISE_VALUE);
+
+        // Get all the workoutStepList where exerciseValue is greater than SMALLER_EXERCISE_VALUE
+        defaultWorkoutStepShouldBeFound("exerciseValue.greaterThan=" + SMALLER_EXERCISE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseValueTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseValueType equals to DEFAULT_EXERCISE_VALUE_TYPE
+        defaultWorkoutStepShouldBeFound("exerciseValueType.equals=" + DEFAULT_EXERCISE_VALUE_TYPE);
+
+        // Get all the workoutStepList where exerciseValueType equals to UPDATED_EXERCISE_VALUE_TYPE
+        defaultWorkoutStepShouldNotBeFound("exerciseValueType.equals=" + UPDATED_EXERCISE_VALUE_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseValueTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseValueType not equals to DEFAULT_EXERCISE_VALUE_TYPE
+        defaultWorkoutStepShouldNotBeFound("exerciseValueType.notEquals=" + DEFAULT_EXERCISE_VALUE_TYPE);
+
+        // Get all the workoutStepList where exerciseValueType not equals to UPDATED_EXERCISE_VALUE_TYPE
+        defaultWorkoutStepShouldBeFound("exerciseValueType.notEquals=" + UPDATED_EXERCISE_VALUE_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseValueTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseValueType in DEFAULT_EXERCISE_VALUE_TYPE or UPDATED_EXERCISE_VALUE_TYPE
+        defaultWorkoutStepShouldBeFound("exerciseValueType.in=" + DEFAULT_EXERCISE_VALUE_TYPE + "," + UPDATED_EXERCISE_VALUE_TYPE);
+
+        // Get all the workoutStepList where exerciseValueType equals to UPDATED_EXERCISE_VALUE_TYPE
+        defaultWorkoutStepShouldNotBeFound("exerciseValueType.in=" + UPDATED_EXERCISE_VALUE_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByExerciseValueTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+
+        // Get all the workoutStepList where exerciseValueType is not null
+        defaultWorkoutStepShouldBeFound("exerciseValueType.specified=true");
+
+        // Get all the workoutStepList where exerciseValueType is null
+        defaultWorkoutStepShouldNotBeFound("exerciseValueType.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutStepsByWorkoutIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutStepRepository.saveAndFlush(workoutStep);
+        Workout workout = WorkoutResourceIT.createEntity(em);
+        em.persist(workout);
+        em.flush();
+        workoutStep.setWorkout(workout);
+        workoutStepRepository.saveAndFlush(workoutStep);
+        Long workoutId = workout.getId();
+
+        // Get all the workoutStepList where workout equals to workoutId
+        defaultWorkoutStepShouldBeFound("workoutId.equals=" + workoutId);
+
+        // Get all the workoutStepList where workout equals to (workoutId + 1)
+        defaultWorkoutStepShouldNotBeFound("workoutId.equals=" + (workoutId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -764,11 +998,13 @@ class WorkoutStepResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(workoutStep.getId().intValue())))
             .andExpect(jsonPath("$.[*].uuid").value(hasItem(DEFAULT_UUID.toString())))
             .andExpect(jsonPath("$.[*].order").value(hasItem(DEFAULT_ORDER)))
-            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
-            .andExpect(jsonPath("$.[*].valueType").value(hasItem(DEFAULT_VALUE_TYPE.toString())))
             .andExpect(jsonPath("$.[*].executionTime").value(hasItem(DEFAULT_EXECUTION_TIME)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].exerciseUuid").value(hasItem(DEFAULT_EXERCISE_UUID.toString())))
+            .andExpect(jsonPath("$.[*].exerciseName").value(hasItem(DEFAULT_EXERCISE_NAME)))
+            .andExpect(jsonPath("$.[*].exerciseValue").value(hasItem(DEFAULT_EXERCISE_VALUE)))
+            .andExpect(jsonPath("$.[*].exerciseValueType").value(hasItem(DEFAULT_EXERCISE_VALUE_TYPE.toString())));
 
         // Check, that the count call also returns 1
         restWorkoutStepMockMvc
@@ -819,11 +1055,13 @@ class WorkoutStepResourceIT {
         updatedWorkoutStep
             .uuid(UPDATED_UUID)
             .order(UPDATED_ORDER)
-            .value(UPDATED_VALUE)
-            .valueType(UPDATED_VALUE_TYPE)
             .executionTime(UPDATED_EXECUTION_TIME)
             .type(UPDATED_TYPE)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .exerciseUuid(UPDATED_EXERCISE_UUID)
+            .exerciseName(UPDATED_EXERCISE_NAME)
+            .exerciseValue(UPDATED_EXERCISE_VALUE)
+            .exerciseValueType(UPDATED_EXERCISE_VALUE_TYPE);
 
         restWorkoutStepMockMvc
             .perform(
@@ -839,11 +1077,13 @@ class WorkoutStepResourceIT {
         WorkoutStep testWorkoutStep = workoutStepList.get(workoutStepList.size() - 1);
         assertThat(testWorkoutStep.getUuid()).isEqualTo(UPDATED_UUID);
         assertThat(testWorkoutStep.getOrder()).isEqualTo(UPDATED_ORDER);
-        assertThat(testWorkoutStep.getValue()).isEqualTo(UPDATED_VALUE);
-        assertThat(testWorkoutStep.getValueType()).isEqualTo(UPDATED_VALUE_TYPE);
         assertThat(testWorkoutStep.getExecutionTime()).isEqualTo(UPDATED_EXECUTION_TIME);
         assertThat(testWorkoutStep.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testWorkoutStep.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testWorkoutStep.getExerciseUuid()).isEqualTo(UPDATED_EXERCISE_UUID);
+        assertThat(testWorkoutStep.getExerciseName()).isEqualTo(UPDATED_EXERCISE_NAME);
+        assertThat(testWorkoutStep.getExerciseValue()).isEqualTo(UPDATED_EXERCISE_VALUE);
+        assertThat(testWorkoutStep.getExerciseValueType()).isEqualTo(UPDATED_EXERCISE_VALUE_TYPE);
     }
 
     @Test
@@ -914,7 +1154,7 @@ class WorkoutStepResourceIT {
         WorkoutStep partialUpdatedWorkoutStep = new WorkoutStep();
         partialUpdatedWorkoutStep.setId(workoutStep.getId());
 
-        partialUpdatedWorkoutStep.valueType(UPDATED_VALUE_TYPE).executionTime(UPDATED_EXECUTION_TIME).type(UPDATED_TYPE);
+        partialUpdatedWorkoutStep.type(UPDATED_TYPE).status(UPDATED_STATUS).exerciseUuid(UPDATED_EXERCISE_UUID);
 
         restWorkoutStepMockMvc
             .perform(
@@ -930,11 +1170,13 @@ class WorkoutStepResourceIT {
         WorkoutStep testWorkoutStep = workoutStepList.get(workoutStepList.size() - 1);
         assertThat(testWorkoutStep.getUuid()).isEqualTo(DEFAULT_UUID);
         assertThat(testWorkoutStep.getOrder()).isEqualTo(DEFAULT_ORDER);
-        assertThat(testWorkoutStep.getValue()).isEqualTo(DEFAULT_VALUE);
-        assertThat(testWorkoutStep.getValueType()).isEqualTo(UPDATED_VALUE_TYPE);
-        assertThat(testWorkoutStep.getExecutionTime()).isEqualTo(UPDATED_EXECUTION_TIME);
+        assertThat(testWorkoutStep.getExecutionTime()).isEqualTo(DEFAULT_EXECUTION_TIME);
         assertThat(testWorkoutStep.getType()).isEqualTo(UPDATED_TYPE);
-        assertThat(testWorkoutStep.getStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testWorkoutStep.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testWorkoutStep.getExerciseUuid()).isEqualTo(UPDATED_EXERCISE_UUID);
+        assertThat(testWorkoutStep.getExerciseName()).isEqualTo(DEFAULT_EXERCISE_NAME);
+        assertThat(testWorkoutStep.getExerciseValue()).isEqualTo(DEFAULT_EXERCISE_VALUE);
+        assertThat(testWorkoutStep.getExerciseValueType()).isEqualTo(DEFAULT_EXERCISE_VALUE_TYPE);
     }
 
     @Test
@@ -952,11 +1194,13 @@ class WorkoutStepResourceIT {
         partialUpdatedWorkoutStep
             .uuid(UPDATED_UUID)
             .order(UPDATED_ORDER)
-            .value(UPDATED_VALUE)
-            .valueType(UPDATED_VALUE_TYPE)
             .executionTime(UPDATED_EXECUTION_TIME)
             .type(UPDATED_TYPE)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .exerciseUuid(UPDATED_EXERCISE_UUID)
+            .exerciseName(UPDATED_EXERCISE_NAME)
+            .exerciseValue(UPDATED_EXERCISE_VALUE)
+            .exerciseValueType(UPDATED_EXERCISE_VALUE_TYPE);
 
         restWorkoutStepMockMvc
             .perform(
@@ -972,11 +1216,13 @@ class WorkoutStepResourceIT {
         WorkoutStep testWorkoutStep = workoutStepList.get(workoutStepList.size() - 1);
         assertThat(testWorkoutStep.getUuid()).isEqualTo(UPDATED_UUID);
         assertThat(testWorkoutStep.getOrder()).isEqualTo(UPDATED_ORDER);
-        assertThat(testWorkoutStep.getValue()).isEqualTo(UPDATED_VALUE);
-        assertThat(testWorkoutStep.getValueType()).isEqualTo(UPDATED_VALUE_TYPE);
         assertThat(testWorkoutStep.getExecutionTime()).isEqualTo(UPDATED_EXECUTION_TIME);
         assertThat(testWorkoutStep.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testWorkoutStep.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testWorkoutStep.getExerciseUuid()).isEqualTo(UPDATED_EXERCISE_UUID);
+        assertThat(testWorkoutStep.getExerciseName()).isEqualTo(UPDATED_EXERCISE_NAME);
+        assertThat(testWorkoutStep.getExerciseValue()).isEqualTo(UPDATED_EXERCISE_VALUE);
+        assertThat(testWorkoutStep.getExerciseValueType()).isEqualTo(UPDATED_EXERCISE_VALUE_TYPE);
     }
 
     @Test

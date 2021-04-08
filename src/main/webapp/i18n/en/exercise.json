@@ -22,7 +22,11 @@
       "image": "Image",
       "name": "Name",
       "description": "Description",
-      "valueType": "Value Type"
+      "valueType": "Value Type",
+      "owner": "Owner",
+      "exerciseTool": "Exercise Tool",
+      "note": "Note",
+      "muscle": "Muscle"
     }
   }
 }

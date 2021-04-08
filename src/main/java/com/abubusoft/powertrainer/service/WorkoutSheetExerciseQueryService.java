@@ -87,14 +87,31 @@ public class WorkoutSheetExerciseQueryService extends QueryService<WorkoutSheetE
             if (criteria.getOrder() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getOrder(), WorkoutSheetExercise_.order));
             }
-            if (criteria.getRepetition() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getRepetition(), WorkoutSheetExercise_.repetition));
+            if (criteria.getRepetitions() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getRepetitions(), WorkoutSheetExercise_.repetitions));
             }
-            if (criteria.getValue() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getValue(), WorkoutSheetExercise_.value));
+            if (criteria.getExerciseUuid() != null) {
+                specification = specification.and(buildSpecification(criteria.getExerciseUuid(), WorkoutSheetExercise_.exerciseUuid));
             }
-            if (criteria.getValueType() != null) {
-                specification = specification.and(buildSpecification(criteria.getValueType(), WorkoutSheetExercise_.valueType));
+            if (criteria.getExerciseName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getExerciseName(), WorkoutSheetExercise_.exerciseName));
+            }
+            if (criteria.getExerciseValue() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getExerciseValue(), WorkoutSheetExercise_.exerciseValue));
+            }
+            if (criteria.getExerciseValueType() != null) {
+                specification =
+                    specification.and(buildSpecification(criteria.getExerciseValueType(), WorkoutSheetExercise_.exerciseValueType));
+            }
+            if (criteria.getWorkoutSheetId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getWorkoutSheetId(),
+                            root -> root.join(WorkoutSheetExercise_.workoutSheet, JoinType.LEFT).get(WorkoutSheet_.id)
+                        )
+                    );
             }
         }
         return specification;

@@ -46,14 +46,20 @@ public class WorkoutSheetExerciseServiceImpl implements WorkoutSheetExerciseServ
                     if (workoutSheetExercise.getOrder() != null) {
                         existingWorkoutSheetExercise.setOrder(workoutSheetExercise.getOrder());
                     }
-                    if (workoutSheetExercise.getRepetition() != null) {
-                        existingWorkoutSheetExercise.setRepetition(workoutSheetExercise.getRepetition());
+                    if (workoutSheetExercise.getRepetitions() != null) {
+                        existingWorkoutSheetExercise.setRepetitions(workoutSheetExercise.getRepetitions());
                     }
-                    if (workoutSheetExercise.getValue() != null) {
-                        existingWorkoutSheetExercise.setValue(workoutSheetExercise.getValue());
+                    if (workoutSheetExercise.getExerciseUuid() != null) {
+                        existingWorkoutSheetExercise.setExerciseUuid(workoutSheetExercise.getExerciseUuid());
                     }
-                    if (workoutSheetExercise.getValueType() != null) {
-                        existingWorkoutSheetExercise.setValueType(workoutSheetExercise.getValueType());
+                    if (workoutSheetExercise.getExerciseName() != null) {
+                        existingWorkoutSheetExercise.setExerciseName(workoutSheetExercise.getExerciseName());
+                    }
+                    if (workoutSheetExercise.getExerciseValue() != null) {
+                        existingWorkoutSheetExercise.setExerciseValue(workoutSheetExercise.getExerciseValue());
+                    }
+                    if (workoutSheetExercise.getExerciseValueType() != null) {
+                        existingWorkoutSheetExercise.setExerciseValueType(workoutSheetExercise.getExerciseValueType());
                     }
 
                     return existingWorkoutSheetExercise;

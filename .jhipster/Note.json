@@ -9,7 +9,7 @@
     {
       "fieldName": "type",
       "fieldType": "NoteType",
-      "fieldValues": "YOUTUBE,EMBEDDED,URL",
+      "fieldValues": "VIDEO,TEXT,URL",
       "fieldValidateRules": ["required"]
     },
     {
@@ -27,7 +27,14 @@
       "fieldTypeBlobContent": "text"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "exercise",
+      "otherEntityRelationshipName": "note",
+      "relationshipName": "exercise"
+    }
+  ],
   "entityTableName": "notes",
   "dto": "no",
   "pagination": "pagination",
@@ -37,5 +44,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": ["PowerTrainer"],
-  "changelogDate": "20210402170400"
+  "changelogDate": "20210402170600"
 }

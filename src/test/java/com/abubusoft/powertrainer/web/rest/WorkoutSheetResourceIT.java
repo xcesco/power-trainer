@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.abubusoft.powertrainer.IntegrationTest;
 import com.abubusoft.powertrainer.domain.WorkoutSheet;
+import com.abubusoft.powertrainer.domain.WorkoutSheetExercise;
 import com.abubusoft.powertrainer.domain.enumeration.WorkoutType;
 import com.abubusoft.powertrainer.repository.WorkoutSheetRepository;
 import com.abubusoft.powertrainer.service.criteria.WorkoutSheetCriteria;
@@ -46,6 +47,9 @@ class WorkoutSheetResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_OWNER = "AAAAAAAAAA";
+    private static final String UPDATED_OWNER = "BBBBBBBBBB";
 
     private static final Integer DEFAULT_PREPARE_TIME = 1;
     private static final Integer UPDATED_PREPARE_TIME = 2;
@@ -104,6 +108,7 @@ class WorkoutSheetResourceIT {
             .image(DEFAULT_IMAGE)
             .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE)
             .description(DEFAULT_DESCRIPTION)
+            .owner(DEFAULT_OWNER)
             .prepareTime(DEFAULT_PREPARE_TIME)
             .coolDownTime(DEFAULT_COOL_DOWN_TIME)
             .cycles(DEFAULT_CYCLES)
@@ -127,6 +132,7 @@ class WorkoutSheetResourceIT {
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
             .description(UPDATED_DESCRIPTION)
+            .owner(UPDATED_OWNER)
             .prepareTime(UPDATED_PREPARE_TIME)
             .coolDownTime(UPDATED_COOL_DOWN_TIME)
             .cycles(UPDATED_CYCLES)
@@ -160,6 +166,7 @@ class WorkoutSheetResourceIT {
         assertThat(testWorkoutSheet.getImage()).isEqualTo(DEFAULT_IMAGE);
         assertThat(testWorkoutSheet.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
         assertThat(testWorkoutSheet.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testWorkoutSheet.getOwner()).isEqualTo(DEFAULT_OWNER);
         assertThat(testWorkoutSheet.getPrepareTime()).isEqualTo(DEFAULT_PREPARE_TIME);
         assertThat(testWorkoutSheet.getCoolDownTime()).isEqualTo(DEFAULT_COOL_DOWN_TIME);
         assertThat(testWorkoutSheet.getCycles()).isEqualTo(DEFAULT_CYCLES);
@@ -238,6 +245,7 @@ class WorkoutSheetResourceIT {
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].owner").value(hasItem(DEFAULT_OWNER)))
             .andExpect(jsonPath("$.[*].prepareTime").value(hasItem(DEFAULT_PREPARE_TIME)))
             .andExpect(jsonPath("$.[*].coolDownTime").value(hasItem(DEFAULT_COOL_DOWN_TIME)))
             .andExpect(jsonPath("$.[*].cycles").value(hasItem(DEFAULT_CYCLES)))
@@ -264,6 +272,7 @@ class WorkoutSheetResourceIT {
             .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
             .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
+            .andExpect(jsonPath("$.owner").value(DEFAULT_OWNER))
             .andExpect(jsonPath("$.prepareTime").value(DEFAULT_PREPARE_TIME))
             .andExpect(jsonPath("$.coolDownTime").value(DEFAULT_COOL_DOWN_TIME))
             .andExpect(jsonPath("$.cycles").value(DEFAULT_CYCLES))
@@ -419,6 +428,84 @@ class WorkoutSheetResourceIT {
 
         // Get all the workoutSheetList where name does not contain UPDATED_NAME
         defaultWorkoutSheetShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutSheetsByOwnerIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutSheetRepository.saveAndFlush(workoutSheet);
+
+        // Get all the workoutSheetList where owner equals to DEFAULT_OWNER
+        defaultWorkoutSheetShouldBeFound("owner.equals=" + DEFAULT_OWNER);
+
+        // Get all the workoutSheetList where owner equals to UPDATED_OWNER
+        defaultWorkoutSheetShouldNotBeFound("owner.equals=" + UPDATED_OWNER);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutSheetsByOwnerIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutSheetRepository.saveAndFlush(workoutSheet);
+
+        // Get all the workoutSheetList where owner not equals to DEFAULT_OWNER
+        defaultWorkoutSheetShouldNotBeFound("owner.notEquals=" + DEFAULT_OWNER);
+
+        // Get all the workoutSheetList where owner not equals to UPDATED_OWNER
+        defaultWorkoutSheetShouldBeFound("owner.notEquals=" + UPDATED_OWNER);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutSheetsByOwnerIsInShouldWork() throws Exception {
+        // Initialize the database
+        workoutSheetRepository.saveAndFlush(workoutSheet);
+
+        // Get all the workoutSheetList where owner in DEFAULT_OWNER or UPDATED_OWNER
+        defaultWorkoutSheetShouldBeFound("owner.in=" + DEFAULT_OWNER + "," + UPDATED_OWNER);
+
+        // Get all the workoutSheetList where owner equals to UPDATED_OWNER
+        defaultWorkoutSheetShouldNotBeFound("owner.in=" + UPDATED_OWNER);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutSheetsByOwnerIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        workoutSheetRepository.saveAndFlush(workoutSheet);
+
+        // Get all the workoutSheetList where owner is not null
+        defaultWorkoutSheetShouldBeFound("owner.specified=true");
+
+        // Get all the workoutSheetList where owner is null
+        defaultWorkoutSheetShouldNotBeFound("owner.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutSheetsByOwnerContainsSomething() throws Exception {
+        // Initialize the database
+        workoutSheetRepository.saveAndFlush(workoutSheet);
+
+        // Get all the workoutSheetList where owner contains DEFAULT_OWNER
+        defaultWorkoutSheetShouldBeFound("owner.contains=" + DEFAULT_OWNER);
+
+        // Get all the workoutSheetList where owner contains UPDATED_OWNER
+        defaultWorkoutSheetShouldNotBeFound("owner.contains=" + UPDATED_OWNER);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutSheetsByOwnerNotContainsSomething() throws Exception {
+        // Initialize the database
+        workoutSheetRepository.saveAndFlush(workoutSheet);
+
+        // Get all the workoutSheetList where owner does not contain DEFAULT_OWNER
+        defaultWorkoutSheetShouldNotBeFound("owner.doesNotContain=" + DEFAULT_OWNER);
+
+        // Get all the workoutSheetList where owner does not contain UPDATED_OWNER
+        defaultWorkoutSheetShouldBeFound("owner.doesNotContain=" + UPDATED_OWNER);
     }
 
     @Test
@@ -1097,6 +1184,25 @@ class WorkoutSheetResourceIT {
         defaultWorkoutSheetShouldNotBeFound("type.specified=false");
     }
 
+    @Test
+    @Transactional
+    void getAllWorkoutSheetsByWorkoutSheetExerciseIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutSheetRepository.saveAndFlush(workoutSheet);
+        WorkoutSheetExercise workoutSheetExercise = WorkoutSheetExerciseResourceIT.createEntity(em);
+        em.persist(workoutSheetExercise);
+        em.flush();
+        workoutSheet.addWorkoutSheetExercise(workoutSheetExercise);
+        workoutSheetRepository.saveAndFlush(workoutSheet);
+        Long workoutSheetExerciseId = workoutSheetExercise.getId();
+
+        // Get all the workoutSheetList where workoutSheetExercise equals to workoutSheetExerciseId
+        defaultWorkoutSheetShouldBeFound("workoutSheetExerciseId.equals=" + workoutSheetExerciseId);
+
+        // Get all the workoutSheetList where workoutSheetExercise equals to (workoutSheetExerciseId + 1)
+        defaultWorkoutSheetShouldNotBeFound("workoutSheetExerciseId.equals=" + (workoutSheetExerciseId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1111,6 +1217,7 @@ class WorkoutSheetResourceIT {
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].owner").value(hasItem(DEFAULT_OWNER)))
             .andExpect(jsonPath("$.[*].prepareTime").value(hasItem(DEFAULT_PREPARE_TIME)))
             .andExpect(jsonPath("$.[*].coolDownTime").value(hasItem(DEFAULT_COOL_DOWN_TIME)))
             .andExpect(jsonPath("$.[*].cycles").value(hasItem(DEFAULT_CYCLES)))
@@ -1171,6 +1278,7 @@ class WorkoutSheetResourceIT {
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
             .description(UPDATED_DESCRIPTION)
+            .owner(UPDATED_OWNER)
             .prepareTime(UPDATED_PREPARE_TIME)
             .coolDownTime(UPDATED_COOL_DOWN_TIME)
             .cycles(UPDATED_CYCLES)
@@ -1196,6 +1304,7 @@ class WorkoutSheetResourceIT {
         assertThat(testWorkoutSheet.getImage()).isEqualTo(UPDATED_IMAGE);
         assertThat(testWorkoutSheet.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
         assertThat(testWorkoutSheet.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testWorkoutSheet.getOwner()).isEqualTo(UPDATED_OWNER);
         assertThat(testWorkoutSheet.getPrepareTime()).isEqualTo(UPDATED_PREPARE_TIME);
         assertThat(testWorkoutSheet.getCoolDownTime()).isEqualTo(UPDATED_COOL_DOWN_TIME);
         assertThat(testWorkoutSheet.getCycles()).isEqualTo(UPDATED_CYCLES);
@@ -1277,10 +1386,10 @@ class WorkoutSheetResourceIT {
             .uuid(UPDATED_UUID)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .prepareTime(UPDATED_PREPARE_TIME)
+            .owner(UPDATED_OWNER)
+            .cycleRestTime(UPDATED_CYCLE_REST_TIME)
             .set(UPDATED_SET)
-            .setRestTime(UPDATED_SET_REST_TIME)
-            .type(UPDATED_TYPE);
+            .setRestTime(UPDATED_SET_REST_TIME);
 
         restWorkoutSheetMockMvc
             .perform(
@@ -1299,13 +1408,14 @@ class WorkoutSheetResourceIT {
         assertThat(testWorkoutSheet.getImage()).isEqualTo(DEFAULT_IMAGE);
         assertThat(testWorkoutSheet.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
         assertThat(testWorkoutSheet.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testWorkoutSheet.getPrepareTime()).isEqualTo(UPDATED_PREPARE_TIME);
+        assertThat(testWorkoutSheet.getOwner()).isEqualTo(UPDATED_OWNER);
+        assertThat(testWorkoutSheet.getPrepareTime()).isEqualTo(DEFAULT_PREPARE_TIME);
         assertThat(testWorkoutSheet.getCoolDownTime()).isEqualTo(DEFAULT_COOL_DOWN_TIME);
         assertThat(testWorkoutSheet.getCycles()).isEqualTo(DEFAULT_CYCLES);
-        assertThat(testWorkoutSheet.getCycleRestTime()).isEqualTo(DEFAULT_CYCLE_REST_TIME);
+        assertThat(testWorkoutSheet.getCycleRestTime()).isEqualTo(UPDATED_CYCLE_REST_TIME);
         assertThat(testWorkoutSheet.getSet()).isEqualTo(UPDATED_SET);
         assertThat(testWorkoutSheet.getSetRestTime()).isEqualTo(UPDATED_SET_REST_TIME);
-        assertThat(testWorkoutSheet.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testWorkoutSheet.getType()).isEqualTo(DEFAULT_TYPE);
     }
 
     @Test
@@ -1326,6 +1436,7 @@ class WorkoutSheetResourceIT {
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
             .description(UPDATED_DESCRIPTION)
+            .owner(UPDATED_OWNER)
             .prepareTime(UPDATED_PREPARE_TIME)
             .coolDownTime(UPDATED_COOL_DOWN_TIME)
             .cycles(UPDATED_CYCLES)
@@ -1351,6 +1462,7 @@ class WorkoutSheetResourceIT {
         assertThat(testWorkoutSheet.getImage()).isEqualTo(UPDATED_IMAGE);
         assertThat(testWorkoutSheet.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
         assertThat(testWorkoutSheet.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testWorkoutSheet.getOwner()).isEqualTo(UPDATED_OWNER);
         assertThat(testWorkoutSheet.getPrepareTime()).isEqualTo(UPDATED_PREPARE_TIME);
         assertThat(testWorkoutSheet.getCoolDownTime()).isEqualTo(UPDATED_COOL_DOWN_TIME);
         assertThat(testWorkoutSheet.getCycles()).isEqualTo(UPDATED_CYCLES);

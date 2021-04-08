@@ -105,6 +105,21 @@ public class WorkoutQueryService extends QueryService<Workout> {
             if (criteria.getNote() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getNote(), Workout_.note));
             }
+            if (criteria.getWorkoutStepId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getWorkoutStepId(),
+                            root -> root.join(Workout_.workoutSteps, JoinType.LEFT).get(WorkoutStep_.id)
+                        )
+                    );
+            }
+            if (criteria.getCalendarId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getCalendarId(), root -> root.join(Workout_.calendar, JoinType.LEFT).get(Calendar_.id))
+                    );
+            }
         }
         return specification;
     }

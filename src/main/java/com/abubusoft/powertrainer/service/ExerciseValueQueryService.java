@@ -84,11 +84,29 @@ public class ExerciseValueQueryService extends QueryService<ExerciseValue> {
             if (criteria.getUuid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUuid(), ExerciseValue_.uuid));
             }
-            if (criteria.getValue() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getValue(), ExerciseValue_.value));
-            }
             if (criteria.getDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDate(), ExerciseValue_.date));
+            }
+            if (criteria.getExerciseUuid() != null) {
+                specification = specification.and(buildSpecification(criteria.getExerciseUuid(), ExerciseValue_.exerciseUuid));
+            }
+            if (criteria.getExerciseName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getExerciseName(), ExerciseValue_.exerciseName));
+            }
+            if (criteria.getExerciseValue() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getExerciseValue(), ExerciseValue_.exerciseValue));
+            }
+            if (criteria.getExerciseValueType() != null) {
+                specification = specification.and(buildSpecification(criteria.getExerciseValueType(), ExerciseValue_.exerciseValueType));
+            }
+            if (criteria.getCalendarId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getCalendarId(),
+                            root -> root.join(ExerciseValue_.calendar, JoinType.LEFT).get(Calendar_.id)
+                        )
+                    );
             }
         }
         return specification;

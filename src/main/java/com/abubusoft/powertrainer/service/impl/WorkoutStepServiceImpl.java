@@ -46,12 +46,6 @@ public class WorkoutStepServiceImpl implements WorkoutStepService {
                     if (workoutStep.getOrder() != null) {
                         existingWorkoutStep.setOrder(workoutStep.getOrder());
                     }
-                    if (workoutStep.getValue() != null) {
-                        existingWorkoutStep.setValue(workoutStep.getValue());
-                    }
-                    if (workoutStep.getValueType() != null) {
-                        existingWorkoutStep.setValueType(workoutStep.getValueType());
-                    }
                     if (workoutStep.getExecutionTime() != null) {
                         existingWorkoutStep.setExecutionTime(workoutStep.getExecutionTime());
                     }
@@ -60,6 +54,18 @@ public class WorkoutStepServiceImpl implements WorkoutStepService {
                     }
                     if (workoutStep.getStatus() != null) {
                         existingWorkoutStep.setStatus(workoutStep.getStatus());
+                    }
+                    if (workoutStep.getExerciseUuid() != null) {
+                        existingWorkoutStep.setExerciseUuid(workoutStep.getExerciseUuid());
+                    }
+                    if (workoutStep.getExerciseName() != null) {
+                        existingWorkoutStep.setExerciseName(workoutStep.getExerciseName());
+                    }
+                    if (workoutStep.getExerciseValue() != null) {
+                        existingWorkoutStep.setExerciseValue(workoutStep.getExerciseValue());
+                    }
+                    if (workoutStep.getExerciseValueType() != null) {
+                        existingWorkoutStep.setExerciseValueType(workoutStep.getExerciseValueType());
                     }
 
                     return existingWorkoutStep;

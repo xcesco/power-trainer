@@ -1,0 +1,27 @@
+{
+  "powerTrainerApp": {
+    "translation": {
+      "home": {
+        "title": "Translations",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Translation",
+        "createOrEditLabel": "Genera o modifica un Translation",
+        "notFound": "No Translations found"
+      },
+      "created": "&Egrave; stato generato un nuovo Translation con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Translation identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Translation con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Translation {{ id }}?"
+      },
+      "detail": {
+        "title": "Translation"
+      },
+      "id": "ID",
+      "entityType": "Entity Type",
+      "entityUuid": "Entity Uuid",
+      "value": "Value",
+      "language": "Language"
+    }
+  }
+}

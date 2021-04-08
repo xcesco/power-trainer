@@ -2,8 +2,8 @@
   "powerTrainerApp": {
     "NoteType": {
       "null": "",
-      "YOUTUBE": "YOUTUBE",
-      "EMBEDDED": "EMBEDDED",
+      "VIDEO": "VIDEO",
+      "TEXT": "TEXT",
       "URL": "URL"
     }
   }

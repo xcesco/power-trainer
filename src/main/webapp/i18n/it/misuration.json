@@ -1,0 +1,30 @@
+{
+  "powerTrainerApp": {
+    "misuration": {
+      "home": {
+        "title": "Misurations",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Misuration",
+        "createOrEditLabel": "Genera o modifica un Misuration",
+        "notFound": "No Misurations found"
+      },
+      "created": "&Egrave; stato generato un nuovo Misuration con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Misuration identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Misuration con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Misuration {{ id }}?"
+      },
+      "detail": {
+        "title": "Misuration"
+      },
+      "id": "ID",
+      "uuid": "Uuid",
+      "date": "Date",
+      "value": "Value",
+      "image": "Image",
+      "note": "Note",
+      "calendar": "Calendar",
+      "misurationType": "Misuration Type"
+    }
+  }
+}

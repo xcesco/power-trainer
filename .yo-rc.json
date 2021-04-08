@@ -39,15 +39,17 @@
     "skipServer": false,
     "entitySuffix": "",
     "entities": [
+      "Language",
+      "Translation",
       "Calendar",
       "Exercise",
       "ExerciseValue",
-      "MeasureValue",
-      "MeasureType",
+      "ExerciseTool",
+      "Misuration",
+      "MisurationType",
       "WorkoutSheet",
       "WorkoutSheetExercise",
       "Workout",
-      "Muscle2Exercise",
       "WorkoutStep",
       "Device",
       "Muscle",
@@ -56,6 +58,6 @@
     "skipCheckLengthOfIdentifier": false,
     "skipFakeData": false,
     "pages": [],
-    "lastLiquibaseTimestamp": 1617383040000
+    "lastLiquibaseTimestamp": 1617383160000
   }
 }

@@ -24,6 +24,7 @@ describe('Service Tests', () => {
         id: 0,
         uuid: 'AAAAAAA',
         name: 'AAAAAAA',
+        owner: 'AAAAAAA',
       };
     });
 
@@ -61,6 +62,7 @@ describe('Service Tests', () => {
             id: 1,
             uuid: 'BBBBBB',
             name: 'BBBBBB',
+            owner: 'BBBBBB',
           },
           elemDefault
         );
@@ -94,6 +96,7 @@ describe('Service Tests', () => {
             id: 1,
             uuid: 'BBBBBB',
             name: 'BBBBBB',
+            owner: 'BBBBBB',
           },
           elemDefault
         );
@@ -145,7 +148,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Calendar to an array', () => {
-          const calendarArray: ICalendar[] = [{ id: 123 }, { id: 456 }, { id: 30424 }];
+          const calendarArray: ICalendar[] = [{ id: 123 }, { id: 456 }, { id: 99433 }];
           const calendarCollection: ICalendar[] = [{ id: 123 }];
           expectedResult = service.addCalendarToCollectionIfMissing(calendarCollection, ...calendarArray);
           expect(expectedResult).toHaveLength(3);

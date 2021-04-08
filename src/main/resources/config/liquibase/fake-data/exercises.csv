@@ -1,11 +1,11 @@
-id;uuid;image;image_content_type;name;description;value_type
-1;d8ecaaf0-a3c7-4432-a485-53d5daa86c11;../fake-data/blob/hipster.png;image/png;Platinum Pound;../fake-data/blob/hipster.txt;DURATION
-2;5f69548f-067e-48da-968d-2b669af7970f;../fake-data/blob/hipster.png;image/png;Concrete;../fake-data/blob/hipster.txt;REPETITIONS
-3;19916ffe-7276-4572-baba-ec29f67d7f08;../fake-data/blob/hipster.png;image/png;IB Table Direct;../fake-data/blob/hipster.txt;WEIGHT
-4;d2ba0fdf-07d4-45a2-8171-1778ec373d40;../fake-data/blob/hipster.png;image/png;metrics Checking;../fake-data/blob/hipster.txt;REPETITIONS
-5;527745dc-6352-457f-8964-51b05ab43d46;../fake-data/blob/hipster.png;image/png;Data Granite Maine;../fake-data/blob/hipster.txt;DISTANCE
-6;e6d8ea6d-249a-45d1-a455-df79e7a61fc7;../fake-data/blob/hipster.png;image/png;hard Mouse Dynamic;../fake-data/blob/hipster.txt;DURATION
-7;2ff8e6d1-79e8-4ce8-a790-9eaf8480a9b9;../fake-data/blob/hipster.png;image/png;New;../fake-data/blob/hipster.txt;DISTANCE
-8;958ac767-3329-4f77-91a0-03e1423847cf;../fake-data/blob/hipster.png;image/png;auxiliary;../fake-data/blob/hipster.txt;DURATION
-9;33a0e00e-23ca-447f-a6f2-0700c13952b6;../fake-data/blob/hipster.png;image/png;Visionary;../fake-data/blob/hipster.txt;DISTANCE
-10;8145898d-49e8-47b1-86df-96a9d1c1ff66;../fake-data/blob/hipster.png;image/png;maximize Virginia;../fake-data/blob/hipster.txt;REPETITIONS
+id;uuid;image;image_content_type;name;description;value_type;owner
+1;d8ecaaf0-a3c7-4432-a485-53d5daa86c11;../fake-data/blob/hipster.png;image/png;Platinum Pound;../fake-data/blob/hipster.txt;DURATION;Group B2C
+2;f067e8da-568d-42b6-a9af-7970f006335e;../fake-data/blob/hipster.png;image/png;Home;../fake-data/blob/hipster.txt;WEIGHT;Agent Shoes bleeding-edge
+3;fabaec29-f67d-47f0-8eed-a0fe7fe154d2;../fake-data/blob/hipster.png;image/png;deposit XSS Summit;../fake-data/blob/hipster.txt;WEIGHT;Hat Club
+4;778ec373-d40a-46da-903e-527745dc6352;../fake-data/blob/hipster.png;image/png;blockchains;../fake-data/blob/hipster.txt;DISTANCE;Horizontal back
+5;ab43d46c-ec22-48e9-a88e-6d8ea6d249a5;../fake-data/blob/hipster.png;image/png;Fantastic forecast Optimization;../fake-data/blob/hipster.txt;REPETITIONS;withdrawal Assistant
+6;fb91237e-a522-4ff8-a6d1-79e8ce8e7909;../fake-data/blob/hipster.png;image/png;invoice intranet Rupee;../fake-data/blob/hipster.txt;DISTANCE;New
+7;a958ac76-7332-49f7-b51a-003e1423847c;../fake-data/blob/hipster.png;image/png;reciprocal Croatia Programmable;../fake-data/blob/hipster.txt;REPETITIONS;Bike
+8;a47f66f2-0700-4c13-952b-643f89814589;../fake-data/blob/hipster.png;image/png;compressing EXE;../fake-data/blob/hipster.txt;DISTANCE;index
+9;f96a9d1c-1ff6-4686-929e-4e498cd58316;../fake-data/blob/hipster.png;image/png;IB visionary;../fake-data/blob/hipster.txt;DISTANCE;Plastic Ville software
+10;7e45ec96-2ffa-410b-9623-d197796af1b8;../fake-data/blob/hipster.png;image/png;Product;../fake-data/blob/hipster.txt;DISTANCE;syndicate Plastic Bedfordshire

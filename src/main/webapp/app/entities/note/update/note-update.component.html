@@ -27,8 +27,8 @@
           <label class="form-control-label" jhiTranslate="powerTrainerApp.note.type" for="field_type">Type</label>
           <select class="form-control" name="type" formControlName="type" id="field_type" data-cy="type">
             <option [ngValue]="null">{{ 'powerTrainerApp.NoteType.null' | translate }}</option>
-            <option value="YOUTUBE">{{ 'powerTrainerApp.NoteType.YOUTUBE' | translate }}</option>
-            <option value="EMBEDDED">{{ 'powerTrainerApp.NoteType.EMBEDDED' | translate }}</option>
+            <option value="VIDEO">{{ 'powerTrainerApp.NoteType.VIDEO' | translate }}</option>
+            <option value="TEXT">{{ 'powerTrainerApp.NoteType.TEXT' | translate }}</option>
             <option value="URL">{{ 'powerTrainerApp.NoteType.URL' | translate }}</option>
           </select>
           <div *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
@@ -90,6 +90,19 @@
             data-cy="description"
             formControlName="description"
           ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.note.exercise" for="field_exercise">Exercise</label>
+          <select class="form-control" id="field_exercise" data-cy="exercise" name="exercise" formControlName="exercise">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="exerciseOption.id === editForm.get('exercise')!.value?.id ? editForm.get('exercise')!.value : exerciseOption"
+              *ngFor="let exerciseOption of exercisesSharedCollection; trackBy: trackExerciseById"
+            >
+              {{ exerciseOption.id }}
+            </option>
+          </select>
         </div>
       </div>
 

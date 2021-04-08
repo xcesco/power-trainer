@@ -22,13 +22,15 @@
       "name": "Name",
       "image": "Image",
       "description": "Description",
+      "owner": "Owner",
       "prepareTime": "Prepare Time",
       "coolDownTime": "Cool Down Time",
       "cycles": "Cycles",
       "cycleRestTime": "Cycle Rest Time",
       "set": "Set",
       "setRestTime": "Set Rest Time",
-      "type": "Type"
+      "type": "Type",
+      "workoutSheetExercise": "Workout Sheet Exercise"
     }
   }
 }

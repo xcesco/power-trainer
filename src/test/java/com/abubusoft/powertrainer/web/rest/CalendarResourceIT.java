@@ -7,6 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.abubusoft.powertrainer.IntegrationTest;
 import com.abubusoft.powertrainer.domain.Calendar;
+import com.abubusoft.powertrainer.domain.ExerciseValue;
+import com.abubusoft.powertrainer.domain.Misuration;
+import com.abubusoft.powertrainer.domain.Workout;
 import com.abubusoft.powertrainer.repository.CalendarRepository;
 import com.abubusoft.powertrainer.service.criteria.CalendarCriteria;
 import java.util.List;
@@ -37,6 +40,9 @@ class CalendarResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_OWNER = "AAAAAAAAAA";
+    private static final String UPDATED_OWNER = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/calendars";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -61,7 +67,7 @@ class CalendarResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Calendar createEntity(EntityManager em) {
-        Calendar calendar = new Calendar().uuid(DEFAULT_UUID).name(DEFAULT_NAME);
+        Calendar calendar = new Calendar().uuid(DEFAULT_UUID).name(DEFAULT_NAME).owner(DEFAULT_OWNER);
         return calendar;
     }
 
@@ -72,7 +78,7 @@ class CalendarResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Calendar createUpdatedEntity(EntityManager em) {
-        Calendar calendar = new Calendar().uuid(UPDATED_UUID).name(UPDATED_NAME);
+        Calendar calendar = new Calendar().uuid(UPDATED_UUID).name(UPDATED_NAME).owner(UPDATED_OWNER);
         return calendar;
     }
 
@@ -96,6 +102,7 @@ class CalendarResourceIT {
         Calendar testCalendar = calendarList.get(calendarList.size() - 1);
         assertThat(testCalendar.getUuid()).isEqualTo(DEFAULT_UUID);
         assertThat(testCalendar.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testCalendar.getOwner()).isEqualTo(DEFAULT_OWNER);
     }
 
     @Test
@@ -152,6 +159,23 @@ class CalendarResourceIT {
 
     @Test
     @Transactional
+    void checkOwnerIsRequired() throws Exception {
+        int databaseSizeBeforeTest = calendarRepository.findAll().size();
+        // set the field null
+        calendar.setOwner(null);
+
+        // Create the Calendar, which fails.
+
+        restCalendarMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(calendar)))
+            .andExpect(status().isBadRequest());
+
+        List<Calendar> calendarList = calendarRepository.findAll();
+        assertThat(calendarList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllCalendars() throws Exception {
         // Initialize the database
         calendarRepository.saveAndFlush(calendar);
@@ -163,7 +187,8 @@ class CalendarResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(calendar.getId().intValue())))
             .andExpect(jsonPath("$.[*].uuid").value(hasItem(DEFAULT_UUID.toString())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].owner").value(hasItem(DEFAULT_OWNER)));
     }
 
     @Test
@@ -179,7 +204,8 @@ class CalendarResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(calendar.getId().intValue()))
             .andExpect(jsonPath("$.uuid").value(DEFAULT_UUID.toString()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.owner").value(DEFAULT_OWNER));
     }
 
     @Test
@@ -330,6 +356,141 @@ class CalendarResourceIT {
         defaultCalendarShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
     }
 
+    @Test
+    @Transactional
+    void getAllCalendarsByOwnerIsEqualToSomething() throws Exception {
+        // Initialize the database
+        calendarRepository.saveAndFlush(calendar);
+
+        // Get all the calendarList where owner equals to DEFAULT_OWNER
+        defaultCalendarShouldBeFound("owner.equals=" + DEFAULT_OWNER);
+
+        // Get all the calendarList where owner equals to UPDATED_OWNER
+        defaultCalendarShouldNotBeFound("owner.equals=" + UPDATED_OWNER);
+    }
+
+    @Test
+    @Transactional
+    void getAllCalendarsByOwnerIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        calendarRepository.saveAndFlush(calendar);
+
+        // Get all the calendarList where owner not equals to DEFAULT_OWNER
+        defaultCalendarShouldNotBeFound("owner.notEquals=" + DEFAULT_OWNER);
+
+        // Get all the calendarList where owner not equals to UPDATED_OWNER
+        defaultCalendarShouldBeFound("owner.notEquals=" + UPDATED_OWNER);
+    }
+
+    @Test
+    @Transactional
+    void getAllCalendarsByOwnerIsInShouldWork() throws Exception {
+        // Initialize the database
+        calendarRepository.saveAndFlush(calendar);
+
+        // Get all the calendarList where owner in DEFAULT_OWNER or UPDATED_OWNER
+        defaultCalendarShouldBeFound("owner.in=" + DEFAULT_OWNER + "," + UPDATED_OWNER);
+
+        // Get all the calendarList where owner equals to UPDATED_OWNER
+        defaultCalendarShouldNotBeFound("owner.in=" + UPDATED_OWNER);
+    }
+
+    @Test
+    @Transactional
+    void getAllCalendarsByOwnerIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        calendarRepository.saveAndFlush(calendar);
+
+        // Get all the calendarList where owner is not null
+        defaultCalendarShouldBeFound("owner.specified=true");
+
+        // Get all the calendarList where owner is null
+        defaultCalendarShouldNotBeFound("owner.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllCalendarsByOwnerContainsSomething() throws Exception {
+        // Initialize the database
+        calendarRepository.saveAndFlush(calendar);
+
+        // Get all the calendarList where owner contains DEFAULT_OWNER
+        defaultCalendarShouldBeFound("owner.contains=" + DEFAULT_OWNER);
+
+        // Get all the calendarList where owner contains UPDATED_OWNER
+        defaultCalendarShouldNotBeFound("owner.contains=" + UPDATED_OWNER);
+    }
+
+    @Test
+    @Transactional
+    void getAllCalendarsByOwnerNotContainsSomething() throws Exception {
+        // Initialize the database
+        calendarRepository.saveAndFlush(calendar);
+
+        // Get all the calendarList where owner does not contain DEFAULT_OWNER
+        defaultCalendarShouldNotBeFound("owner.doesNotContain=" + DEFAULT_OWNER);
+
+        // Get all the calendarList where owner does not contain UPDATED_OWNER
+        defaultCalendarShouldBeFound("owner.doesNotContain=" + UPDATED_OWNER);
+    }
+
+    @Test
+    @Transactional
+    void getAllCalendarsByExerciseValueIsEqualToSomething() throws Exception {
+        // Initialize the database
+        calendarRepository.saveAndFlush(calendar);
+        ExerciseValue exerciseValue = ExerciseValueResourceIT.createEntity(em);
+        em.persist(exerciseValue);
+        em.flush();
+        calendar.addExerciseValue(exerciseValue);
+        calendarRepository.saveAndFlush(calendar);
+        Long exerciseValueId = exerciseValue.getId();
+
+        // Get all the calendarList where exerciseValue equals to exerciseValueId
+        defaultCalendarShouldBeFound("exerciseValueId.equals=" + exerciseValueId);
+
+        // Get all the calendarList where exerciseValue equals to (exerciseValueId + 1)
+        defaultCalendarShouldNotBeFound("exerciseValueId.equals=" + (exerciseValueId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllCalendarsByMisurationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        calendarRepository.saveAndFlush(calendar);
+        Misuration misuration = MisurationResourceIT.createEntity(em);
+        em.persist(misuration);
+        em.flush();
+        calendar.addMisuration(misuration);
+        calendarRepository.saveAndFlush(calendar);
+        Long misurationId = misuration.getId();
+
+        // Get all the calendarList where misuration equals to misurationId
+        defaultCalendarShouldBeFound("misurationId.equals=" + misurationId);
+
+        // Get all the calendarList where misuration equals to (misurationId + 1)
+        defaultCalendarShouldNotBeFound("misurationId.equals=" + (misurationId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllCalendarsByWorkoutIsEqualToSomething() throws Exception {
+        // Initialize the database
+        calendarRepository.saveAndFlush(calendar);
+        Workout workout = WorkoutResourceIT.createEntity(em);
+        em.persist(workout);
+        em.flush();
+        calendar.addWorkout(workout);
+        calendarRepository.saveAndFlush(calendar);
+        Long workoutId = workout.getId();
+
+        // Get all the calendarList where workout equals to workoutId
+        defaultCalendarShouldBeFound("workoutId.equals=" + workoutId);
+
+        // Get all the calendarList where workout equals to (workoutId + 1)
+        defaultCalendarShouldNotBeFound("workoutId.equals=" + (workoutId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -340,7 +501,8 @@ class CalendarResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(calendar.getId().intValue())))
             .andExpect(jsonPath("$.[*].uuid").value(hasItem(DEFAULT_UUID.toString())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].owner").value(hasItem(DEFAULT_OWNER)));
 
         // Check, that the count call also returns 1
         restCalendarMockMvc
@@ -388,7 +550,7 @@ class CalendarResourceIT {
         Calendar updatedCalendar = calendarRepository.findById(calendar.getId()).get();
         // Disconnect from session so that the updates on updatedCalendar are not directly saved in db
         em.detach(updatedCalendar);
-        updatedCalendar.uuid(UPDATED_UUID).name(UPDATED_NAME);
+        updatedCalendar.uuid(UPDATED_UUID).name(UPDATED_NAME).owner(UPDATED_OWNER);
 
         restCalendarMockMvc
             .perform(
@@ -404,6 +566,7 @@ class CalendarResourceIT {
         Calendar testCalendar = calendarList.get(calendarList.size() - 1);
         assertThat(testCalendar.getUuid()).isEqualTo(UPDATED_UUID);
         assertThat(testCalendar.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testCalendar.getOwner()).isEqualTo(UPDATED_OWNER);
     }
 
     @Test
@@ -488,6 +651,7 @@ class CalendarResourceIT {
         Calendar testCalendar = calendarList.get(calendarList.size() - 1);
         assertThat(testCalendar.getUuid()).isEqualTo(DEFAULT_UUID);
         assertThat(testCalendar.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testCalendar.getOwner()).isEqualTo(DEFAULT_OWNER);
     }
 
     @Test
@@ -502,7 +666,7 @@ class CalendarResourceIT {
         Calendar partialUpdatedCalendar = new Calendar();
         partialUpdatedCalendar.setId(calendar.getId());
 
-        partialUpdatedCalendar.uuid(UPDATED_UUID).name(UPDATED_NAME);
+        partialUpdatedCalendar.uuid(UPDATED_UUID).name(UPDATED_NAME).owner(UPDATED_OWNER);
 
         restCalendarMockMvc
             .perform(
@@ -518,6 +682,7 @@ class CalendarResourceIT {
         Calendar testCalendar = calendarList.get(calendarList.size() - 1);
         assertThat(testCalendar.getUuid()).isEqualTo(UPDATED_UUID);
         assertThat(testCalendar.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testCalendar.getOwner()).isEqualTo(UPDATED_OWNER);
     }
 
     @Test

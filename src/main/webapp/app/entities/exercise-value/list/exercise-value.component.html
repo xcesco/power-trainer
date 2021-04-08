@@ -36,11 +36,23 @@
           <th scope="col" jhiSortBy="uuid">
             <span jhiTranslate="powerTrainerApp.exerciseValue.uuid">Uuid</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="value">
-            <span jhiTranslate="powerTrainerApp.exerciseValue.value">Value</span> <fa-icon icon="sort"></fa-icon>
-          </th>
           <th scope="col" jhiSortBy="date">
             <span jhiTranslate="powerTrainerApp.exerciseValue.date">Date</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="exerciseUuid">
+            <span jhiTranslate="powerTrainerApp.exerciseValue.exerciseUuid">Exercise Uuid</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="exerciseName">
+            <span jhiTranslate="powerTrainerApp.exerciseValue.exerciseName">Exercise Name</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="exerciseValue">
+            <span jhiTranslate="powerTrainerApp.exerciseValue.exerciseValue">Exercise Value</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="exerciseValueType">
+            <span jhiTranslate="powerTrainerApp.exerciseValue.exerciseValueType">Exercise Value Type</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="calendar.id">
+            <span jhiTranslate="powerTrainerApp.exerciseValue.calendar">Calendar</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
         </tr>
@@ -51,8 +63,16 @@
             <a [routerLink]="['/exercise-value', exerciseValue.id, 'view']">{{ exerciseValue.id }}</a>
           </td>
           <td>{{ exerciseValue.uuid }}</td>
-          <td>{{ exerciseValue.value }}</td>
-          <td>{{ exerciseValue.date | formatMediumDate }}</td>
+          <td>{{ exerciseValue.date | formatMediumDatetime }}</td>
+          <td>{{ exerciseValue.exerciseUuid }}</td>
+          <td>{{ exerciseValue.exerciseName }}</td>
+          <td>{{ exerciseValue.exerciseValue }}</td>
+          <td jhiTranslate="{{ 'powerTrainerApp.ValueType.' + exerciseValue.exerciseValueType }}">{{ exerciseValue.exerciseValueType }}</td>
+          <td>
+            <div *ngIf="exerciseValue.calendar">
+              <a [routerLink]="['/calendar', exerciseValue.calendar?.id, 'view']">{{ exerciseValue.calendar?.id }}</a>
+            </div>
+          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

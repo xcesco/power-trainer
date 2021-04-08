@@ -39,6 +39,12 @@
         <dd>
           <span>{{ note.description }}</span>
         </dd>
+        <dt><span jhiTranslate="powerTrainerApp.note.exercise">Exercise</span></dt>
+        <dd>
+          <div *ngIf="note.exercise">
+            <a [routerLink]="['/exercise', note.exercise?.id, 'view']">{{ note.exercise?.id }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

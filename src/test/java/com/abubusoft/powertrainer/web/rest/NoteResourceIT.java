@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.abubusoft.powertrainer.IntegrationTest;
+import com.abubusoft.powertrainer.domain.Exercise;
 import com.abubusoft.powertrainer.domain.Note;
 import com.abubusoft.powertrainer.domain.enumeration.NoteType;
 import com.abubusoft.powertrainer.repository.NoteRepository;
@@ -36,8 +37,8 @@ class NoteResourceIT {
     private static final UUID DEFAULT_UUID = UUID.randomUUID();
     private static final UUID UPDATED_UUID = UUID.randomUUID();
 
-    private static final NoteType DEFAULT_TYPE = NoteType.YOUTUBE;
-    private static final NoteType UPDATED_TYPE = NoteType.EMBEDDED;
+    private static final NoteType DEFAULT_TYPE = NoteType.VIDEO;
+    private static final NoteType UPDATED_TYPE = NoteType.TEXT;
 
     private static final String DEFAULT_URL = "AAAAAAAAAA";
     private static final String UPDATED_URL = "BBBBBBBBBB";
@@ -417,6 +418,25 @@ class NoteResourceIT {
 
         // Get all the noteList where url does not contain UPDATED_URL
         defaultNoteShouldBeFound("url.doesNotContain=" + UPDATED_URL);
+    }
+
+    @Test
+    @Transactional
+    void getAllNotesByExerciseIsEqualToSomething() throws Exception {
+        // Initialize the database
+        noteRepository.saveAndFlush(note);
+        Exercise exercise = ExerciseResourceIT.createEntity(em);
+        em.persist(exercise);
+        em.flush();
+        note.setExercise(exercise);
+        noteRepository.saveAndFlush(note);
+        Long exerciseId = exercise.getId();
+
+        // Get all the noteList where exercise equals to exerciseId
+        defaultNoteShouldBeFound("exerciseId.equals=" + exerciseId);
+
+        // Get all the noteList where exercise equals to (exerciseId + 1)
+        defaultNoteShouldNotBeFound("exerciseId.equals=" + (exerciseId + 1));
     }
 
     /**

@@ -60,6 +60,9 @@
           <th scope="col" jhiSortBy="note">
             <span jhiTranslate="powerTrainerApp.workout.note">Note</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="calendar.id">
+            <span jhiTranslate="powerTrainerApp.workout.calendar">Calendar</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -82,6 +85,11 @@
           <td jhiTranslate="{{ 'powerTrainerApp.WorkoutStatus.' + workout.status }}">{{ workout.status }}</td>
           <td>{{ workout.date | formatMediumDatetime }}</td>
           <td>{{ workout.note }}</td>
+          <td>
+            <div *ngIf="workout.calendar">
+              <a [routerLink]="['/calendar', workout.calendar?.id, 'view']">{{ workout.calendar?.id }}</a>
+            </div>
+          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

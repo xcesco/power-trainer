@@ -19,7 +19,7 @@
       },
       "id": "ID",
       "owner": "Owner",
-      "deviceId": "Device Id"
+      "deviceUuid": "Device Uuid"
     }
   }
 }

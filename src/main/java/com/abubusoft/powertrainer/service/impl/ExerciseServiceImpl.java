@@ -58,6 +58,9 @@ public class ExerciseServiceImpl implements ExerciseService {
                     if (exercise.getValueType() != null) {
                         existingExercise.setValueType(exercise.getValueType());
                     }
+                    if (exercise.getOwner() != null) {
+                        existingExercise.setOwner(exercise.getOwner());
+                    }
 
                     return existingExercise;
                 }
@@ -72,11 +75,15 @@ public class ExerciseServiceImpl implements ExerciseService {
         return exerciseRepository.findAll(pageable);
     }
 
+    public Page<Exercise> findAllWithEagerRelationships(Pageable pageable) {
+        return exerciseRepository.findAllWithEagerRelationships(pageable);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<Exercise> findOne(Long id) {
         log.debug("Request to get Exercise : {}", id);
-        return exerciseRepository.findById(id);
+        return exerciseRepository.findOneWithEagerRelationships(id);
     }
 
     @Override

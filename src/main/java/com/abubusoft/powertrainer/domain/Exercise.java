@@ -1,7 +1,10 @@
 package com.abubusoft.powertrainer.domain;
 
 import com.abubusoft.powertrainer.domain.enumeration.ValueType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -47,6 +50,30 @@ public class Exercise implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "value_type")
     private ValueType valueType;
+
+    @NotNull
+    @Column(name = "owner", nullable = false)
+    private String owner;
+
+    @OneToMany(mappedBy = "exercise")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "exercise" }, allowSetters = true)
+    private Set<ExerciseTool> exerciseTools = new HashSet<>();
+
+    @OneToMany(mappedBy = "exercise")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "exercise" }, allowSetters = true)
+    private Set<Note> notes = new HashSet<>();
+
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JoinTable(
+        name = "rel_exercises__muscle",
+        joinColumns = @JoinColumn(name = "exercises_id"),
+        inverseJoinColumns = @JoinColumn(name = "muscle_id")
+    )
+    @JsonIgnoreProperties(value = { "exercises" }, allowSetters = true)
+    private Set<Muscle> muscles = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -140,6 +167,106 @@ public class Exercise implements Serializable {
         this.valueType = valueType;
     }
 
+    public String getOwner() {
+        return this.owner;
+    }
+
+    public Exercise owner(String owner) {
+        this.owner = owner;
+        return this;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public Set<ExerciseTool> getExerciseTools() {
+        return this.exerciseTools;
+    }
+
+    public Exercise exerciseTools(Set<ExerciseTool> exerciseTools) {
+        this.setExerciseTools(exerciseTools);
+        return this;
+    }
+
+    public Exercise addExerciseTool(ExerciseTool exerciseTool) {
+        this.exerciseTools.add(exerciseTool);
+        exerciseTool.setExercise(this);
+        return this;
+    }
+
+    public Exercise removeExerciseTool(ExerciseTool exerciseTool) {
+        this.exerciseTools.remove(exerciseTool);
+        exerciseTool.setExercise(null);
+        return this;
+    }
+
+    public void setExerciseTools(Set<ExerciseTool> exerciseTools) {
+        if (this.exerciseTools != null) {
+            this.exerciseTools.forEach(i -> i.setExercise(null));
+        }
+        if (exerciseTools != null) {
+            exerciseTools.forEach(i -> i.setExercise(this));
+        }
+        this.exerciseTools = exerciseTools;
+    }
+
+    public Set<Note> getNotes() {
+        return this.notes;
+    }
+
+    public Exercise notes(Set<Note> notes) {
+        this.setNotes(notes);
+        return this;
+    }
+
+    public Exercise addNote(Note note) {
+        this.notes.add(note);
+        note.setExercise(this);
+        return this;
+    }
+
+    public Exercise removeNote(Note note) {
+        this.notes.remove(note);
+        note.setExercise(null);
+        return this;
+    }
+
+    public void setNotes(Set<Note> notes) {
+        if (this.notes != null) {
+            this.notes.forEach(i -> i.setExercise(null));
+        }
+        if (notes != null) {
+            notes.forEach(i -> i.setExercise(this));
+        }
+        this.notes = notes;
+    }
+
+    public Set<Muscle> getMuscles() {
+        return this.muscles;
+    }
+
+    public Exercise muscles(Set<Muscle> muscles) {
+        this.setMuscles(muscles);
+        return this;
+    }
+
+    public Exercise addMuscle(Muscle muscle) {
+        this.muscles.add(muscle);
+        muscle.getExercises().add(this);
+        return this;
+    }
+
+    public Exercise removeMuscle(Muscle muscle) {
+        this.muscles.remove(muscle);
+        muscle.getExercises().remove(this);
+        return this;
+    }
+
+    public void setMuscles(Set<Muscle> muscles) {
+        this.muscles = muscles;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -170,6 +297,7 @@ public class Exercise implements Serializable {
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", valueType='" + getValueType() + "'" +
+            ", owner='" + getOwner() + "'" +
             "}";
     }
 }

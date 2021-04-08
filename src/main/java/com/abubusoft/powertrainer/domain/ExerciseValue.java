@@ -1,7 +1,9 @@
 package com.abubusoft.powertrainer.domain;
 
+import com.abubusoft.powertrainer.domain.enumeration.ValueType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -28,12 +30,29 @@ public class ExerciseValue implements Serializable {
     private UUID uuid;
 
     @NotNull
-    @Column(name = "value", nullable = false)
-    private Integer value;
+    @Column(name = "date", nullable = false)
+    private ZonedDateTime date;
 
     @NotNull
-    @Column(name = "date", nullable = false)
-    private LocalDate date;
+    @Column(name = "exercise_uuid", nullable = false)
+    private UUID exerciseUuid;
+
+    @NotNull
+    @Column(name = "exercise_name", nullable = false)
+    private String exerciseName;
+
+    @NotNull
+    @Column(name = "exercise_value", nullable = false)
+    private Integer exerciseValue;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "exercise_value_type", nullable = false)
+    private ValueType exerciseValueType;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "exerciseValues", "misurations", "workouts" }, allowSetters = true)
+    private Calendar calendar;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -62,30 +81,82 @@ public class ExerciseValue implements Serializable {
         this.uuid = uuid;
     }
 
-    public Integer getValue() {
-        return this.value;
-    }
-
-    public ExerciseValue value(Integer value) {
-        this.value = value;
-        return this;
-    }
-
-    public void setValue(Integer value) {
-        this.value = value;
-    }
-
-    public LocalDate getDate() {
+    public ZonedDateTime getDate() {
         return this.date;
     }
 
-    public ExerciseValue date(LocalDate date) {
+    public ExerciseValue date(ZonedDateTime date) {
         this.date = date;
         return this;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(ZonedDateTime date) {
         this.date = date;
+    }
+
+    public UUID getExerciseUuid() {
+        return this.exerciseUuid;
+    }
+
+    public ExerciseValue exerciseUuid(UUID exerciseUuid) {
+        this.exerciseUuid = exerciseUuid;
+        return this;
+    }
+
+    public void setExerciseUuid(UUID exerciseUuid) {
+        this.exerciseUuid = exerciseUuid;
+    }
+
+    public String getExerciseName() {
+        return this.exerciseName;
+    }
+
+    public ExerciseValue exerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
+        return this;
+    }
+
+    public void setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
+    }
+
+    public Integer getExerciseValue() {
+        return this.exerciseValue;
+    }
+
+    public ExerciseValue exerciseValue(Integer exerciseValue) {
+        this.exerciseValue = exerciseValue;
+        return this;
+    }
+
+    public void setExerciseValue(Integer exerciseValue) {
+        this.exerciseValue = exerciseValue;
+    }
+
+    public ValueType getExerciseValueType() {
+        return this.exerciseValueType;
+    }
+
+    public ExerciseValue exerciseValueType(ValueType exerciseValueType) {
+        this.exerciseValueType = exerciseValueType;
+        return this;
+    }
+
+    public void setExerciseValueType(ValueType exerciseValueType) {
+        this.exerciseValueType = exerciseValueType;
+    }
+
+    public Calendar getCalendar() {
+        return this.calendar;
+    }
+
+    public ExerciseValue calendar(Calendar calendar) {
+        this.setCalendar(calendar);
+        return this;
+    }
+
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -113,8 +184,11 @@ public class ExerciseValue implements Serializable {
         return "ExerciseValue{" +
             "id=" + getId() +
             ", uuid='" + getUuid() + "'" +
-            ", value=" + getValue() +
             ", date='" + getDate() + "'" +
+            ", exerciseUuid='" + getExerciseUuid() + "'" +
+            ", exerciseName='" + getExerciseName() + "'" +
+            ", exerciseValue=" + getExerciseValue() +
+            ", exerciseValueType='" + getExerciseValueType() + "'" +
             "}";
     }
 }

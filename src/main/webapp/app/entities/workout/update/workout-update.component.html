@@ -130,6 +130,19 @@
           <label class="form-control-label" jhiTranslate="powerTrainerApp.workout.note" for="field_note">Note</label>
           <input type="text" class="form-control" name="note" id="field_note" data-cy="note" formControlName="note" />
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workout.calendar" for="field_calendar">Calendar</label>
+          <select class="form-control" id="field_calendar" data-cy="calendar" name="calendar" formControlName="calendar">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="calendarOption.id === editForm.get('calendar')!.value?.id ? editForm.get('calendar')!.value : calendarOption"
+              *ngFor="let calendarOption of calendarsSharedCollection; trackBy: trackCalendarById"
+            >
+              {{ calendarOption.id }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

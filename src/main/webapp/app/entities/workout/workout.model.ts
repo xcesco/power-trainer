@@ -1,4 +1,6 @@
 import * as dayjs from 'dayjs';
+import { IWorkoutStep } from 'app/entities/workout-step/workout-step.model';
+import { ICalendar } from 'app/entities/calendar/calendar.model';
 import { WorkoutType } from 'app/entities/enumerations/workout-type.model';
 import { WorkoutStatus } from 'app/entities/enumerations/workout-status.model';
 
@@ -14,6 +16,8 @@ export interface IWorkout {
   status?: WorkoutStatus | null;
   date?: dayjs.Dayjs | null;
   note?: string | null;
+  workoutSteps?: IWorkoutStep[] | null;
+  calendar?: ICalendar | null;
 }
 
 export class Workout implements IWorkout {
@@ -28,7 +32,9 @@ export class Workout implements IWorkout {
     public previewTime?: number | null,
     public status?: WorkoutStatus | null,
     public date?: dayjs.Dayjs | null,
-    public note?: string | null
+    public note?: string | null,
+    public workoutSteps?: IWorkoutStep[] | null,
+    public calendar?: ICalendar | null
   ) {}
 }
 

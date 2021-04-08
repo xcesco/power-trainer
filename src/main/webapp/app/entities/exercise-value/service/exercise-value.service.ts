@@ -5,7 +5,6 @@ import { map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 
 import { isPresent } from 'app/core/util/operators';
-import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IExerciseValue, getExerciseValueIdentifier } from '../exercise-value.model';
@@ -81,7 +80,7 @@ export class ExerciseValueService {
 
   protected convertDateFromClient(exerciseValue: IExerciseValue): IExerciseValue {
     return Object.assign({}, exerciseValue, {
-      date: exerciseValue.date?.isValid() ? exerciseValue.date.format(DATE_FORMAT) : undefined,
+      date: exerciseValue.date?.isValid() ? exerciseValue.date.toJSON() : undefined,
     });
   }
 

@@ -2,14 +2,20 @@ package com.abubusoft.powertrainer.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.abubusoft.powertrainer.IntegrationTest;
 import com.abubusoft.powertrainer.domain.Exercise;
+import com.abubusoft.powertrainer.domain.ExerciseTool;
+import com.abubusoft.powertrainer.domain.Muscle;
+import com.abubusoft.powertrainer.domain.Note;
 import com.abubusoft.powertrainer.domain.enumeration.ValueType;
 import com.abubusoft.powertrainer.repository.ExerciseRepository;
+import com.abubusoft.powertrainer.service.ExerciseService;
 import com.abubusoft.powertrainer.service.criteria.ExerciseCriteria;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -17,8 +23,13 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,6 +40,7 @@ import org.springframework.util.Base64Utils;
  * Integration tests for the {@link ExerciseResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class ExerciseResourceIT {
@@ -50,6 +62,9 @@ class ExerciseResourceIT {
     private static final ValueType DEFAULT_VALUE_TYPE = ValueType.DURATION;
     private static final ValueType UPDATED_VALUE_TYPE = ValueType.WEIGHT;
 
+    private static final String DEFAULT_OWNER = "AAAAAAAAAA";
+    private static final String UPDATED_OWNER = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/exercises";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -58,6 +73,12 @@ class ExerciseResourceIT {
 
     @Autowired
     private ExerciseRepository exerciseRepository;
+
+    @Mock
+    private ExerciseRepository exerciseRepositoryMock;
+
+    @Mock
+    private ExerciseService exerciseServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -80,7 +101,8 @@ class ExerciseResourceIT {
             .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE)
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
-            .valueType(DEFAULT_VALUE_TYPE);
+            .valueType(DEFAULT_VALUE_TYPE)
+            .owner(DEFAULT_OWNER);
         return exercise;
     }
 
@@ -97,7 +119,8 @@ class ExerciseResourceIT {
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .valueType(UPDATED_VALUE_TYPE);
+            .valueType(UPDATED_VALUE_TYPE)
+            .owner(UPDATED_OWNER);
         return exercise;
     }
 
@@ -125,6 +148,7 @@ class ExerciseResourceIT {
         assertThat(testExercise.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testExercise.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testExercise.getValueType()).isEqualTo(DEFAULT_VALUE_TYPE);
+        assertThat(testExercise.getOwner()).isEqualTo(DEFAULT_OWNER);
     }
 
     @Test
@@ -181,6 +205,23 @@ class ExerciseResourceIT {
 
     @Test
     @Transactional
+    void checkOwnerIsRequired() throws Exception {
+        int databaseSizeBeforeTest = exerciseRepository.findAll().size();
+        // set the field null
+        exercise.setOwner(null);
+
+        // Create the Exercise, which fails.
+
+        restExerciseMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(exercise)))
+            .andExpect(status().isBadRequest());
+
+        List<Exercise> exerciseList = exerciseRepository.findAll();
+        assertThat(exerciseList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllExercises() throws Exception {
         // Initialize the database
         exerciseRepository.saveAndFlush(exercise);
@@ -196,7 +237,26 @@ class ExerciseResourceIT {
             .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].valueType").value(hasItem(DEFAULT_VALUE_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].valueType").value(hasItem(DEFAULT_VALUE_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].owner").value(hasItem(DEFAULT_OWNER)));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllExercisesWithEagerRelationshipsIsEnabled() throws Exception {
+        when(exerciseServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restExerciseMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(exerciseServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllExercisesWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(exerciseServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restExerciseMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(exerciseServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -216,7 +276,8 @@ class ExerciseResourceIT {
             .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
-            .andExpect(jsonPath("$.valueType").value(DEFAULT_VALUE_TYPE.toString()));
+            .andExpect(jsonPath("$.valueType").value(DEFAULT_VALUE_TYPE.toString()))
+            .andExpect(jsonPath("$.owner").value(DEFAULT_OWNER));
     }
 
     @Test
@@ -419,6 +480,141 @@ class ExerciseResourceIT {
         defaultExerciseShouldNotBeFound("valueType.specified=false");
     }
 
+    @Test
+    @Transactional
+    void getAllExercisesByOwnerIsEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseRepository.saveAndFlush(exercise);
+
+        // Get all the exerciseList where owner equals to DEFAULT_OWNER
+        defaultExerciseShouldBeFound("owner.equals=" + DEFAULT_OWNER);
+
+        // Get all the exerciseList where owner equals to UPDATED_OWNER
+        defaultExerciseShouldNotBeFound("owner.equals=" + UPDATED_OWNER);
+    }
+
+    @Test
+    @Transactional
+    void getAllExercisesByOwnerIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseRepository.saveAndFlush(exercise);
+
+        // Get all the exerciseList where owner not equals to DEFAULT_OWNER
+        defaultExerciseShouldNotBeFound("owner.notEquals=" + DEFAULT_OWNER);
+
+        // Get all the exerciseList where owner not equals to UPDATED_OWNER
+        defaultExerciseShouldBeFound("owner.notEquals=" + UPDATED_OWNER);
+    }
+
+    @Test
+    @Transactional
+    void getAllExercisesByOwnerIsInShouldWork() throws Exception {
+        // Initialize the database
+        exerciseRepository.saveAndFlush(exercise);
+
+        // Get all the exerciseList where owner in DEFAULT_OWNER or UPDATED_OWNER
+        defaultExerciseShouldBeFound("owner.in=" + DEFAULT_OWNER + "," + UPDATED_OWNER);
+
+        // Get all the exerciseList where owner equals to UPDATED_OWNER
+        defaultExerciseShouldNotBeFound("owner.in=" + UPDATED_OWNER);
+    }
+
+    @Test
+    @Transactional
+    void getAllExercisesByOwnerIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        exerciseRepository.saveAndFlush(exercise);
+
+        // Get all the exerciseList where owner is not null
+        defaultExerciseShouldBeFound("owner.specified=true");
+
+        // Get all the exerciseList where owner is null
+        defaultExerciseShouldNotBeFound("owner.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllExercisesByOwnerContainsSomething() throws Exception {
+        // Initialize the database
+        exerciseRepository.saveAndFlush(exercise);
+
+        // Get all the exerciseList where owner contains DEFAULT_OWNER
+        defaultExerciseShouldBeFound("owner.contains=" + DEFAULT_OWNER);
+
+        // Get all the exerciseList where owner contains UPDATED_OWNER
+        defaultExerciseShouldNotBeFound("owner.contains=" + UPDATED_OWNER);
+    }
+
+    @Test
+    @Transactional
+    void getAllExercisesByOwnerNotContainsSomething() throws Exception {
+        // Initialize the database
+        exerciseRepository.saveAndFlush(exercise);
+
+        // Get all the exerciseList where owner does not contain DEFAULT_OWNER
+        defaultExerciseShouldNotBeFound("owner.doesNotContain=" + DEFAULT_OWNER);
+
+        // Get all the exerciseList where owner does not contain UPDATED_OWNER
+        defaultExerciseShouldBeFound("owner.doesNotContain=" + UPDATED_OWNER);
+    }
+
+    @Test
+    @Transactional
+    void getAllExercisesByExerciseToolIsEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseRepository.saveAndFlush(exercise);
+        ExerciseTool exerciseTool = ExerciseToolResourceIT.createEntity(em);
+        em.persist(exerciseTool);
+        em.flush();
+        exercise.addExerciseTool(exerciseTool);
+        exerciseRepository.saveAndFlush(exercise);
+        Long exerciseToolId = exerciseTool.getId();
+
+        // Get all the exerciseList where exerciseTool equals to exerciseToolId
+        defaultExerciseShouldBeFound("exerciseToolId.equals=" + exerciseToolId);
+
+        // Get all the exerciseList where exerciseTool equals to (exerciseToolId + 1)
+        defaultExerciseShouldNotBeFound("exerciseToolId.equals=" + (exerciseToolId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllExercisesByNoteIsEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseRepository.saveAndFlush(exercise);
+        Note note = NoteResourceIT.createEntity(em);
+        em.persist(note);
+        em.flush();
+        exercise.addNote(note);
+        exerciseRepository.saveAndFlush(exercise);
+        Long noteId = note.getId();
+
+        // Get all the exerciseList where note equals to noteId
+        defaultExerciseShouldBeFound("noteId.equals=" + noteId);
+
+        // Get all the exerciseList where note equals to (noteId + 1)
+        defaultExerciseShouldNotBeFound("noteId.equals=" + (noteId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllExercisesByMuscleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseRepository.saveAndFlush(exercise);
+        Muscle muscle = MuscleResourceIT.createEntity(em);
+        em.persist(muscle);
+        em.flush();
+        exercise.addMuscle(muscle);
+        exerciseRepository.saveAndFlush(exercise);
+        Long muscleId = muscle.getId();
+
+        // Get all the exerciseList where muscle equals to muscleId
+        defaultExerciseShouldBeFound("muscleId.equals=" + muscleId);
+
+        // Get all the exerciseList where muscle equals to (muscleId + 1)
+        defaultExerciseShouldNotBeFound("muscleId.equals=" + (muscleId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -433,7 +629,8 @@ class ExerciseResourceIT {
             .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
-            .andExpect(jsonPath("$.[*].valueType").value(hasItem(DEFAULT_VALUE_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].valueType").value(hasItem(DEFAULT_VALUE_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].owner").value(hasItem(DEFAULT_OWNER)));
 
         // Check, that the count call also returns 1
         restExerciseMockMvc
@@ -487,7 +684,8 @@ class ExerciseResourceIT {
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .valueType(UPDATED_VALUE_TYPE);
+            .valueType(UPDATED_VALUE_TYPE)
+            .owner(UPDATED_OWNER);
 
         restExerciseMockMvc
             .perform(
@@ -507,6 +705,7 @@ class ExerciseResourceIT {
         assertThat(testExercise.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testExercise.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testExercise.getValueType()).isEqualTo(UPDATED_VALUE_TYPE);
+        assertThat(testExercise.getOwner()).isEqualTo(UPDATED_OWNER);
     }
 
     @Test
@@ -583,7 +782,8 @@ class ExerciseResourceIT {
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .valueType(UPDATED_VALUE_TYPE);
+            .valueType(UPDATED_VALUE_TYPE)
+            .owner(UPDATED_OWNER);
 
         restExerciseMockMvc
             .perform(
@@ -603,6 +803,7 @@ class ExerciseResourceIT {
         assertThat(testExercise.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testExercise.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testExercise.getValueType()).isEqualTo(UPDATED_VALUE_TYPE);
+        assertThat(testExercise.getOwner()).isEqualTo(UPDATED_OWNER);
     }
 
     @Test
@@ -623,7 +824,8 @@ class ExerciseResourceIT {
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .valueType(UPDATED_VALUE_TYPE);
+            .valueType(UPDATED_VALUE_TYPE)
+            .owner(UPDATED_OWNER);
 
         restExerciseMockMvc
             .perform(
@@ -643,6 +845,7 @@ class ExerciseResourceIT {
         assertThat(testExercise.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testExercise.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testExercise.getValueType()).isEqualTo(UPDATED_VALUE_TYPE);
+        assertThat(testExercise.getOwner()).isEqualTo(UPDATED_OWNER);
     }
 
     @Test

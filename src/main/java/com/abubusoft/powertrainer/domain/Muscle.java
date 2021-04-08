@@ -1,6 +1,9 @@
 package com.abubusoft.powertrainer.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -39,6 +42,11 @@ public class Muscle implements Serializable {
 
     @Column(name = "note")
     private String note;
+
+    @ManyToMany(mappedBy = "muscles")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "exerciseTools", "notes", "muscles" }, allowSetters = true)
+    private Set<Exercise> exercises = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -117,6 +125,37 @@ public class Muscle implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public Set<Exercise> getExercises() {
+        return this.exercises;
+    }
+
+    public Muscle exercises(Set<Exercise> exercises) {
+        this.setExercises(exercises);
+        return this;
+    }
+
+    public Muscle addExercise(Exercise exercise) {
+        this.exercises.add(exercise);
+        exercise.getMuscles().add(this);
+        return this;
+    }
+
+    public Muscle removeExercise(Exercise exercise) {
+        this.exercises.remove(exercise);
+        exercise.getMuscles().remove(this);
+        return this;
+    }
+
+    public void setExercises(Set<Exercise> exercises) {
+        if (this.exercises != null) {
+            this.exercises.forEach(i -> i.removeMuscle(this));
+        }
+        if (exercises != null) {
+            exercises.forEach(i -> i.addMuscle(this));
+        }
+        this.exercises = exercises;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

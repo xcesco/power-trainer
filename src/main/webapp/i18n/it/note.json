@@ -22,7 +22,8 @@
       "type": "Type",
       "url": "Url",
       "image": "Image",
-      "description": "Description"
+      "description": "Description",
+      "exercise": "Exercise"
     }
   }
 }

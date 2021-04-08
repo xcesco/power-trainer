@@ -41,24 +41,46 @@ application {
   entities *
 }
 
+entity Language(languages) {
+	code	String  unique required,
+	name 	String	required
+}
+
+entity Translation(translations) {
+  entityType String required,
+  entityUuid String required,
+	value  String  required
+}
 
 entity Calendar(calendars) {
-	uuid	UUID	unique required     ,
-	name 	String	required
+	uuid	UUID	unique required,
+	name 	String	required,
+  owner String required
 }
 
 entity Exercise(exercises) {
 	uuid		UUID        unique required ,
 	image		ImageBlob                   ,
-    name		String      required        ,
-    description TextBlob                    ,
-    valueType	ValueType
+  name		String      required        ,
+  description TextBlob                ,
+  valueType	ValueType                 ,
+  owner String required
 }
 
 entity ExerciseValue(exerciValues) {
-	uuid	UUID	    unique required ,
-	value	Integer     required        ,
-    date	LocalDate   required
+	uuid	                 UUID           unique required ,
+  date	                 ZonedDateTime  required        ,
+  exerciseUuid			     UUID           required        ,
+  exerciseName			     String         required        ,
+  exerciseValue			     Integer        required        ,
+  exerciseValueType		   ValueType      required
+}
+
+entity ExerciseTool(exerciseTools) {
+	uuid           UUID          unique required  ,
+  image		       ImageBlob                      ,
+  name		      String        required         ,
+  description   TextBlob
 }
 
 enum ValueType {
@@ -68,47 +90,51 @@ enum ValueType {
     REPETITIONS
 }
 
-entity MeasureValue(bodyStatus) {
+entity Misuration(misurations) {
 	uuid	UUID            unique required ,
     date	ZonedDateTime   required        ,
     value   Integer         required        ,
+    image	ImageBlob               ,
     note	TextBlob
 }
 
-entity MeasureType(bodyStatusType) {
+entity MisurationType(misurationTypes) {
 	uuid	UUID    unique required ,
 	name    String  required        ,
 	image	ImageBlob               ,
-    note	TextBlob
+    description	TextBlob
 }
 
 
 entity WorkoutSheet(workoutSheets) {
-	uuid	UUID	unique required ,
-	name			String required , // nome
-    image			ImageBlob       ,
-    description		TextBlob        ,
+	uuid	UUID	unique required     ,
+	name			String required       , // nome
+  image			ImageBlob             ,
+  description		TextBlob          ,
+	owner			String,
 
-	prepareTime		Integer         ,	// tempo di preparazione (s)
-    coolDownTime	Integer         ,	// tempo di defaticamento (s)
-    cycles			Integer         ,	// # di cicli di esercizi
-    cycleRestTime	Integer         ,	// tempo di riposo tra cicli
-    set				Integer         ,	// per ogni ciclo, quante volte devo ripetere un esercizio
-    setRestTime		Integer         ,   // tempo di riposo tra esercizi
-    type			WorkoutType	        // tipo di workout
+	prepareTime		Integer           ,	// tempo di preparazione (s)
+  coolDownTime	Integer           ,	// tempo di defaticamento (s)
+  cycles			Integer             ,	// # di cicli di esercizi
+  cycleRestTime	Integer           ,	// tempo di riposo tra cicli
+  set				Integer               ,	// per ogni ciclo, quante volte devo ripetere un esercizio
+  setRestTime		Integer           ,   // tempo di riposo tra esercizi
+  type			WorkoutType	             // tipo di workout
 }
 
 entity WorkoutSheetExercise(workoutSheetExercises) {
-	uuid			UUID	unique required ,
-	order			Integer                 ,
-    repetition		Integer                 ,
-    value			Integer                 ,
-    valueType		ValueType
+  uuid			    UUID	unique required ,
+  order			    Integer               ,
+  repetitions		Integer               ,
+  exerciseUuid			    UUID        required,
+  exerciseName			    String      required,
+  exerciseValue			    Integer     required,
+  exerciseValueType		  ValueType     required
 }
 
 enum WorkoutType {
 	SEQUENCE    ,	// le serie dei vari esercizi vengono fatte in sequenza
-    SUPERSET	    // una serie per ogni esercizio
+  SUPERSET	    // una serie per ogni esercizio
 }
 
 /*
@@ -127,22 +153,20 @@ entity Workout(workouts) {
 
     status			WorkoutStatus           ,
 
-    date	        ZonedDateTime           ,
+    date	        ZonedDateTime          ,
     note	        String
-}
-
-entity Muscle2Exercise {
-
 }
 
 entity WorkoutStep {
 	uuid			UUID    unique required     ,
 	order			Integer                     ,
-    value			Integer                     ,
-    valueType		ValueType                   ,
     executionTime	Integer                     ,   // tempo di esecuzione
     type			WorkoutStepType             ,
-    status			WorkoutStatus
+    status			WorkoutStatus				,
+    exerciseUuid			    UUID        required,
+  	exerciseName			    String      required,
+  	exerciseValue			    Integer     required,
+  	exerciseValueType		  ValueType     required
 }
 
 enum WorkoutStepType {
@@ -162,12 +186,13 @@ enum WorkoutStatus {
 enum ExerciseType {
   ANEROBIC          ,
   AEROBIC           ,
-  STRETCHING
+  STRETCHING		,
+  UNDEFINED
 }
 
 entity Device (devices) {
     owner 		String required         ,
-    deviceId 	String required unique
+    deviceUuid 	String required unique
 }
 
 entity Muscle(muscles) {
@@ -186,31 +211,29 @@ entity Note(notes) {
 }
 
 enum NoteType {
-    YOUTUBE ,
-    EMBEDDED,
+    VIDEO ,
+    TEXT,
     URL
 }
 
-/*
 relationship OneToMany {
-	  Exercise{rel1} to WorkoutStep{rel2}                           ,
-    Exercise{rel3} to WorkoutSheetExercise{rel4}    ,
-    Exercise{rel5} to ExerciseValue{rel6}                 ,
-    Exercise{rel6} to Note{rel7}                                            ,
+    Exercise to ExerciseTool            ,
+    Exercise to Note                    ,
 
-    WorkoutSheet{rel8} to WorkoutSheetExercise{rel9}  ,
-    Workout{rel10} to WorkoutStep{rel11}                                            ,
-    WorkoutStep{rel12} to Exercise{rel13}                                         ,
+    Calendar to ExerciseValue,
+    Calendar to Misuration  ,
+    Calendar to Workout       ,
 
-    Calendar{rel14} to Note{rel15}                                               ,
-    Calendar{rel16} to MeasureValue{rel16}                       ,
-    Calendar{rel17} to Workout{rel18}                                      ,
+    MisurationType    to Misuration       ,
+    Language          to Translation  ,
 
-    MeasureType{rel19} to MeasureValue{rel20}              ,
+    Workout  to WorkoutStep   ,
+    WorkoutSheet to WorkoutSheetExercise
+}
 
-    Exercise{rel21} to Muscle2Exercise{rel22}              ,
-    Muscle{rel22} to Muscle2Exercise{rel23}
-} */
+relationship ManyToMany {
+  Exercise to Muscle
+}
 
 paginate * with pagination
 service * with serviceImpl

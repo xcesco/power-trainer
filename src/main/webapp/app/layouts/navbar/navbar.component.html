@@ -45,6 +45,30 @@
           <li>
             <a
               class="dropdown-item"
+              routerLink="language"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.language">Language</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="translation"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.translation">Translation</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
               routerLink="calendar"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
@@ -81,25 +105,37 @@
           <li>
             <a
               class="dropdown-item"
-              routerLink="measure-value"
+              routerLink="exercise-tool"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
               (click)="collapseNavbar()"
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.measureValue">Measure Value</span>
+              <span jhiTranslate="global.menu.entities.exerciseTool">Exercise Tool</span>
             </a>
           </li>
           <li>
             <a
               class="dropdown-item"
-              routerLink="measure-type"
+              routerLink="misuration"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
               (click)="collapseNavbar()"
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.measureType">Measure Type</span>
+              <span jhiTranslate="global.menu.entities.misuration">Misuration</span>
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="misuration-type"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span jhiTranslate="global.menu.entities.misurationType">Misuration Type</span>
             </a>
           </li>
           <li>
@@ -136,18 +172,6 @@
             >
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
               <span jhiTranslate="global.menu.entities.workout">Workout</span>
-            </a>
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              routerLink="muscle-2-exercise"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              (click)="collapseNavbar()"
-            >
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span jhiTranslate="global.menu.entities.muscle2Exercise">Muscle 2 Exercise</span>
             </a>
           </li>
           <li>

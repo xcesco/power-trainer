@@ -45,6 +45,9 @@
           <th scope="col" jhiSortBy="description">
             <span jhiTranslate="powerTrainerApp.workoutSheet.description">Description</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="owner">
+            <span jhiTranslate="powerTrainerApp.workoutSheet.owner">Owner</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="prepareTime">
             <span jhiTranslate="powerTrainerApp.workoutSheet.prepareTime">Prepare Time</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -87,6 +90,7 @@
             <span *ngIf="workoutSheet.image">{{ workoutSheet.imageContentType }}, {{ byteSize(workoutSheet.image) }}</span>
           </td>
           <td>{{ workoutSheet.description }}</td>
+          <td>{{ workoutSheet.owner }}</td>
           <td>{{ workoutSheet.prepareTime }}</td>
           <td>{{ workoutSheet.coolDownTime }}</td>
           <td>{{ workoutSheet.cycles }}</td>

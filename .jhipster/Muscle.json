@@ -21,7 +21,15 @@
       "fieldType": "String"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "exercise",
+      "otherEntityRelationshipName": "muscle",
+      "relationshipName": "exercise",
+      "ownerSide": false
+    }
+  ],
   "entityTableName": "muscles",
   "dto": "no",
   "pagination": "pagination",
@@ -31,5 +39,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": ["PowerTrainer"],
-  "changelogDate": "20210402170300"
+  "changelogDate": "20210402170500"
 }

@@ -87,12 +87,6 @@ public class WorkoutStepQueryService extends QueryService<WorkoutStep> {
             if (criteria.getOrder() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getOrder(), WorkoutStep_.order));
             }
-            if (criteria.getValue() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getValue(), WorkoutStep_.value));
-            }
-            if (criteria.getValueType() != null) {
-                specification = specification.and(buildSpecification(criteria.getValueType(), WorkoutStep_.valueType));
-            }
             if (criteria.getExecutionTime() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getExecutionTime(), WorkoutStep_.executionTime));
             }
@@ -101,6 +95,24 @@ public class WorkoutStepQueryService extends QueryService<WorkoutStep> {
             }
             if (criteria.getStatus() != null) {
                 specification = specification.and(buildSpecification(criteria.getStatus(), WorkoutStep_.status));
+            }
+            if (criteria.getExerciseUuid() != null) {
+                specification = specification.and(buildSpecification(criteria.getExerciseUuid(), WorkoutStep_.exerciseUuid));
+            }
+            if (criteria.getExerciseName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getExerciseName(), WorkoutStep_.exerciseName));
+            }
+            if (criteria.getExerciseValue() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getExerciseValue(), WorkoutStep_.exerciseValue));
+            }
+            if (criteria.getExerciseValueType() != null) {
+                specification = specification.and(buildSpecification(criteria.getExerciseValueType(), WorkoutStep_.exerciseValueType));
+            }
+            if (criteria.getWorkoutId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getWorkoutId(), root -> root.join(WorkoutStep_.workout, JoinType.LEFT).get(Workout_.id))
+                    );
             }
         }
         return specification;

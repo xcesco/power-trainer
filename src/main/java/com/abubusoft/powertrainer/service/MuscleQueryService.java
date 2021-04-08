@@ -90,6 +90,12 @@ public class MuscleQueryService extends QueryService<Muscle> {
             if (criteria.getNote() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getNote(), Muscle_.note));
             }
+            if (criteria.getExerciseId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getExerciseId(), root -> root.join(Muscle_.exercises, JoinType.LEFT).get(Exercise_.id))
+                    );
+            }
         }
         return specification;
     }

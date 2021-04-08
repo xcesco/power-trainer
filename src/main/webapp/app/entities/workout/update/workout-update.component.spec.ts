@@ -9,6 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { WorkoutService } from '../service/workout.service';
 import { IWorkout, Workout } from '../workout.model';
+import { ICalendar } from 'app/entities/calendar/calendar.model';
+import { CalendarService } from 'app/entities/calendar/service/calendar.service';
 
 import { WorkoutUpdateComponent } from './workout-update.component';
 
@@ -18,6 +20,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<WorkoutUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let workoutService: WorkoutService;
+    let calendarService: CalendarService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -31,18 +34,41 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(WorkoutUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       workoutService = TestBed.inject(WorkoutService);
+      calendarService = TestBed.inject(CalendarService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
+      it('Should call Calendar query and add missing value', () => {
+        const workout: IWorkout = { id: 456 };
+        const calendar: ICalendar = { id: 78729 };
+        workout.calendar = calendar;
+
+        const calendarCollection: ICalendar[] = [{ id: 1822 }];
+        spyOn(calendarService, 'query').and.returnValue(of(new HttpResponse({ body: calendarCollection })));
+        const additionalCalendars = [calendar];
+        const expectedCollection: ICalendar[] = [...additionalCalendars, ...calendarCollection];
+        spyOn(calendarService, 'addCalendarToCollectionIfMissing').and.returnValue(expectedCollection);
+
+        activatedRoute.data = of({ workout });
+        comp.ngOnInit();
+
+        expect(calendarService.query).toHaveBeenCalled();
+        expect(calendarService.addCalendarToCollectionIfMissing).toHaveBeenCalledWith(calendarCollection, ...additionalCalendars);
+        expect(comp.calendarsSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should update editForm', () => {
         const workout: IWorkout = { id: 456 };
+        const calendar: ICalendar = { id: 96893 };
+        workout.calendar = calendar;
 
         activatedRoute.data = of({ workout });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(workout));
+        expect(comp.calendarsSharedCollection).toContain(calendar);
       });
     });
 
@@ -107,6 +133,16 @@ describe('Component Tests', () => {
         expect(workoutService.update).toHaveBeenCalledWith(workout);
         expect(comp.isSaving).toEqual(false);
         expect(comp.previousState).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('Tracking relationships identifiers', () => {
+      describe('trackCalendarById', () => {
+        it('Should return tracked Calendar primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackCalendarById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
       });
     });
   });

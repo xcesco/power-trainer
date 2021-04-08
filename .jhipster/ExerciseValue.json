@@ -7,17 +7,40 @@
       "fieldValidateRules": ["unique", "required"]
     },
     {
-      "fieldName": "value",
+      "fieldName": "date",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "exerciseUuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "exerciseName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "exerciseValue",
       "fieldType": "Integer",
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "date",
-      "fieldType": "LocalDate",
+      "fieldName": "exerciseValueType",
+      "fieldType": "ValueType",
+      "fieldValues": "DURATION,WEIGHT,DISTANCE,REPETITIONS",
       "fieldValidateRules": ["required"]
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "calendar",
+      "otherEntityRelationshipName": "exerciseValue",
+      "relationshipName": "calendar"
+    }
+  ],
   "entityTableName": "exerci_values",
   "dto": "no",
   "pagination": "pagination",
@@ -27,5 +50,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": ["PowerTrainer"],
-  "changelogDate": "20210402165400"
+  "changelogDate": "20210402165600"
 }

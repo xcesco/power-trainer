@@ -18,7 +18,7 @@ export class DeviceUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     owner: [null, [Validators.required]],
-    deviceId: [null, [Validators.required]],
+    deviceUuid: [null, [Validators.required]],
   });
 
   constructor(protected deviceService: DeviceService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
@@ -66,7 +66,7 @@ export class DeviceUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: device.id,
       owner: device.owner,
-      deviceId: device.deviceId,
+      deviceUuid: device.deviceUuid,
     });
   }
 
@@ -75,7 +75,7 @@ export class DeviceUpdateComponent implements OnInit {
       ...new Device(),
       id: this.editForm.get(['id'])!.value,
       owner: this.editForm.get(['owner'])!.value,
-      deviceId: this.editForm.get(['deviceId'])!.value,
+      deviceUuid: this.editForm.get(['deviceUuid'])!.value,
     };
   }
 }

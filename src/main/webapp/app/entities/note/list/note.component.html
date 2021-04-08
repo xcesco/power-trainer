@@ -42,6 +42,9 @@
           <th scope="col" jhiSortBy="description">
             <span jhiTranslate="powerTrainerApp.note.description">Description</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="exercise.id">
+            <span jhiTranslate="powerTrainerApp.note.exercise">Exercise</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -60,6 +63,11 @@
             <span *ngIf="note.image">{{ note.imageContentType }}, {{ byteSize(note.image) }}</span>
           </td>
           <td>{{ note.description }}</td>
+          <td>
+            <div *ngIf="note.exercise">
+              <a [routerLink]="['/exercise', note.exercise?.id, 'view']">{{ note.exercise?.id }}</a>
+            </div>
+          </td>
           <td class="text-right">
             <div class="btn-group">
               <button type="submit" [routerLink]="['/note', note.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">

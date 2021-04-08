@@ -49,11 +49,17 @@ public class WorkoutSheetExerciseCriteria implements Serializable, Criteria {
 
     private IntegerFilter order;
 
-    private IntegerFilter repetition;
+    private IntegerFilter repetitions;
 
-    private IntegerFilter value;
+    private UUIDFilter exerciseUuid;
 
-    private ValueTypeFilter valueType;
+    private StringFilter exerciseName;
+
+    private IntegerFilter exerciseValue;
+
+    private ValueTypeFilter exerciseValueType;
+
+    private LongFilter workoutSheetId;
 
     public WorkoutSheetExerciseCriteria() {}
 
@@ -61,9 +67,12 @@ public class WorkoutSheetExerciseCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.uuid = other.uuid == null ? null : other.uuid.copy();
         this.order = other.order == null ? null : other.order.copy();
-        this.repetition = other.repetition == null ? null : other.repetition.copy();
-        this.value = other.value == null ? null : other.value.copy();
-        this.valueType = other.valueType == null ? null : other.valueType.copy();
+        this.repetitions = other.repetitions == null ? null : other.repetitions.copy();
+        this.exerciseUuid = other.exerciseUuid == null ? null : other.exerciseUuid.copy();
+        this.exerciseName = other.exerciseName == null ? null : other.exerciseName.copy();
+        this.exerciseValue = other.exerciseValue == null ? null : other.exerciseValue.copy();
+        this.exerciseValueType = other.exerciseValueType == null ? null : other.exerciseValueType.copy();
+        this.workoutSheetId = other.workoutSheetId == null ? null : other.workoutSheetId.copy();
     }
 
     @Override
@@ -116,49 +125,94 @@ public class WorkoutSheetExerciseCriteria implements Serializable, Criteria {
         this.order = order;
     }
 
-    public IntegerFilter getRepetition() {
-        return repetition;
+    public IntegerFilter getRepetitions() {
+        return repetitions;
     }
 
-    public IntegerFilter repetition() {
-        if (repetition == null) {
-            repetition = new IntegerFilter();
+    public IntegerFilter repetitions() {
+        if (repetitions == null) {
+            repetitions = new IntegerFilter();
         }
-        return repetition;
+        return repetitions;
     }
 
-    public void setRepetition(IntegerFilter repetition) {
-        this.repetition = repetition;
+    public void setRepetitions(IntegerFilter repetitions) {
+        this.repetitions = repetitions;
     }
 
-    public IntegerFilter getValue() {
-        return value;
+    public UUIDFilter getExerciseUuid() {
+        return exerciseUuid;
     }
 
-    public IntegerFilter value() {
-        if (value == null) {
-            value = new IntegerFilter();
+    public UUIDFilter exerciseUuid() {
+        if (exerciseUuid == null) {
+            exerciseUuid = new UUIDFilter();
         }
-        return value;
+        return exerciseUuid;
     }
 
-    public void setValue(IntegerFilter value) {
-        this.value = value;
+    public void setExerciseUuid(UUIDFilter exerciseUuid) {
+        this.exerciseUuid = exerciseUuid;
     }
 
-    public ValueTypeFilter getValueType() {
-        return valueType;
+    public StringFilter getExerciseName() {
+        return exerciseName;
     }
 
-    public ValueTypeFilter valueType() {
-        if (valueType == null) {
-            valueType = new ValueTypeFilter();
+    public StringFilter exerciseName() {
+        if (exerciseName == null) {
+            exerciseName = new StringFilter();
         }
-        return valueType;
+        return exerciseName;
     }
 
-    public void setValueType(ValueTypeFilter valueType) {
-        this.valueType = valueType;
+    public void setExerciseName(StringFilter exerciseName) {
+        this.exerciseName = exerciseName;
+    }
+
+    public IntegerFilter getExerciseValue() {
+        return exerciseValue;
+    }
+
+    public IntegerFilter exerciseValue() {
+        if (exerciseValue == null) {
+            exerciseValue = new IntegerFilter();
+        }
+        return exerciseValue;
+    }
+
+    public void setExerciseValue(IntegerFilter exerciseValue) {
+        this.exerciseValue = exerciseValue;
+    }
+
+    public ValueTypeFilter getExerciseValueType() {
+        return exerciseValueType;
+    }
+
+    public ValueTypeFilter exerciseValueType() {
+        if (exerciseValueType == null) {
+            exerciseValueType = new ValueTypeFilter();
+        }
+        return exerciseValueType;
+    }
+
+    public void setExerciseValueType(ValueTypeFilter exerciseValueType) {
+        this.exerciseValueType = exerciseValueType;
+    }
+
+    public LongFilter getWorkoutSheetId() {
+        return workoutSheetId;
+    }
+
+    public LongFilter workoutSheetId() {
+        if (workoutSheetId == null) {
+            workoutSheetId = new LongFilter();
+        }
+        return workoutSheetId;
+    }
+
+    public void setWorkoutSheetId(LongFilter workoutSheetId) {
+        this.workoutSheetId = workoutSheetId;
     }
 
     @Override
@@ -174,15 +228,18 @@ public class WorkoutSheetExerciseCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(uuid, that.uuid) &&
             Objects.equals(order, that.order) &&
-            Objects.equals(repetition, that.repetition) &&
-            Objects.equals(value, that.value) &&
-            Objects.equals(valueType, that.valueType)
+            Objects.equals(repetitions, that.repetitions) &&
+            Objects.equals(exerciseUuid, that.exerciseUuid) &&
+            Objects.equals(exerciseName, that.exerciseName) &&
+            Objects.equals(exerciseValue, that.exerciseValue) &&
+            Objects.equals(exerciseValueType, that.exerciseValueType) &&
+            Objects.equals(workoutSheetId, that.workoutSheetId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uuid, order, repetition, value, valueType);
+        return Objects.hash(id, uuid, order, repetitions, exerciseUuid, exerciseName, exerciseValue, exerciseValueType, workoutSheetId);
     }
 
     // prettier-ignore
@@ -192,9 +249,12 @@ public class WorkoutSheetExerciseCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (uuid != null ? "uuid=" + uuid + ", " : "") +
             (order != null ? "order=" + order + ", " : "") +
-            (repetition != null ? "repetition=" + repetition + ", " : "") +
-            (value != null ? "value=" + value + ", " : "") +
-            (valueType != null ? "valueType=" + valueType + ", " : "") +
+            (repetitions != null ? "repetitions=" + repetitions + ", " : "") +
+            (exerciseUuid != null ? "exerciseUuid=" + exerciseUuid + ", " : "") +
+            (exerciseName != null ? "exerciseName=" + exerciseName + ", " : "") +
+            (exerciseValue != null ? "exerciseValue=" + exerciseValue + ", " : "") +
+            (exerciseValueType != null ? "exerciseValueType=" + exerciseValueType + ", " : "") +
+            (workoutSheetId != null ? "workoutSheetId=" + workoutSheetId + ", " : "") +
             "}";
     }
 }

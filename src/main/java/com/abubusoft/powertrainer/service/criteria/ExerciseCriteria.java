@@ -51,6 +51,14 @@ public class ExerciseCriteria implements Serializable, Criteria {
 
     private ValueTypeFilter valueType;
 
+    private StringFilter owner;
+
+    private LongFilter exerciseToolId;
+
+    private LongFilter noteId;
+
+    private LongFilter muscleId;
+
     public ExerciseCriteria() {}
 
     public ExerciseCriteria(ExerciseCriteria other) {
@@ -58,6 +66,10 @@ public class ExerciseCriteria implements Serializable, Criteria {
         this.uuid = other.uuid == null ? null : other.uuid.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.valueType = other.valueType == null ? null : other.valueType.copy();
+        this.owner = other.owner == null ? null : other.owner.copy();
+        this.exerciseToolId = other.exerciseToolId == null ? null : other.exerciseToolId.copy();
+        this.noteId = other.noteId == null ? null : other.noteId.copy();
+        this.muscleId = other.muscleId == null ? null : other.muscleId.copy();
     }
 
     @Override
@@ -125,6 +137,66 @@ public class ExerciseCriteria implements Serializable, Criteria {
         this.valueType = valueType;
     }
 
+    public StringFilter getOwner() {
+        return owner;
+    }
+
+    public StringFilter owner() {
+        if (owner == null) {
+            owner = new StringFilter();
+        }
+        return owner;
+    }
+
+    public void setOwner(StringFilter owner) {
+        this.owner = owner;
+    }
+
+    public LongFilter getExerciseToolId() {
+        return exerciseToolId;
+    }
+
+    public LongFilter exerciseToolId() {
+        if (exerciseToolId == null) {
+            exerciseToolId = new LongFilter();
+        }
+        return exerciseToolId;
+    }
+
+    public void setExerciseToolId(LongFilter exerciseToolId) {
+        this.exerciseToolId = exerciseToolId;
+    }
+
+    public LongFilter getNoteId() {
+        return noteId;
+    }
+
+    public LongFilter noteId() {
+        if (noteId == null) {
+            noteId = new LongFilter();
+        }
+        return noteId;
+    }
+
+    public void setNoteId(LongFilter noteId) {
+        this.noteId = noteId;
+    }
+
+    public LongFilter getMuscleId() {
+        return muscleId;
+    }
+
+    public LongFilter muscleId() {
+        if (muscleId == null) {
+            muscleId = new LongFilter();
+        }
+        return muscleId;
+    }
+
+    public void setMuscleId(LongFilter muscleId) {
+        this.muscleId = muscleId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -138,13 +210,17 @@ public class ExerciseCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(uuid, that.uuid) &&
             Objects.equals(name, that.name) &&
-            Objects.equals(valueType, that.valueType)
+            Objects.equals(valueType, that.valueType) &&
+            Objects.equals(owner, that.owner) &&
+            Objects.equals(exerciseToolId, that.exerciseToolId) &&
+            Objects.equals(noteId, that.noteId) &&
+            Objects.equals(muscleId, that.muscleId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uuid, name, valueType);
+        return Objects.hash(id, uuid, name, valueType, owner, exerciseToolId, noteId, muscleId);
     }
 
     // prettier-ignore
@@ -155,6 +231,10 @@ public class ExerciseCriteria implements Serializable, Criteria {
             (uuid != null ? "uuid=" + uuid + ", " : "") +
             (name != null ? "name=" + name + ", " : "") +
             (valueType != null ? "valueType=" + valueType + ", " : "") +
+            (owner != null ? "owner=" + owner + ", " : "") +
+            (exerciseToolId != null ? "exerciseToolId=" + exerciseToolId + ", " : "") +
+            (noteId != null ? "noteId=" + noteId + ", " : "") +
+            (muscleId != null ? "muscleId=" + muscleId + ", " : "") +
             "}";
     }
 }

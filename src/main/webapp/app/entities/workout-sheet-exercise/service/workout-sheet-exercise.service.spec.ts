@@ -25,9 +25,11 @@ describe('Service Tests', () => {
         id: 0,
         uuid: 'AAAAAAA',
         order: 0,
-        repetition: 0,
-        value: 0,
-        valueType: ValueType.DURATION,
+        repetitions: 0,
+        exerciseUuid: 'AAAAAAA',
+        exerciseName: 'AAAAAAA',
+        exerciseValue: 0,
+        exerciseValueType: ValueType.DURATION,
       };
     });
 
@@ -65,9 +67,11 @@ describe('Service Tests', () => {
             id: 1,
             uuid: 'BBBBBB',
             order: 1,
-            repetition: 1,
-            value: 1,
-            valueType: 'BBBBBB',
+            repetitions: 1,
+            exerciseUuid: 'BBBBBB',
+            exerciseName: 'BBBBBB',
+            exerciseValue: 1,
+            exerciseValueType: 'BBBBBB',
           },
           elemDefault
         );
@@ -86,8 +90,9 @@ describe('Service Tests', () => {
           {
             uuid: 'BBBBBB',
             order: 1,
-            repetition: 1,
-            valueType: 'BBBBBB',
+            repetitions: 1,
+            exerciseName: 'BBBBBB',
+            exerciseValue: 1,
           },
           new WorkoutSheetExercise()
         );
@@ -109,9 +114,11 @@ describe('Service Tests', () => {
             id: 1,
             uuid: 'BBBBBB',
             order: 1,
-            repetition: 1,
-            value: 1,
-            valueType: 'BBBBBB',
+            repetitions: 1,
+            exerciseUuid: 'BBBBBB',
+            exerciseName: 'BBBBBB',
+            exerciseValue: 1,
+            exerciseValueType: 'BBBBBB',
           },
           elemDefault
         );
@@ -163,7 +170,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique WorkoutSheetExercise to an array', () => {
-          const workoutSheetExerciseArray: IWorkoutSheetExercise[] = [{ id: 123 }, { id: 456 }, { id: 96293 }];
+          const workoutSheetExerciseArray: IWorkoutSheetExercise[] = [{ id: 123 }, { id: 456 }, { id: 10389 }];
           const workoutSheetExerciseCollection: IWorkoutSheetExercise[] = [{ id: 123 }];
           expectedResult = service.addWorkoutSheetExerciseToCollectionIfMissing(
             workoutSheetExerciseCollection,

@@ -20,9 +20,12 @@
       "id": "ID",
       "uuid": "Uuid",
       "order": "Order",
-      "repetition": "Repetition",
-      "value": "Value",
-      "valueType": "Value Type"
+      "repetitions": "Repetitions",
+      "exerciseUuid": "Exercise Uuid",
+      "exerciseName": "Exercise Name",
+      "exerciseValue": "Exercise Value",
+      "exerciseValueType": "Exercise Value Type",
+      "workoutSheet": "Workout Sheet"
     }
   }
 }

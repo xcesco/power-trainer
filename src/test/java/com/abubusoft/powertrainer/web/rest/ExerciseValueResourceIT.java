@@ -1,16 +1,21 @@
 package com.abubusoft.powertrainer.web.rest;
 
+import static com.abubusoft.powertrainer.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.abubusoft.powertrainer.IntegrationTest;
+import com.abubusoft.powertrainer.domain.Calendar;
 import com.abubusoft.powertrainer.domain.ExerciseValue;
+import com.abubusoft.powertrainer.domain.enumeration.ValueType;
 import com.abubusoft.powertrainer.repository.ExerciseValueRepository;
 import com.abubusoft.powertrainer.service.criteria.ExerciseValueCriteria;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -36,13 +41,22 @@ class ExerciseValueResourceIT {
     private static final UUID DEFAULT_UUID = UUID.randomUUID();
     private static final UUID UPDATED_UUID = UUID.randomUUID();
 
-    private static final Integer DEFAULT_VALUE = 1;
-    private static final Integer UPDATED_VALUE = 2;
-    private static final Integer SMALLER_VALUE = 1 - 1;
+    private static final ZonedDateTime DEFAULT_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final ZonedDateTime SMALLER_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
 
-    private static final LocalDate DEFAULT_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_DATE = LocalDate.ofEpochDay(-1L);
+    private static final UUID DEFAULT_EXERCISE_UUID = UUID.randomUUID();
+    private static final UUID UPDATED_EXERCISE_UUID = UUID.randomUUID();
+
+    private static final String DEFAULT_EXERCISE_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_EXERCISE_NAME = "BBBBBBBBBB";
+
+    private static final Integer DEFAULT_EXERCISE_VALUE = 1;
+    private static final Integer UPDATED_EXERCISE_VALUE = 2;
+    private static final Integer SMALLER_EXERCISE_VALUE = 1 - 1;
+
+    private static final ValueType DEFAULT_EXERCISE_VALUE_TYPE = ValueType.DURATION;
+    private static final ValueType UPDATED_EXERCISE_VALUE_TYPE = ValueType.WEIGHT;
 
     private static final String ENTITY_API_URL = "/api/exercise-values";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -68,7 +82,13 @@ class ExerciseValueResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static ExerciseValue createEntity(EntityManager em) {
-        ExerciseValue exerciseValue = new ExerciseValue().uuid(DEFAULT_UUID).value(DEFAULT_VALUE).date(DEFAULT_DATE);
+        ExerciseValue exerciseValue = new ExerciseValue()
+            .uuid(DEFAULT_UUID)
+            .date(DEFAULT_DATE)
+            .exerciseUuid(DEFAULT_EXERCISE_UUID)
+            .exerciseName(DEFAULT_EXERCISE_NAME)
+            .exerciseValue(DEFAULT_EXERCISE_VALUE)
+            .exerciseValueType(DEFAULT_EXERCISE_VALUE_TYPE);
         return exerciseValue;
     }
 
@@ -79,7 +99,13 @@ class ExerciseValueResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static ExerciseValue createUpdatedEntity(EntityManager em) {
-        ExerciseValue exerciseValue = new ExerciseValue().uuid(UPDATED_UUID).value(UPDATED_VALUE).date(UPDATED_DATE);
+        ExerciseValue exerciseValue = new ExerciseValue()
+            .uuid(UPDATED_UUID)
+            .date(UPDATED_DATE)
+            .exerciseUuid(UPDATED_EXERCISE_UUID)
+            .exerciseName(UPDATED_EXERCISE_NAME)
+            .exerciseValue(UPDATED_EXERCISE_VALUE)
+            .exerciseValueType(UPDATED_EXERCISE_VALUE_TYPE);
         return exerciseValue;
     }
 
@@ -102,8 +128,11 @@ class ExerciseValueResourceIT {
         assertThat(exerciseValueList).hasSize(databaseSizeBeforeCreate + 1);
         ExerciseValue testExerciseValue = exerciseValueList.get(exerciseValueList.size() - 1);
         assertThat(testExerciseValue.getUuid()).isEqualTo(DEFAULT_UUID);
-        assertThat(testExerciseValue.getValue()).isEqualTo(DEFAULT_VALUE);
         assertThat(testExerciseValue.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testExerciseValue.getExerciseUuid()).isEqualTo(DEFAULT_EXERCISE_UUID);
+        assertThat(testExerciseValue.getExerciseName()).isEqualTo(DEFAULT_EXERCISE_NAME);
+        assertThat(testExerciseValue.getExerciseValue()).isEqualTo(DEFAULT_EXERCISE_VALUE);
+        assertThat(testExerciseValue.getExerciseValueType()).isEqualTo(DEFAULT_EXERCISE_VALUE_TYPE);
     }
 
     @Test
@@ -143,10 +172,10 @@ class ExerciseValueResourceIT {
 
     @Test
     @Transactional
-    void checkValueIsRequired() throws Exception {
+    void checkDateIsRequired() throws Exception {
         int databaseSizeBeforeTest = exerciseValueRepository.findAll().size();
         // set the field null
-        exerciseValue.setValue(null);
+        exerciseValue.setDate(null);
 
         // Create the ExerciseValue, which fails.
 
@@ -160,10 +189,61 @@ class ExerciseValueResourceIT {
 
     @Test
     @Transactional
-    void checkDateIsRequired() throws Exception {
+    void checkExerciseUuidIsRequired() throws Exception {
         int databaseSizeBeforeTest = exerciseValueRepository.findAll().size();
         // set the field null
-        exerciseValue.setDate(null);
+        exerciseValue.setExerciseUuid(null);
+
+        // Create the ExerciseValue, which fails.
+
+        restExerciseValueMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(exerciseValue)))
+            .andExpect(status().isBadRequest());
+
+        List<ExerciseValue> exerciseValueList = exerciseValueRepository.findAll();
+        assertThat(exerciseValueList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkExerciseNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = exerciseValueRepository.findAll().size();
+        // set the field null
+        exerciseValue.setExerciseName(null);
+
+        // Create the ExerciseValue, which fails.
+
+        restExerciseValueMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(exerciseValue)))
+            .andExpect(status().isBadRequest());
+
+        List<ExerciseValue> exerciseValueList = exerciseValueRepository.findAll();
+        assertThat(exerciseValueList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkExerciseValueIsRequired() throws Exception {
+        int databaseSizeBeforeTest = exerciseValueRepository.findAll().size();
+        // set the field null
+        exerciseValue.setExerciseValue(null);
+
+        // Create the ExerciseValue, which fails.
+
+        restExerciseValueMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(exerciseValue)))
+            .andExpect(status().isBadRequest());
+
+        List<ExerciseValue> exerciseValueList = exerciseValueRepository.findAll();
+        assertThat(exerciseValueList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkExerciseValueTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = exerciseValueRepository.findAll().size();
+        // set the field null
+        exerciseValue.setExerciseValueType(null);
 
         // Create the ExerciseValue, which fails.
 
@@ -188,8 +268,11 @@ class ExerciseValueResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(exerciseValue.getId().intValue())))
             .andExpect(jsonPath("$.[*].uuid").value(hasItem(DEFAULT_UUID.toString())))
-            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
-            .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())));
+            .andExpect(jsonPath("$.[*].date").value(hasItem(sameInstant(DEFAULT_DATE))))
+            .andExpect(jsonPath("$.[*].exerciseUuid").value(hasItem(DEFAULT_EXERCISE_UUID.toString())))
+            .andExpect(jsonPath("$.[*].exerciseName").value(hasItem(DEFAULT_EXERCISE_NAME)))
+            .andExpect(jsonPath("$.[*].exerciseValue").value(hasItem(DEFAULT_EXERCISE_VALUE)))
+            .andExpect(jsonPath("$.[*].exerciseValueType").value(hasItem(DEFAULT_EXERCISE_VALUE_TYPE.toString())));
     }
 
     @Test
@@ -205,8 +288,11 @@ class ExerciseValueResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(exerciseValue.getId().intValue()))
             .andExpect(jsonPath("$.uuid").value(DEFAULT_UUID.toString()))
-            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE))
-            .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()));
+            .andExpect(jsonPath("$.date").value(sameInstant(DEFAULT_DATE)))
+            .andExpect(jsonPath("$.exerciseUuid").value(DEFAULT_EXERCISE_UUID.toString()))
+            .andExpect(jsonPath("$.exerciseName").value(DEFAULT_EXERCISE_NAME))
+            .andExpect(jsonPath("$.exerciseValue").value(DEFAULT_EXERCISE_VALUE))
+            .andExpect(jsonPath("$.exerciseValueType").value(DEFAULT_EXERCISE_VALUE_TYPE.toString()));
     }
 
     @Test
@@ -277,110 +363,6 @@ class ExerciseValueResourceIT {
 
         // Get all the exerciseValueList where uuid is null
         defaultExerciseValueShouldNotBeFound("uuid.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllExerciseValuesByValueIsEqualToSomething() throws Exception {
-        // Initialize the database
-        exerciseValueRepository.saveAndFlush(exerciseValue);
-
-        // Get all the exerciseValueList where value equals to DEFAULT_VALUE
-        defaultExerciseValueShouldBeFound("value.equals=" + DEFAULT_VALUE);
-
-        // Get all the exerciseValueList where value equals to UPDATED_VALUE
-        defaultExerciseValueShouldNotBeFound("value.equals=" + UPDATED_VALUE);
-    }
-
-    @Test
-    @Transactional
-    void getAllExerciseValuesByValueIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        exerciseValueRepository.saveAndFlush(exerciseValue);
-
-        // Get all the exerciseValueList where value not equals to DEFAULT_VALUE
-        defaultExerciseValueShouldNotBeFound("value.notEquals=" + DEFAULT_VALUE);
-
-        // Get all the exerciseValueList where value not equals to UPDATED_VALUE
-        defaultExerciseValueShouldBeFound("value.notEquals=" + UPDATED_VALUE);
-    }
-
-    @Test
-    @Transactional
-    void getAllExerciseValuesByValueIsInShouldWork() throws Exception {
-        // Initialize the database
-        exerciseValueRepository.saveAndFlush(exerciseValue);
-
-        // Get all the exerciseValueList where value in DEFAULT_VALUE or UPDATED_VALUE
-        defaultExerciseValueShouldBeFound("value.in=" + DEFAULT_VALUE + "," + UPDATED_VALUE);
-
-        // Get all the exerciseValueList where value equals to UPDATED_VALUE
-        defaultExerciseValueShouldNotBeFound("value.in=" + UPDATED_VALUE);
-    }
-
-    @Test
-    @Transactional
-    void getAllExerciseValuesByValueIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        exerciseValueRepository.saveAndFlush(exerciseValue);
-
-        // Get all the exerciseValueList where value is not null
-        defaultExerciseValueShouldBeFound("value.specified=true");
-
-        // Get all the exerciseValueList where value is null
-        defaultExerciseValueShouldNotBeFound("value.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllExerciseValuesByValueIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        exerciseValueRepository.saveAndFlush(exerciseValue);
-
-        // Get all the exerciseValueList where value is greater than or equal to DEFAULT_VALUE
-        defaultExerciseValueShouldBeFound("value.greaterThanOrEqual=" + DEFAULT_VALUE);
-
-        // Get all the exerciseValueList where value is greater than or equal to UPDATED_VALUE
-        defaultExerciseValueShouldNotBeFound("value.greaterThanOrEqual=" + UPDATED_VALUE);
-    }
-
-    @Test
-    @Transactional
-    void getAllExerciseValuesByValueIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        exerciseValueRepository.saveAndFlush(exerciseValue);
-
-        // Get all the exerciseValueList where value is less than or equal to DEFAULT_VALUE
-        defaultExerciseValueShouldBeFound("value.lessThanOrEqual=" + DEFAULT_VALUE);
-
-        // Get all the exerciseValueList where value is less than or equal to SMALLER_VALUE
-        defaultExerciseValueShouldNotBeFound("value.lessThanOrEqual=" + SMALLER_VALUE);
-    }
-
-    @Test
-    @Transactional
-    void getAllExerciseValuesByValueIsLessThanSomething() throws Exception {
-        // Initialize the database
-        exerciseValueRepository.saveAndFlush(exerciseValue);
-
-        // Get all the exerciseValueList where value is less than DEFAULT_VALUE
-        defaultExerciseValueShouldNotBeFound("value.lessThan=" + DEFAULT_VALUE);
-
-        // Get all the exerciseValueList where value is less than UPDATED_VALUE
-        defaultExerciseValueShouldBeFound("value.lessThan=" + UPDATED_VALUE);
-    }
-
-    @Test
-    @Transactional
-    void getAllExerciseValuesByValueIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        exerciseValueRepository.saveAndFlush(exerciseValue);
-
-        // Get all the exerciseValueList where value is greater than DEFAULT_VALUE
-        defaultExerciseValueShouldNotBeFound("value.greaterThan=" + DEFAULT_VALUE);
-
-        // Get all the exerciseValueList where value is greater than SMALLER_VALUE
-        defaultExerciseValueShouldBeFound("value.greaterThan=" + SMALLER_VALUE);
     }
 
     @Test
@@ -487,6 +469,311 @@ class ExerciseValueResourceIT {
         defaultExerciseValueShouldBeFound("date.greaterThan=" + SMALLER_DATE);
     }
 
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseUuidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseUuid equals to DEFAULT_EXERCISE_UUID
+        defaultExerciseValueShouldBeFound("exerciseUuid.equals=" + DEFAULT_EXERCISE_UUID);
+
+        // Get all the exerciseValueList where exerciseUuid equals to UPDATED_EXERCISE_UUID
+        defaultExerciseValueShouldNotBeFound("exerciseUuid.equals=" + UPDATED_EXERCISE_UUID);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseUuidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseUuid not equals to DEFAULT_EXERCISE_UUID
+        defaultExerciseValueShouldNotBeFound("exerciseUuid.notEquals=" + DEFAULT_EXERCISE_UUID);
+
+        // Get all the exerciseValueList where exerciseUuid not equals to UPDATED_EXERCISE_UUID
+        defaultExerciseValueShouldBeFound("exerciseUuid.notEquals=" + UPDATED_EXERCISE_UUID);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseUuidIsInShouldWork() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseUuid in DEFAULT_EXERCISE_UUID or UPDATED_EXERCISE_UUID
+        defaultExerciseValueShouldBeFound("exerciseUuid.in=" + DEFAULT_EXERCISE_UUID + "," + UPDATED_EXERCISE_UUID);
+
+        // Get all the exerciseValueList where exerciseUuid equals to UPDATED_EXERCISE_UUID
+        defaultExerciseValueShouldNotBeFound("exerciseUuid.in=" + UPDATED_EXERCISE_UUID);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseUuidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseUuid is not null
+        defaultExerciseValueShouldBeFound("exerciseUuid.specified=true");
+
+        // Get all the exerciseValueList where exerciseUuid is null
+        defaultExerciseValueShouldNotBeFound("exerciseUuid.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseName equals to DEFAULT_EXERCISE_NAME
+        defaultExerciseValueShouldBeFound("exerciseName.equals=" + DEFAULT_EXERCISE_NAME);
+
+        // Get all the exerciseValueList where exerciseName equals to UPDATED_EXERCISE_NAME
+        defaultExerciseValueShouldNotBeFound("exerciseName.equals=" + UPDATED_EXERCISE_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseName not equals to DEFAULT_EXERCISE_NAME
+        defaultExerciseValueShouldNotBeFound("exerciseName.notEquals=" + DEFAULT_EXERCISE_NAME);
+
+        // Get all the exerciseValueList where exerciseName not equals to UPDATED_EXERCISE_NAME
+        defaultExerciseValueShouldBeFound("exerciseName.notEquals=" + UPDATED_EXERCISE_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseName in DEFAULT_EXERCISE_NAME or UPDATED_EXERCISE_NAME
+        defaultExerciseValueShouldBeFound("exerciseName.in=" + DEFAULT_EXERCISE_NAME + "," + UPDATED_EXERCISE_NAME);
+
+        // Get all the exerciseValueList where exerciseName equals to UPDATED_EXERCISE_NAME
+        defaultExerciseValueShouldNotBeFound("exerciseName.in=" + UPDATED_EXERCISE_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseName is not null
+        defaultExerciseValueShouldBeFound("exerciseName.specified=true");
+
+        // Get all the exerciseValueList where exerciseName is null
+        defaultExerciseValueShouldNotBeFound("exerciseName.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseNameContainsSomething() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseName contains DEFAULT_EXERCISE_NAME
+        defaultExerciseValueShouldBeFound("exerciseName.contains=" + DEFAULT_EXERCISE_NAME);
+
+        // Get all the exerciseValueList where exerciseName contains UPDATED_EXERCISE_NAME
+        defaultExerciseValueShouldNotBeFound("exerciseName.contains=" + UPDATED_EXERCISE_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseName does not contain DEFAULT_EXERCISE_NAME
+        defaultExerciseValueShouldNotBeFound("exerciseName.doesNotContain=" + DEFAULT_EXERCISE_NAME);
+
+        // Get all the exerciseValueList where exerciseName does not contain UPDATED_EXERCISE_NAME
+        defaultExerciseValueShouldBeFound("exerciseName.doesNotContain=" + UPDATED_EXERCISE_NAME);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseValueIsEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseValue equals to DEFAULT_EXERCISE_VALUE
+        defaultExerciseValueShouldBeFound("exerciseValue.equals=" + DEFAULT_EXERCISE_VALUE);
+
+        // Get all the exerciseValueList where exerciseValue equals to UPDATED_EXERCISE_VALUE
+        defaultExerciseValueShouldNotBeFound("exerciseValue.equals=" + UPDATED_EXERCISE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseValueIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseValue not equals to DEFAULT_EXERCISE_VALUE
+        defaultExerciseValueShouldNotBeFound("exerciseValue.notEquals=" + DEFAULT_EXERCISE_VALUE);
+
+        // Get all the exerciseValueList where exerciseValue not equals to UPDATED_EXERCISE_VALUE
+        defaultExerciseValueShouldBeFound("exerciseValue.notEquals=" + UPDATED_EXERCISE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseValueIsInShouldWork() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseValue in DEFAULT_EXERCISE_VALUE or UPDATED_EXERCISE_VALUE
+        defaultExerciseValueShouldBeFound("exerciseValue.in=" + DEFAULT_EXERCISE_VALUE + "," + UPDATED_EXERCISE_VALUE);
+
+        // Get all the exerciseValueList where exerciseValue equals to UPDATED_EXERCISE_VALUE
+        defaultExerciseValueShouldNotBeFound("exerciseValue.in=" + UPDATED_EXERCISE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseValueIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseValue is not null
+        defaultExerciseValueShouldBeFound("exerciseValue.specified=true");
+
+        // Get all the exerciseValueList where exerciseValue is null
+        defaultExerciseValueShouldNotBeFound("exerciseValue.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseValueIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseValue is greater than or equal to DEFAULT_EXERCISE_VALUE
+        defaultExerciseValueShouldBeFound("exerciseValue.greaterThanOrEqual=" + DEFAULT_EXERCISE_VALUE);
+
+        // Get all the exerciseValueList where exerciseValue is greater than or equal to UPDATED_EXERCISE_VALUE
+        defaultExerciseValueShouldNotBeFound("exerciseValue.greaterThanOrEqual=" + UPDATED_EXERCISE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseValueIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseValue is less than or equal to DEFAULT_EXERCISE_VALUE
+        defaultExerciseValueShouldBeFound("exerciseValue.lessThanOrEqual=" + DEFAULT_EXERCISE_VALUE);
+
+        // Get all the exerciseValueList where exerciseValue is less than or equal to SMALLER_EXERCISE_VALUE
+        defaultExerciseValueShouldNotBeFound("exerciseValue.lessThanOrEqual=" + SMALLER_EXERCISE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseValueIsLessThanSomething() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseValue is less than DEFAULT_EXERCISE_VALUE
+        defaultExerciseValueShouldNotBeFound("exerciseValue.lessThan=" + DEFAULT_EXERCISE_VALUE);
+
+        // Get all the exerciseValueList where exerciseValue is less than UPDATED_EXERCISE_VALUE
+        defaultExerciseValueShouldBeFound("exerciseValue.lessThan=" + UPDATED_EXERCISE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseValueIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseValue is greater than DEFAULT_EXERCISE_VALUE
+        defaultExerciseValueShouldNotBeFound("exerciseValue.greaterThan=" + DEFAULT_EXERCISE_VALUE);
+
+        // Get all the exerciseValueList where exerciseValue is greater than SMALLER_EXERCISE_VALUE
+        defaultExerciseValueShouldBeFound("exerciseValue.greaterThan=" + SMALLER_EXERCISE_VALUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseValueTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseValueType equals to DEFAULT_EXERCISE_VALUE_TYPE
+        defaultExerciseValueShouldBeFound("exerciseValueType.equals=" + DEFAULT_EXERCISE_VALUE_TYPE);
+
+        // Get all the exerciseValueList where exerciseValueType equals to UPDATED_EXERCISE_VALUE_TYPE
+        defaultExerciseValueShouldNotBeFound("exerciseValueType.equals=" + UPDATED_EXERCISE_VALUE_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseValueTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseValueType not equals to DEFAULT_EXERCISE_VALUE_TYPE
+        defaultExerciseValueShouldNotBeFound("exerciseValueType.notEquals=" + DEFAULT_EXERCISE_VALUE_TYPE);
+
+        // Get all the exerciseValueList where exerciseValueType not equals to UPDATED_EXERCISE_VALUE_TYPE
+        defaultExerciseValueShouldBeFound("exerciseValueType.notEquals=" + UPDATED_EXERCISE_VALUE_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseValueTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseValueType in DEFAULT_EXERCISE_VALUE_TYPE or UPDATED_EXERCISE_VALUE_TYPE
+        defaultExerciseValueShouldBeFound("exerciseValueType.in=" + DEFAULT_EXERCISE_VALUE_TYPE + "," + UPDATED_EXERCISE_VALUE_TYPE);
+
+        // Get all the exerciseValueList where exerciseValueType equals to UPDATED_EXERCISE_VALUE_TYPE
+        defaultExerciseValueShouldNotBeFound("exerciseValueType.in=" + UPDATED_EXERCISE_VALUE_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByExerciseValueTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+
+        // Get all the exerciseValueList where exerciseValueType is not null
+        defaultExerciseValueShouldBeFound("exerciseValueType.specified=true");
+
+        // Get all the exerciseValueList where exerciseValueType is null
+        defaultExerciseValueShouldNotBeFound("exerciseValueType.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllExerciseValuesByCalendarIsEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+        Calendar calendar = CalendarResourceIT.createEntity(em);
+        em.persist(calendar);
+        em.flush();
+        exerciseValue.setCalendar(calendar);
+        exerciseValueRepository.saveAndFlush(exerciseValue);
+        Long calendarId = calendar.getId();
+
+        // Get all the exerciseValueList where calendar equals to calendarId
+        defaultExerciseValueShouldBeFound("calendarId.equals=" + calendarId);
+
+        // Get all the exerciseValueList where calendar equals to (calendarId + 1)
+        defaultExerciseValueShouldNotBeFound("calendarId.equals=" + (calendarId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -497,8 +784,11 @@ class ExerciseValueResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(exerciseValue.getId().intValue())))
             .andExpect(jsonPath("$.[*].uuid").value(hasItem(DEFAULT_UUID.toString())))
-            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
-            .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())));
+            .andExpect(jsonPath("$.[*].date").value(hasItem(sameInstant(DEFAULT_DATE))))
+            .andExpect(jsonPath("$.[*].exerciseUuid").value(hasItem(DEFAULT_EXERCISE_UUID.toString())))
+            .andExpect(jsonPath("$.[*].exerciseName").value(hasItem(DEFAULT_EXERCISE_NAME)))
+            .andExpect(jsonPath("$.[*].exerciseValue").value(hasItem(DEFAULT_EXERCISE_VALUE)))
+            .andExpect(jsonPath("$.[*].exerciseValueType").value(hasItem(DEFAULT_EXERCISE_VALUE_TYPE.toString())));
 
         // Check, that the count call also returns 1
         restExerciseValueMockMvc
@@ -546,7 +836,13 @@ class ExerciseValueResourceIT {
         ExerciseValue updatedExerciseValue = exerciseValueRepository.findById(exerciseValue.getId()).get();
         // Disconnect from session so that the updates on updatedExerciseValue are not directly saved in db
         em.detach(updatedExerciseValue);
-        updatedExerciseValue.uuid(UPDATED_UUID).value(UPDATED_VALUE).date(UPDATED_DATE);
+        updatedExerciseValue
+            .uuid(UPDATED_UUID)
+            .date(UPDATED_DATE)
+            .exerciseUuid(UPDATED_EXERCISE_UUID)
+            .exerciseName(UPDATED_EXERCISE_NAME)
+            .exerciseValue(UPDATED_EXERCISE_VALUE)
+            .exerciseValueType(UPDATED_EXERCISE_VALUE_TYPE);
 
         restExerciseValueMockMvc
             .perform(
@@ -561,8 +857,11 @@ class ExerciseValueResourceIT {
         assertThat(exerciseValueList).hasSize(databaseSizeBeforeUpdate);
         ExerciseValue testExerciseValue = exerciseValueList.get(exerciseValueList.size() - 1);
         assertThat(testExerciseValue.getUuid()).isEqualTo(UPDATED_UUID);
-        assertThat(testExerciseValue.getValue()).isEqualTo(UPDATED_VALUE);
         assertThat(testExerciseValue.getDate()).isEqualTo(UPDATED_DATE);
+        assertThat(testExerciseValue.getExerciseUuid()).isEqualTo(UPDATED_EXERCISE_UUID);
+        assertThat(testExerciseValue.getExerciseName()).isEqualTo(UPDATED_EXERCISE_NAME);
+        assertThat(testExerciseValue.getExerciseValue()).isEqualTo(UPDATED_EXERCISE_VALUE);
+        assertThat(testExerciseValue.getExerciseValueType()).isEqualTo(UPDATED_EXERCISE_VALUE_TYPE);
     }
 
     @Test
@@ -633,7 +932,7 @@ class ExerciseValueResourceIT {
         ExerciseValue partialUpdatedExerciseValue = new ExerciseValue();
         partialUpdatedExerciseValue.setId(exerciseValue.getId());
 
-        partialUpdatedExerciseValue.uuid(UPDATED_UUID).value(UPDATED_VALUE).date(UPDATED_DATE);
+        partialUpdatedExerciseValue.uuid(UPDATED_UUID).date(UPDATED_DATE).exerciseUuid(UPDATED_EXERCISE_UUID);
 
         restExerciseValueMockMvc
             .perform(
@@ -648,8 +947,11 @@ class ExerciseValueResourceIT {
         assertThat(exerciseValueList).hasSize(databaseSizeBeforeUpdate);
         ExerciseValue testExerciseValue = exerciseValueList.get(exerciseValueList.size() - 1);
         assertThat(testExerciseValue.getUuid()).isEqualTo(UPDATED_UUID);
-        assertThat(testExerciseValue.getValue()).isEqualTo(UPDATED_VALUE);
         assertThat(testExerciseValue.getDate()).isEqualTo(UPDATED_DATE);
+        assertThat(testExerciseValue.getExerciseUuid()).isEqualTo(UPDATED_EXERCISE_UUID);
+        assertThat(testExerciseValue.getExerciseName()).isEqualTo(DEFAULT_EXERCISE_NAME);
+        assertThat(testExerciseValue.getExerciseValue()).isEqualTo(DEFAULT_EXERCISE_VALUE);
+        assertThat(testExerciseValue.getExerciseValueType()).isEqualTo(DEFAULT_EXERCISE_VALUE_TYPE);
     }
 
     @Test
@@ -664,7 +966,13 @@ class ExerciseValueResourceIT {
         ExerciseValue partialUpdatedExerciseValue = new ExerciseValue();
         partialUpdatedExerciseValue.setId(exerciseValue.getId());
 
-        partialUpdatedExerciseValue.uuid(UPDATED_UUID).value(UPDATED_VALUE).date(UPDATED_DATE);
+        partialUpdatedExerciseValue
+            .uuid(UPDATED_UUID)
+            .date(UPDATED_DATE)
+            .exerciseUuid(UPDATED_EXERCISE_UUID)
+            .exerciseName(UPDATED_EXERCISE_NAME)
+            .exerciseValue(UPDATED_EXERCISE_VALUE)
+            .exerciseValueType(UPDATED_EXERCISE_VALUE_TYPE);
 
         restExerciseValueMockMvc
             .perform(
@@ -679,8 +987,11 @@ class ExerciseValueResourceIT {
         assertThat(exerciseValueList).hasSize(databaseSizeBeforeUpdate);
         ExerciseValue testExerciseValue = exerciseValueList.get(exerciseValueList.size() - 1);
         assertThat(testExerciseValue.getUuid()).isEqualTo(UPDATED_UUID);
-        assertThat(testExerciseValue.getValue()).isEqualTo(UPDATED_VALUE);
         assertThat(testExerciseValue.getDate()).isEqualTo(UPDATED_DATE);
+        assertThat(testExerciseValue.getExerciseUuid()).isEqualTo(UPDATED_EXERCISE_UUID);
+        assertThat(testExerciseValue.getExerciseName()).isEqualTo(UPDATED_EXERCISE_NAME);
+        assertThat(testExerciseValue.getExerciseValue()).isEqualTo(UPDATED_EXERCISE_VALUE);
+        assertThat(testExerciseValue.getExerciseValueType()).isEqualTo(UPDATED_EXERCISE_VALUE_TYPE);
     }
 
     @Test

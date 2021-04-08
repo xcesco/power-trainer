@@ -24,12 +24,19 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="powerTrainerApp.device.deviceId" for="field_deviceId">Device Id</label>
-          <input type="text" class="form-control" name="deviceId" id="field_deviceId" data-cy="deviceId" formControlName="deviceId" />
-          <div *ngIf="editForm.get('deviceId')!.invalid && (editForm.get('deviceId')!.dirty || editForm.get('deviceId')!.touched)">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.device.deviceUuid" for="field_deviceUuid">Device Uuid</label>
+          <input
+            type="text"
+            class="form-control"
+            name="deviceUuid"
+            id="field_deviceUuid"
+            data-cy="deviceUuid"
+            formControlName="deviceUuid"
+          />
+          <div *ngIf="editForm.get('deviceUuid')!.invalid && (editForm.get('deviceUuid')!.dirty || editForm.get('deviceUuid')!.touched)">
             <small
               class="form-text text-danger"
-              *ngIf="editForm.get('deviceId')?.errors?.required"
+              *ngIf="editForm.get('deviceUuid')?.errors?.required"
               jhiTranslate="entity.validation.required"
             >
               This field is required.

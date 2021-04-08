@@ -26,8 +26,8 @@ public class Device implements Serializable {
     private String owner;
 
     @NotNull
-    @Column(name = "device_id", nullable = false, unique = true)
-    private String deviceId;
+    @Column(name = "device_uuid", nullable = false, unique = true)
+    private String deviceUuid;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -56,17 +56,17 @@ public class Device implements Serializable {
         this.owner = owner;
     }
 
-    public String getDeviceId() {
-        return this.deviceId;
+    public String getDeviceUuid() {
+        return this.deviceUuid;
     }
 
-    public Device deviceId(String deviceId) {
-        this.deviceId = deviceId;
+    public Device deviceUuid(String deviceUuid) {
+        this.deviceUuid = deviceUuid;
         return this;
     }
 
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
+    public void setDeviceUuid(String deviceUuid) {
+        this.deviceUuid = deviceUuid;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -94,7 +94,7 @@ public class Device implements Serializable {
         return "Device{" +
             "id=" + getId() +
             ", owner='" + getOwner() + "'" +
-            ", deviceId='" + getDeviceId() + "'" +
+            ", deviceUuid='" + getDeviceUuid() + "'" +
             "}";
     }
 }

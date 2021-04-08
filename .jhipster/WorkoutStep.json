@@ -11,15 +11,6 @@
       "fieldType": "Integer"
     },
     {
-      "fieldName": "value",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "valueType",
-      "fieldType": "ValueType",
-      "fieldValues": "DURATION,WEIGHT,DISTANCE,REPETITIONS"
-    },
-    {
       "fieldName": "executionTime",
       "fieldType": "Integer"
     },
@@ -32,9 +23,37 @@
       "fieldName": "status",
       "fieldType": "WorkoutStatus",
       "fieldValues": "SCHEDULED,CANCELLED,DONE"
+    },
+    {
+      "fieldName": "exerciseUuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "exerciseName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "exerciseValue",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "exerciseValueType",
+      "fieldType": "ValueType",
+      "fieldValues": "DURATION,WEIGHT,DISTANCE,REPETITIONS",
+      "fieldValidateRules": ["required"]
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "workout",
+      "otherEntityRelationshipName": "workoutStep",
+      "relationshipName": "workout"
+    }
+  ],
   "entityTableName": "workout_step",
   "dto": "no",
   "pagination": "pagination",
@@ -44,5 +63,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": ["PowerTrainer"],
-  "changelogDate": "20210402170100"
+  "changelogDate": "20210402170300"
 }

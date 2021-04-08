@@ -28,14 +28,14 @@ public class DeviceCriteria implements Serializable, Criteria {
 
     private StringFilter owner;
 
-    private StringFilter deviceId;
+    private StringFilter deviceUuid;
 
     public DeviceCriteria() {}
 
     public DeviceCriteria(DeviceCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.owner = other.owner == null ? null : other.owner.copy();
-        this.deviceId = other.deviceId == null ? null : other.deviceId.copy();
+        this.deviceUuid = other.deviceUuid == null ? null : other.deviceUuid.copy();
     }
 
     @Override
@@ -73,19 +73,19 @@ public class DeviceCriteria implements Serializable, Criteria {
         this.owner = owner;
     }
 
-    public StringFilter getDeviceId() {
-        return deviceId;
+    public StringFilter getDeviceUuid() {
+        return deviceUuid;
     }
 
-    public StringFilter deviceId() {
-        if (deviceId == null) {
-            deviceId = new StringFilter();
+    public StringFilter deviceUuid() {
+        if (deviceUuid == null) {
+            deviceUuid = new StringFilter();
         }
-        return deviceId;
+        return deviceUuid;
     }
 
-    public void setDeviceId(StringFilter deviceId) {
-        this.deviceId = deviceId;
+    public void setDeviceUuid(StringFilter deviceUuid) {
+        this.deviceUuid = deviceUuid;
     }
 
     @Override
@@ -97,12 +97,12 @@ public class DeviceCriteria implements Serializable, Criteria {
             return false;
         }
         final DeviceCriteria that = (DeviceCriteria) o;
-        return Objects.equals(id, that.id) && Objects.equals(owner, that.owner) && Objects.equals(deviceId, that.deviceId);
+        return Objects.equals(id, that.id) && Objects.equals(owner, that.owner) && Objects.equals(deviceUuid, that.deviceUuid);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, owner, deviceId);
+        return Objects.hash(id, owner, deviceUuid);
     }
 
     // prettier-ignore
@@ -111,7 +111,7 @@ public class DeviceCriteria implements Serializable, Criteria {
         return "DeviceCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (owner != null ? "owner=" + owner + ", " : "") +
-            (deviceId != null ? "deviceId=" + deviceId + ", " : "") +
+            (deviceUuid != null ? "deviceUuid=" + deviceUuid + ", " : "") +
             "}";
     }
 }

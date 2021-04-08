@@ -92,6 +92,28 @@
             <option value="REPETITIONS">{{ 'powerTrainerApp.ValueType.REPETITIONS' | translate }}</option>
           </select>
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.exercise.owner" for="field_owner">Owner</label>
+          <input type="text" class="form-control" name="owner" id="field_owner" data-cy="owner" formControlName="owner" />
+          <div *ngIf="editForm.get('owner')!.invalid && (editForm.get('owner')!.dirty || editForm.get('owner')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('owner')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label jhiTranslate="powerTrainerApp.exercise.muscle" for="field_muscles">Muscle</label>
+          <select class="form-control" id="field_muscles" data-cy="muscle" multiple name="muscles" formControlName="muscles">
+            <option
+              [ngValue]="getSelectedMuscle(muscleOption, editForm.get('muscles')!.value)"
+              *ngFor="let muscleOption of musclesSharedCollection; trackBy: trackMuscleById"
+            >
+              {{ muscleOption.id }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

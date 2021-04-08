@@ -5,6 +5,16 @@ import { RouterModule } from '@angular/router';
   imports: [
     RouterModule.forChild([
       {
+        path: 'language',
+        data: { pageTitle: 'powerTrainerApp.language.home.title' },
+        loadChildren: () => import('./language/language.module').then(m => m.LanguageModule),
+      },
+      {
+        path: 'translation',
+        data: { pageTitle: 'powerTrainerApp.translation.home.title' },
+        loadChildren: () => import('./translation/translation.module').then(m => m.TranslationModule),
+      },
+      {
         path: 'calendar',
         data: { pageTitle: 'powerTrainerApp.calendar.home.title' },
         loadChildren: () => import('./calendar/calendar.module').then(m => m.CalendarModule),
@@ -20,14 +30,19 @@ import { RouterModule } from '@angular/router';
         loadChildren: () => import('./exercise-value/exercise-value.module').then(m => m.ExerciseValueModule),
       },
       {
-        path: 'measure-value',
-        data: { pageTitle: 'powerTrainerApp.measureValue.home.title' },
-        loadChildren: () => import('./measure-value/measure-value.module').then(m => m.MeasureValueModule),
+        path: 'exercise-tool',
+        data: { pageTitle: 'powerTrainerApp.exerciseTool.home.title' },
+        loadChildren: () => import('./exercise-tool/exercise-tool.module').then(m => m.ExerciseToolModule),
       },
       {
-        path: 'measure-type',
-        data: { pageTitle: 'powerTrainerApp.measureType.home.title' },
-        loadChildren: () => import('./measure-type/measure-type.module').then(m => m.MeasureTypeModule),
+        path: 'misuration',
+        data: { pageTitle: 'powerTrainerApp.misuration.home.title' },
+        loadChildren: () => import('./misuration/misuration.module').then(m => m.MisurationModule),
+      },
+      {
+        path: 'misuration-type',
+        data: { pageTitle: 'powerTrainerApp.misurationType.home.title' },
+        loadChildren: () => import('./misuration-type/misuration-type.module').then(m => m.MisurationTypeModule),
       },
       {
         path: 'workout-sheet',
@@ -43,11 +58,6 @@ import { RouterModule } from '@angular/router';
         path: 'workout',
         data: { pageTitle: 'powerTrainerApp.workout.home.title' },
         loadChildren: () => import('./workout/workout.module').then(m => m.WorkoutModule),
-      },
-      {
-        path: 'muscle-2-exercise',
-        data: { pageTitle: 'powerTrainerApp.muscle2Exercise.home.title' },
-        loadChildren: () => import('./muscle-2-exercise/muscle-2-exercise.module').then(m => m.Muscle2ExerciseModule),
       },
       {
         path: 'workout-step',

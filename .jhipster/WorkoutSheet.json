@@ -22,6 +22,10 @@
       "fieldTypeBlobContent": "text"
     },
     {
+      "fieldName": "owner",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "prepareTime",
       "fieldType": "Integer"
     },
@@ -51,7 +55,14 @@
       "fieldValues": "SEQUENCE,SUPERSET"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "workoutSheetExercise",
+      "otherEntityRelationshipName": "workoutSheet",
+      "relationshipName": "workoutSheetExercise"
+    }
+  ],
   "entityTableName": "workout_sheets",
   "dto": "no",
   "pagination": "pagination",
@@ -61,5 +72,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": ["PowerTrainer"],
-  "changelogDate": "20210402165700"
+  "changelogDate": "20210402170000"
 }

@@ -9,6 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { WorkoutSheetExerciseService } from '../service/workout-sheet-exercise.service';
 import { IWorkoutSheetExercise, WorkoutSheetExercise } from '../workout-sheet-exercise.model';
+import { IWorkoutSheet } from 'app/entities/workout-sheet/workout-sheet.model';
+import { WorkoutSheetService } from 'app/entities/workout-sheet/service/workout-sheet.service';
 
 import { WorkoutSheetExerciseUpdateComponent } from './workout-sheet-exercise-update.component';
 
@@ -18,6 +20,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<WorkoutSheetExerciseUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let workoutSheetExerciseService: WorkoutSheetExerciseService;
+    let workoutSheetService: WorkoutSheetService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -31,18 +34,44 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(WorkoutSheetExerciseUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       workoutSheetExerciseService = TestBed.inject(WorkoutSheetExerciseService);
+      workoutSheetService = TestBed.inject(WorkoutSheetService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
+      it('Should call WorkoutSheet query and add missing value', () => {
+        const workoutSheetExercise: IWorkoutSheetExercise = { id: 456 };
+        const workoutSheet: IWorkoutSheet = { id: 4799 };
+        workoutSheetExercise.workoutSheet = workoutSheet;
+
+        const workoutSheetCollection: IWorkoutSheet[] = [{ id: 47627 }];
+        spyOn(workoutSheetService, 'query').and.returnValue(of(new HttpResponse({ body: workoutSheetCollection })));
+        const additionalWorkoutSheets = [workoutSheet];
+        const expectedCollection: IWorkoutSheet[] = [...additionalWorkoutSheets, ...workoutSheetCollection];
+        spyOn(workoutSheetService, 'addWorkoutSheetToCollectionIfMissing').and.returnValue(expectedCollection);
+
+        activatedRoute.data = of({ workoutSheetExercise });
+        comp.ngOnInit();
+
+        expect(workoutSheetService.query).toHaveBeenCalled();
+        expect(workoutSheetService.addWorkoutSheetToCollectionIfMissing).toHaveBeenCalledWith(
+          workoutSheetCollection,
+          ...additionalWorkoutSheets
+        );
+        expect(comp.workoutSheetsSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should update editForm', () => {
         const workoutSheetExercise: IWorkoutSheetExercise = { id: 456 };
+        const workoutSheet: IWorkoutSheet = { id: 46541 };
+        workoutSheetExercise.workoutSheet = workoutSheet;
 
         activatedRoute.data = of({ workoutSheetExercise });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(workoutSheetExercise));
+        expect(comp.workoutSheetsSharedCollection).toContain(workoutSheet);
       });
     });
 
@@ -107,6 +136,16 @@ describe('Component Tests', () => {
         expect(workoutSheetExerciseService.update).toHaveBeenCalledWith(workoutSheetExercise);
         expect(comp.isSaving).toEqual(false);
         expect(comp.previousState).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('Tracking relationships identifiers', () => {
+      describe('trackWorkoutSheetById', () => {
+        it('Should return tracked WorkoutSheet primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackWorkoutSheetById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
       });
     });
   });

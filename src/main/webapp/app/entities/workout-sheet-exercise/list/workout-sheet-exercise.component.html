@@ -39,14 +39,24 @@
           <th scope="col" jhiSortBy="order">
             <span jhiTranslate="powerTrainerApp.workoutSheetExercise.order">Order</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="repetition">
-            <span jhiTranslate="powerTrainerApp.workoutSheetExercise.repetition">Repetition</span> <fa-icon icon="sort"></fa-icon>
+          <th scope="col" jhiSortBy="repetitions">
+            <span jhiTranslate="powerTrainerApp.workoutSheetExercise.repetitions">Repetitions</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="value">
-            <span jhiTranslate="powerTrainerApp.workoutSheetExercise.value">Value</span> <fa-icon icon="sort"></fa-icon>
+          <th scope="col" jhiSortBy="exerciseUuid">
+            <span jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseUuid">Exercise Uuid</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="valueType">
-            <span jhiTranslate="powerTrainerApp.workoutSheetExercise.valueType">Value Type</span> <fa-icon icon="sort"></fa-icon>
+          <th scope="col" jhiSortBy="exerciseName">
+            <span jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseName">Exercise Name</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="exerciseValue">
+            <span jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseValue">Exercise Value</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="exerciseValueType">
+            <span jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseValueType">Exercise Value Type</span>
+            <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="workoutSheet.id">
+            <span jhiTranslate="powerTrainerApp.workoutSheetExercise.workoutSheet">Workout Sheet</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
         </tr>
@@ -58,9 +68,20 @@
           </td>
           <td>{{ workoutSheetExercise.uuid }}</td>
           <td>{{ workoutSheetExercise.order }}</td>
-          <td>{{ workoutSheetExercise.repetition }}</td>
-          <td>{{ workoutSheetExercise.value }}</td>
-          <td jhiTranslate="{{ 'powerTrainerApp.ValueType.' + workoutSheetExercise.valueType }}">{{ workoutSheetExercise.valueType }}</td>
+          <td>{{ workoutSheetExercise.repetitions }}</td>
+          <td>{{ workoutSheetExercise.exerciseUuid }}</td>
+          <td>{{ workoutSheetExercise.exerciseName }}</td>
+          <td>{{ workoutSheetExercise.exerciseValue }}</td>
+          <td jhiTranslate="{{ 'powerTrainerApp.ValueType.' + workoutSheetExercise.exerciseValueType }}">
+            {{ workoutSheetExercise.exerciseValueType }}
+          </td>
+          <td>
+            <div *ngIf="workoutSheetExercise.workoutSheet">
+              <a [routerLink]="['/workout-sheet', workoutSheetExercise.workoutSheet?.id, 'view']">{{
+                workoutSheetExercise.workoutSheet?.id
+              }}</a>
+            </div>
+          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

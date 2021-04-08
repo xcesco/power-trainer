@@ -19,6 +19,7 @@ export class CalendarUpdateComponent implements OnInit {
     id: [],
     uuid: [null, [Validators.required]],
     name: [null, [Validators.required]],
+    owner: [null, [Validators.required]],
   });
 
   constructor(protected calendarService: CalendarService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
@@ -67,6 +68,7 @@ export class CalendarUpdateComponent implements OnInit {
       id: calendar.id,
       uuid: calendar.uuid,
       name: calendar.name,
+      owner: calendar.owner,
     });
   }
 
@@ -76,6 +78,7 @@ export class CalendarUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       uuid: this.editForm.get(['uuid'])!.value,
       name: this.editForm.get(['name'])!.value,
+      owner: this.editForm.get(['owner'])!.value,
     };
   }
 }

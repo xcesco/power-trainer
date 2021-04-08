@@ -29,6 +29,7 @@ describe('Service Tests', () => {
         name: 'AAAAAAA',
         description: 'AAAAAAA',
         valueType: ValueType.DURATION,
+        owner: 'AAAAAAA',
       };
     });
 
@@ -69,6 +70,7 @@ describe('Service Tests', () => {
             name: 'BBBBBB',
             description: 'BBBBBB',
             valueType: 'BBBBBB',
+            owner: 'BBBBBB',
           },
           elemDefault
         );
@@ -90,6 +92,7 @@ describe('Service Tests', () => {
             name: 'BBBBBB',
             description: 'BBBBBB',
             valueType: 'BBBBBB',
+            owner: 'BBBBBB',
           },
           new Exercise()
         );
@@ -114,6 +117,7 @@ describe('Service Tests', () => {
             name: 'BBBBBB',
             description: 'BBBBBB',
             valueType: 'BBBBBB',
+            owner: 'BBBBBB',
           },
           elemDefault
         );
@@ -165,7 +169,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Exercise to an array', () => {
-          const exerciseArray: IExercise[] = [{ id: 123 }, { id: 456 }, { id: 66330 }];
+          const exerciseArray: IExercise[] = [{ id: 123 }, { id: 456 }, { id: 99516 }];
           const exerciseCollection: IExercise[] = [{ id: 123 }];
           expectedResult = service.addExerciseToCollectionIfMissing(exerciseCollection, ...exerciseArray);
           expect(expectedResult).toHaveLength(3);

@@ -1,7 +1,7 @@
 export enum NoteType {
-  YOUTUBE = 'YOUTUBE',
+  VIDEO = 'VIDEO',
 
-  EMBEDDED = 'EMBEDDED',
+  TEXT = 'TEXT',
 
   URL = 'URL',
 }

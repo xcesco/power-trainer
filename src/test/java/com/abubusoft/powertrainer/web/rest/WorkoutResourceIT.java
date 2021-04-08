@@ -7,7 +7,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.abubusoft.powertrainer.IntegrationTest;
+import com.abubusoft.powertrainer.domain.Calendar;
 import com.abubusoft.powertrainer.domain.Workout;
+import com.abubusoft.powertrainer.domain.WorkoutStep;
 import com.abubusoft.powertrainer.domain.enumeration.WorkoutStatus;
 import com.abubusoft.powertrainer.domain.enumeration.WorkoutType;
 import com.abubusoft.powertrainer.repository.WorkoutRepository;
@@ -883,6 +885,44 @@ class WorkoutResourceIT {
 
         // Get all the workoutList where note does not contain UPDATED_NOTE
         defaultWorkoutShouldBeFound("note.doesNotContain=" + UPDATED_NOTE);
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutsByWorkoutStepIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutRepository.saveAndFlush(workout);
+        WorkoutStep workoutStep = WorkoutStepResourceIT.createEntity(em);
+        em.persist(workoutStep);
+        em.flush();
+        workout.addWorkoutStep(workoutStep);
+        workoutRepository.saveAndFlush(workout);
+        Long workoutStepId = workoutStep.getId();
+
+        // Get all the workoutList where workoutStep equals to workoutStepId
+        defaultWorkoutShouldBeFound("workoutStepId.equals=" + workoutStepId);
+
+        // Get all the workoutList where workoutStep equals to (workoutStepId + 1)
+        defaultWorkoutShouldNotBeFound("workoutStepId.equals=" + (workoutStepId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllWorkoutsByCalendarIsEqualToSomething() throws Exception {
+        // Initialize the database
+        workoutRepository.saveAndFlush(workout);
+        Calendar calendar = CalendarResourceIT.createEntity(em);
+        em.persist(calendar);
+        em.flush();
+        workout.setCalendar(calendar);
+        workoutRepository.saveAndFlush(workout);
+        Long calendarId = calendar.getId();
+
+        // Get all the workoutList where calendar equals to calendarId
+        defaultWorkoutShouldBeFound("calendarId.equals=" + calendarId);
+
+        // Get all the workoutList where calendar equals to (calendarId + 1)
+        defaultWorkoutShouldNotBeFound("calendarId.equals=" + (calendarId + 1));
     }
 
     /**

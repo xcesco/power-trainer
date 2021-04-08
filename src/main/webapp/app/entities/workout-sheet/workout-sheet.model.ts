@@ -1,3 +1,4 @@
+import { IWorkoutSheetExercise } from 'app/entities/workout-sheet-exercise/workout-sheet-exercise.model';
 import { WorkoutType } from 'app/entities/enumerations/workout-type.model';
 
 export interface IWorkoutSheet {
@@ -7,6 +8,7 @@ export interface IWorkoutSheet {
   imageContentType?: string | null;
   image?: string | null;
   description?: string | null;
+  owner?: string | null;
   prepareTime?: number | null;
   coolDownTime?: number | null;
   cycles?: number | null;
@@ -14,6 +16,7 @@ export interface IWorkoutSheet {
   set?: number | null;
   setRestTime?: number | null;
   type?: WorkoutType | null;
+  workoutSheetExercises?: IWorkoutSheetExercise[] | null;
 }
 
 export class WorkoutSheet implements IWorkoutSheet {
@@ -24,13 +27,15 @@ export class WorkoutSheet implements IWorkoutSheet {
     public imageContentType?: string | null,
     public image?: string | null,
     public description?: string | null,
+    public owner?: string | null,
     public prepareTime?: number | null,
     public coolDownTime?: number | null,
     public cycles?: number | null,
     public cycleRestTime?: number | null,
     public set?: number | null,
     public setRestTime?: number | null,
-    public type?: WorkoutType | null
+    public type?: WorkoutType | null,
+    public workoutSheetExercises?: IWorkoutSheetExercise[] | null
   ) {}
 }
 

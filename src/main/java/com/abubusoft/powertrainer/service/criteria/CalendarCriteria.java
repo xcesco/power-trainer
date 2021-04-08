@@ -31,12 +31,24 @@ public class CalendarCriteria implements Serializable, Criteria {
 
     private StringFilter name;
 
+    private StringFilter owner;
+
+    private LongFilter exerciseValueId;
+
+    private LongFilter misurationId;
+
+    private LongFilter workoutId;
+
     public CalendarCriteria() {}
 
     public CalendarCriteria(CalendarCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.uuid = other.uuid == null ? null : other.uuid.copy();
         this.name = other.name == null ? null : other.name.copy();
+        this.owner = other.owner == null ? null : other.owner.copy();
+        this.exerciseValueId = other.exerciseValueId == null ? null : other.exerciseValueId.copy();
+        this.misurationId = other.misurationId == null ? null : other.misurationId.copy();
+        this.workoutId = other.workoutId == null ? null : other.workoutId.copy();
     }
 
     @Override
@@ -89,6 +101,66 @@ public class CalendarCriteria implements Serializable, Criteria {
         this.name = name;
     }
 
+    public StringFilter getOwner() {
+        return owner;
+    }
+
+    public StringFilter owner() {
+        if (owner == null) {
+            owner = new StringFilter();
+        }
+        return owner;
+    }
+
+    public void setOwner(StringFilter owner) {
+        this.owner = owner;
+    }
+
+    public LongFilter getExerciseValueId() {
+        return exerciseValueId;
+    }
+
+    public LongFilter exerciseValueId() {
+        if (exerciseValueId == null) {
+            exerciseValueId = new LongFilter();
+        }
+        return exerciseValueId;
+    }
+
+    public void setExerciseValueId(LongFilter exerciseValueId) {
+        this.exerciseValueId = exerciseValueId;
+    }
+
+    public LongFilter getMisurationId() {
+        return misurationId;
+    }
+
+    public LongFilter misurationId() {
+        if (misurationId == null) {
+            misurationId = new LongFilter();
+        }
+        return misurationId;
+    }
+
+    public void setMisurationId(LongFilter misurationId) {
+        this.misurationId = misurationId;
+    }
+
+    public LongFilter getWorkoutId() {
+        return workoutId;
+    }
+
+    public LongFilter workoutId() {
+        if (workoutId == null) {
+            workoutId = new LongFilter();
+        }
+        return workoutId;
+    }
+
+    public void setWorkoutId(LongFilter workoutId) {
+        this.workoutId = workoutId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -98,12 +170,20 @@ public class CalendarCriteria implements Serializable, Criteria {
             return false;
         }
         final CalendarCriteria that = (CalendarCriteria) o;
-        return Objects.equals(id, that.id) && Objects.equals(uuid, that.uuid) && Objects.equals(name, that.name);
+        return (
+            Objects.equals(id, that.id) &&
+            Objects.equals(uuid, that.uuid) &&
+            Objects.equals(name, that.name) &&
+            Objects.equals(owner, that.owner) &&
+            Objects.equals(exerciseValueId, that.exerciseValueId) &&
+            Objects.equals(misurationId, that.misurationId) &&
+            Objects.equals(workoutId, that.workoutId)
+        );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, uuid, name);
+        return Objects.hash(id, uuid, name, owner, exerciseValueId, misurationId, workoutId);
     }
 
     // prettier-ignore
@@ -113,6 +193,10 @@ public class CalendarCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (uuid != null ? "uuid=" + uuid + ", " : "") +
             (name != null ? "name=" + name + ", " : "") +
+            (owner != null ? "owner=" + owner + ", " : "") +
+            (exerciseValueId != null ? "exerciseValueId=" + exerciseValueId + ", " : "") +
+            (misurationId != null ? "misurationId=" + misurationId + ", " : "") +
+            (workoutId != null ? "workoutId=" + workoutId + ", " : "") +
             "}";
     }
 }

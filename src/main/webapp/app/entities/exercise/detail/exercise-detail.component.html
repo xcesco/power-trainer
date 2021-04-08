@@ -39,6 +39,17 @@
         <dd>
           <span jhiTranslate="{{ 'powerTrainerApp.ValueType.' + exercise.valueType }}">{{ exercise.valueType }}</span>
         </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exercise.owner">Owner</span></dt>
+        <dd>
+          <span>{{ exercise.owner }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exercise.muscle">Muscle</span></dt>
+        <dd>
+          <span *ngFor="let muscle of exercise.muscles; let last = last">
+            <a [routerLink]="['/muscle', muscle?.id, 'view']">{{ muscle.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

@@ -84,8 +84,8 @@ public class DeviceQueryService extends QueryService<Device> {
             if (criteria.getOwner() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getOwner(), Device_.owner));
             }
-            if (criteria.getDeviceId() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getDeviceId(), Device_.deviceId));
+            if (criteria.getDeviceUuid() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDeviceUuid(), Device_.deviceUuid));
             }
         }
         return specification;
