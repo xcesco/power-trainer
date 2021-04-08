@@ -14,7 +14,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * A ExerciseValue.
  */
 @Entity
-@Table(name = "exerci_values")
+@Table(name = "exercise_values")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ExerciseValue implements Serializable {
 

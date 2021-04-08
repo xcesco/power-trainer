@@ -40,6 +40,9 @@ class TranslationResourceIT {
     private static final String DEFAULT_VALUE = "AAAAAAAAAA";
     private static final String UPDATED_VALUE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_ENTITY_FIELD = "AAAAAAAAAA";
+    private static final String UPDATED_ENTITY_FIELD = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/translations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -64,7 +67,11 @@ class TranslationResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Translation createEntity(EntityManager em) {
-        Translation translation = new Translation().entityType(DEFAULT_ENTITY_TYPE).entityUuid(DEFAULT_ENTITY_UUID).value(DEFAULT_VALUE);
+        Translation translation = new Translation()
+            .entityType(DEFAULT_ENTITY_TYPE)
+            .entityUuid(DEFAULT_ENTITY_UUID)
+            .value(DEFAULT_VALUE)
+            .entityField(DEFAULT_ENTITY_FIELD);
         return translation;
     }
 
@@ -75,7 +82,11 @@ class TranslationResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Translation createUpdatedEntity(EntityManager em) {
-        Translation translation = new Translation().entityType(UPDATED_ENTITY_TYPE).entityUuid(UPDATED_ENTITY_UUID).value(UPDATED_VALUE);
+        Translation translation = new Translation()
+            .entityType(UPDATED_ENTITY_TYPE)
+            .entityUuid(UPDATED_ENTITY_UUID)
+            .value(UPDATED_VALUE)
+            .entityField(UPDATED_ENTITY_FIELD);
         return translation;
     }
 
@@ -100,6 +111,7 @@ class TranslationResourceIT {
         assertThat(testTranslation.getEntityType()).isEqualTo(DEFAULT_ENTITY_TYPE);
         assertThat(testTranslation.getEntityUuid()).isEqualTo(DEFAULT_ENTITY_UUID);
         assertThat(testTranslation.getValue()).isEqualTo(DEFAULT_VALUE);
+        assertThat(testTranslation.getEntityField()).isEqualTo(DEFAULT_ENTITY_FIELD);
     }
 
     @Test
@@ -173,6 +185,23 @@ class TranslationResourceIT {
 
     @Test
     @Transactional
+    void checkEntityFieldIsRequired() throws Exception {
+        int databaseSizeBeforeTest = translationRepository.findAll().size();
+        // set the field null
+        translation.setEntityField(null);
+
+        // Create the Translation, which fails.
+
+        restTranslationMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(translation)))
+            .andExpect(status().isBadRequest());
+
+        List<Translation> translationList = translationRepository.findAll();
+        assertThat(translationList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllTranslations() throws Exception {
         // Initialize the database
         translationRepository.saveAndFlush(translation);
@@ -185,7 +214,8 @@ class TranslationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(translation.getId().intValue())))
             .andExpect(jsonPath("$.[*].entityType").value(hasItem(DEFAULT_ENTITY_TYPE)))
             .andExpect(jsonPath("$.[*].entityUuid").value(hasItem(DEFAULT_ENTITY_UUID)))
-            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)));
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
+            .andExpect(jsonPath("$.[*].entityField").value(hasItem(DEFAULT_ENTITY_FIELD)));
     }
 
     @Test
@@ -202,7 +232,8 @@ class TranslationResourceIT {
             .andExpect(jsonPath("$.id").value(translation.getId().intValue()))
             .andExpect(jsonPath("$.entityType").value(DEFAULT_ENTITY_TYPE))
             .andExpect(jsonPath("$.entityUuid").value(DEFAULT_ENTITY_UUID))
-            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE));
+            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE))
+            .andExpect(jsonPath("$.entityField").value(DEFAULT_ENTITY_FIELD));
     }
 
     @Test
@@ -459,6 +490,84 @@ class TranslationResourceIT {
 
     @Test
     @Transactional
+    void getAllTranslationsByEntityFieldIsEqualToSomething() throws Exception {
+        // Initialize the database
+        translationRepository.saveAndFlush(translation);
+
+        // Get all the translationList where entityField equals to DEFAULT_ENTITY_FIELD
+        defaultTranslationShouldBeFound("entityField.equals=" + DEFAULT_ENTITY_FIELD);
+
+        // Get all the translationList where entityField equals to UPDATED_ENTITY_FIELD
+        defaultTranslationShouldNotBeFound("entityField.equals=" + UPDATED_ENTITY_FIELD);
+    }
+
+    @Test
+    @Transactional
+    void getAllTranslationsByEntityFieldIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        translationRepository.saveAndFlush(translation);
+
+        // Get all the translationList where entityField not equals to DEFAULT_ENTITY_FIELD
+        defaultTranslationShouldNotBeFound("entityField.notEquals=" + DEFAULT_ENTITY_FIELD);
+
+        // Get all the translationList where entityField not equals to UPDATED_ENTITY_FIELD
+        defaultTranslationShouldBeFound("entityField.notEquals=" + UPDATED_ENTITY_FIELD);
+    }
+
+    @Test
+    @Transactional
+    void getAllTranslationsByEntityFieldIsInShouldWork() throws Exception {
+        // Initialize the database
+        translationRepository.saveAndFlush(translation);
+
+        // Get all the translationList where entityField in DEFAULT_ENTITY_FIELD or UPDATED_ENTITY_FIELD
+        defaultTranslationShouldBeFound("entityField.in=" + DEFAULT_ENTITY_FIELD + "," + UPDATED_ENTITY_FIELD);
+
+        // Get all the translationList where entityField equals to UPDATED_ENTITY_FIELD
+        defaultTranslationShouldNotBeFound("entityField.in=" + UPDATED_ENTITY_FIELD);
+    }
+
+    @Test
+    @Transactional
+    void getAllTranslationsByEntityFieldIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        translationRepository.saveAndFlush(translation);
+
+        // Get all the translationList where entityField is not null
+        defaultTranslationShouldBeFound("entityField.specified=true");
+
+        // Get all the translationList where entityField is null
+        defaultTranslationShouldNotBeFound("entityField.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllTranslationsByEntityFieldContainsSomething() throws Exception {
+        // Initialize the database
+        translationRepository.saveAndFlush(translation);
+
+        // Get all the translationList where entityField contains DEFAULT_ENTITY_FIELD
+        defaultTranslationShouldBeFound("entityField.contains=" + DEFAULT_ENTITY_FIELD);
+
+        // Get all the translationList where entityField contains UPDATED_ENTITY_FIELD
+        defaultTranslationShouldNotBeFound("entityField.contains=" + UPDATED_ENTITY_FIELD);
+    }
+
+    @Test
+    @Transactional
+    void getAllTranslationsByEntityFieldNotContainsSomething() throws Exception {
+        // Initialize the database
+        translationRepository.saveAndFlush(translation);
+
+        // Get all the translationList where entityField does not contain DEFAULT_ENTITY_FIELD
+        defaultTranslationShouldNotBeFound("entityField.doesNotContain=" + DEFAULT_ENTITY_FIELD);
+
+        // Get all the translationList where entityField does not contain UPDATED_ENTITY_FIELD
+        defaultTranslationShouldBeFound("entityField.doesNotContain=" + UPDATED_ENTITY_FIELD);
+    }
+
+    @Test
+    @Transactional
     void getAllTranslationsByLanguageIsEqualToSomething() throws Exception {
         // Initialize the database
         translationRepository.saveAndFlush(translation);
@@ -487,7 +596,8 @@ class TranslationResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(translation.getId().intValue())))
             .andExpect(jsonPath("$.[*].entityType").value(hasItem(DEFAULT_ENTITY_TYPE)))
             .andExpect(jsonPath("$.[*].entityUuid").value(hasItem(DEFAULT_ENTITY_UUID)))
-            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)));
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
+            .andExpect(jsonPath("$.[*].entityField").value(hasItem(DEFAULT_ENTITY_FIELD)));
 
         // Check, that the count call also returns 1
         restTranslationMockMvc
@@ -535,7 +645,11 @@ class TranslationResourceIT {
         Translation updatedTranslation = translationRepository.findById(translation.getId()).get();
         // Disconnect from session so that the updates on updatedTranslation are not directly saved in db
         em.detach(updatedTranslation);
-        updatedTranslation.entityType(UPDATED_ENTITY_TYPE).entityUuid(UPDATED_ENTITY_UUID).value(UPDATED_VALUE);
+        updatedTranslation
+            .entityType(UPDATED_ENTITY_TYPE)
+            .entityUuid(UPDATED_ENTITY_UUID)
+            .value(UPDATED_VALUE)
+            .entityField(UPDATED_ENTITY_FIELD);
 
         restTranslationMockMvc
             .perform(
@@ -552,6 +666,7 @@ class TranslationResourceIT {
         assertThat(testTranslation.getEntityType()).isEqualTo(UPDATED_ENTITY_TYPE);
         assertThat(testTranslation.getEntityUuid()).isEqualTo(UPDATED_ENTITY_UUID);
         assertThat(testTranslation.getValue()).isEqualTo(UPDATED_VALUE);
+        assertThat(testTranslation.getEntityField()).isEqualTo(UPDATED_ENTITY_FIELD);
     }
 
     @Test
@@ -622,7 +737,7 @@ class TranslationResourceIT {
         Translation partialUpdatedTranslation = new Translation();
         partialUpdatedTranslation.setId(translation.getId());
 
-        partialUpdatedTranslation.value(UPDATED_VALUE);
+        partialUpdatedTranslation.value(UPDATED_VALUE).entityField(UPDATED_ENTITY_FIELD);
 
         restTranslationMockMvc
             .perform(
@@ -639,6 +754,7 @@ class TranslationResourceIT {
         assertThat(testTranslation.getEntityType()).isEqualTo(DEFAULT_ENTITY_TYPE);
         assertThat(testTranslation.getEntityUuid()).isEqualTo(DEFAULT_ENTITY_UUID);
         assertThat(testTranslation.getValue()).isEqualTo(UPDATED_VALUE);
+        assertThat(testTranslation.getEntityField()).isEqualTo(UPDATED_ENTITY_FIELD);
     }
 
     @Test
@@ -653,7 +769,11 @@ class TranslationResourceIT {
         Translation partialUpdatedTranslation = new Translation();
         partialUpdatedTranslation.setId(translation.getId());
 
-        partialUpdatedTranslation.entityType(UPDATED_ENTITY_TYPE).entityUuid(UPDATED_ENTITY_UUID).value(UPDATED_VALUE);
+        partialUpdatedTranslation
+            .entityType(UPDATED_ENTITY_TYPE)
+            .entityUuid(UPDATED_ENTITY_UUID)
+            .value(UPDATED_VALUE)
+            .entityField(UPDATED_ENTITY_FIELD);
 
         restTranslationMockMvc
             .perform(
@@ -670,6 +790,7 @@ class TranslationResourceIT {
         assertThat(testTranslation.getEntityType()).isEqualTo(UPDATED_ENTITY_TYPE);
         assertThat(testTranslation.getEntityUuid()).isEqualTo(UPDATED_ENTITY_UUID);
         assertThat(testTranslation.getValue()).isEqualTo(UPDATED_VALUE);
+        assertThat(testTranslation.getEntityField()).isEqualTo(UPDATED_ENTITY_FIELD);
     }
 
     @Test

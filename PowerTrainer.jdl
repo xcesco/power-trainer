@@ -10,7 +10,7 @@ application {
     clientPackageManager npm
     clientTheme materia
     clientThemeVariant primary
-    creationTimestamp 1617382260009
+    creationTimestamp 1617912526482
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
@@ -19,7 +19,7 @@ application {
     enableTranslation true
     jhiPrefix jhi
     jhipsterVersion "7.0.1"
-    jwtSecretKey "MjUyNTY4OTViZjZlOTMyZGM5YWNhNGI2ZjQxNDVlMzVjZDA1YjcyOWNhNjQ1Yzg1OGQ4NjM5YTk2MzA2MmYzM2ZlZmVjOTExNTU1ZmIyYThlZWJlZjY5YzlmMWYwOGJjMmY5MGJmYmNjNzk0MjQ0YjVkMzM5MDEwMmExZjE2MjM="
+    jwtSecretKey "ZGY5MTI3OGI4OGFlMDVlMzNhMjlhODYzOTMyMjAyNjgwNTIwOTkxYTA1YjI2ZTIyZThkYTUwOTIxNGE4OGI3MTUwOWE2YmYzYTFlYzBlYTk0OGZjMmI5YzE5Y2VmNjMzNjQ5YWY5OThiNGE4OWNiYTgxNjk3M2UyZmY3ZDQ5MjU="
     languages [en, it]
     messageBroker false
     nativeLanguage en
@@ -67,8 +67,8 @@ entity Exercise(exercises) {
   owner String required
 }
 
-entity ExerciseValue(exerciValues) {
-	uuid	                 UUID           unique required ,
+entity ExerciseValue(exerciseValues) {
+  uuid	                 UUID           unique required ,
   date	                 ZonedDateTime  required        ,
   exerciseUuid			     UUID           required        ,
   exerciseName			     String         required        ,

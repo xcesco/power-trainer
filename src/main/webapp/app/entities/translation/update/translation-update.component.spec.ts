@@ -42,10 +42,10 @@ describe('Component Tests', () => {
     describe('ngOnInit', () => {
       it('Should call Language query and add missing value', () => {
         const translation: ITranslation = { id: 456 };
-        const language: ILanguage = { id: 42550 };
+        const language: ILanguage = { id: 85810 };
         translation.language = language;
 
-        const languageCollection: ILanguage[] = [{ id: 15717 }];
+        const languageCollection: ILanguage[] = [{ id: 42901 }];
         spyOn(languageService, 'query').and.returnValue(of(new HttpResponse({ body: languageCollection })));
         const additionalLanguages = [language];
         const expectedCollection: ILanguage[] = [...additionalLanguages, ...languageCollection];
@@ -61,7 +61,7 @@ describe('Component Tests', () => {
 
       it('Should update editForm', () => {
         const translation: ITranslation = { id: 456 };
-        const language: ILanguage = { id: 34998 };
+        const language: ILanguage = { id: 27706 };
         translation.language = language;
 
         activatedRoute.data = of({ translation });

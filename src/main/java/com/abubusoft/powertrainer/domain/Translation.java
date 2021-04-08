@@ -34,6 +34,10 @@ public class Translation implements Serializable {
     @Column(name = "value", nullable = false)
     private String value;
 
+    @NotNull
+    @Column(name = "entity_field", nullable = false)
+    private String entityField;
+
     @ManyToOne
     @JsonIgnoreProperties(value = { "translations" }, allowSetters = true)
     private Language language;
@@ -91,6 +95,19 @@ public class Translation implements Serializable {
         this.value = value;
     }
 
+    public String getEntityField() {
+        return this.entityField;
+    }
+
+    public Translation entityField(String entityField) {
+        this.entityField = entityField;
+        return this;
+    }
+
+    public void setEntityField(String entityField) {
+        this.entityField = entityField;
+    }
+
     public Language getLanguage() {
         return this.language;
     }
@@ -131,6 +148,7 @@ public class Translation implements Serializable {
             ", entityType='" + getEntityType() + "'" +
             ", entityUuid='" + getEntityUuid() + "'" +
             ", value='" + getValue() + "'" +
+            ", entityField='" + getEntityField() + "'" +
             "}";
     }
 }

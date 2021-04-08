@@ -41,7 +41,7 @@
       "relationshipName": "calendar"
     }
   ],
-  "entityTableName": "exerci_values",
+  "entityTableName": "exercise_values",
   "dto": "no",
   "pagination": "pagination",
   "service": "serviceImpl",
@@ -50,5 +50,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": ["PowerTrainer"],
-  "changelogDate": "20210402165600"
+  "changelogDate": "20210408201316"
 }

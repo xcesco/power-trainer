@@ -56,6 +56,7 @@
                   tableName="notes">
             <column name="id" type="numeric"/>
             <column name="uuid" type="${uuidType}"/>
+            <column name="exercise_id" type="numeric"/>
             <column name="type" type="string"/>
             <column name="url" type="string"/>
             <column name="image" type="blob"/>

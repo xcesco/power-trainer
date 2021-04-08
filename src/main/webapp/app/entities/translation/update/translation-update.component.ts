@@ -24,6 +24,7 @@ export class TranslationUpdateComponent implements OnInit {
     entityType: [null, [Validators.required]],
     entityUuid: [null, [Validators.required]],
     value: [null, [Validators.required]],
+    entityField: [null, [Validators.required]],
     language: [],
   });
 
@@ -85,6 +86,7 @@ export class TranslationUpdateComponent implements OnInit {
       entityType: translation.entityType,
       entityUuid: translation.entityUuid,
       value: translation.value,
+      entityField: translation.entityField,
       language: translation.language,
     });
 
@@ -113,6 +115,7 @@ export class TranslationUpdateComponent implements OnInit {
       entityType: this.editForm.get(['entityType'])!.value,
       entityUuid: this.editForm.get(['entityUuid'])!.value,
       value: this.editForm.get(['value'])!.value,
+      entityField: this.editForm.get(['entityField'])!.value,
       language: this.editForm.get(['language'])!.value,
     };
   }

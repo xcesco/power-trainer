@@ -32,6 +32,8 @@ public class TranslationCriteria implements Serializable, Criteria {
 
     private StringFilter value;
 
+    private StringFilter entityField;
+
     private LongFilter languageId;
 
     public TranslationCriteria() {}
@@ -41,6 +43,7 @@ public class TranslationCriteria implements Serializable, Criteria {
         this.entityType = other.entityType == null ? null : other.entityType.copy();
         this.entityUuid = other.entityUuid == null ? null : other.entityUuid.copy();
         this.value = other.value == null ? null : other.value.copy();
+        this.entityField = other.entityField == null ? null : other.entityField.copy();
         this.languageId = other.languageId == null ? null : other.languageId.copy();
     }
 
@@ -109,6 +112,21 @@ public class TranslationCriteria implements Serializable, Criteria {
         this.value = value;
     }
 
+    public StringFilter getEntityField() {
+        return entityField;
+    }
+
+    public StringFilter entityField() {
+        if (entityField == null) {
+            entityField = new StringFilter();
+        }
+        return entityField;
+    }
+
+    public void setEntityField(StringFilter entityField) {
+        this.entityField = entityField;
+    }
+
     public LongFilter getLanguageId() {
         return languageId;
     }
@@ -138,13 +156,14 @@ public class TranslationCriteria implements Serializable, Criteria {
             Objects.equals(entityType, that.entityType) &&
             Objects.equals(entityUuid, that.entityUuid) &&
             Objects.equals(value, that.value) &&
+            Objects.equals(entityField, that.entityField) &&
             Objects.equals(languageId, that.languageId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, entityType, entityUuid, value, languageId);
+        return Objects.hash(id, entityType, entityUuid, value, entityField, languageId);
     }
 
     // prettier-ignore
@@ -155,6 +174,7 @@ public class TranslationCriteria implements Serializable, Criteria {
             (entityType != null ? "entityType=" + entityType + ", " : "") +
             (entityUuid != null ? "entityUuid=" + entityUuid + ", " : "") +
             (value != null ? "value=" + value + ", " : "") +
+            (entityField != null ? "entityField=" + entityField + ", " : "") +
             (languageId != null ? "languageId=" + languageId + ", " : "") +
             "}";
     }

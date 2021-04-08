@@ -42,6 +42,9 @@
           <th scope="col" jhiSortBy="value">
             <span jhiTranslate="powerTrainerApp.translation.value">Value</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="entityField">
+            <span jhiTranslate="powerTrainerApp.translation.entityField">Entity Field</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="language.id">
             <span jhiTranslate="powerTrainerApp.translation.language">Language</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -56,6 +59,7 @@
           <td>{{ translation.entityType }}</td>
           <td>{{ translation.entityUuid }}</td>
           <td>{{ translation.value }}</td>
+          <td>{{ translation.entityField }}</td>
           <td>
             <div *ngIf="translation.language">
               <a [routerLink]="['/language', translation.language?.id, 'view']">{{ translation.language?.id }}</a>

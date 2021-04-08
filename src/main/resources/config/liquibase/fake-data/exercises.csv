@@ -1,11 +1,4 @@
 id;uuid;image;image_content_type;name;description;value_type;owner
-1;d8ecaaf0-a3c7-4432-a485-53d5daa86c11;../fake-data/blob/hipster.png;image/png;Platinum Pound;../fake-data/blob/hipster.txt;DURATION;Group B2C
-2;f067e8da-568d-42b6-a9af-7970f006335e;../fake-data/blob/hipster.png;image/png;Home;../fake-data/blob/hipster.txt;WEIGHT;Agent Shoes bleeding-edge
-3;fabaec29-f67d-47f0-8eed-a0fe7fe154d2;../fake-data/blob/hipster.png;image/png;deposit XSS Summit;../fake-data/blob/hipster.txt;WEIGHT;Hat Club
-4;778ec373-d40a-46da-903e-527745dc6352;../fake-data/blob/hipster.png;image/png;blockchains;../fake-data/blob/hipster.txt;DISTANCE;Horizontal back
-5;ab43d46c-ec22-48e9-a88e-6d8ea6d249a5;../fake-data/blob/hipster.png;image/png;Fantastic forecast Optimization;../fake-data/blob/hipster.txt;REPETITIONS;withdrawal Assistant
-6;fb91237e-a522-4ff8-a6d1-79e8ce8e7909;../fake-data/blob/hipster.png;image/png;invoice intranet Rupee;../fake-data/blob/hipster.txt;DISTANCE;New
-7;a958ac76-7332-49f7-b51a-003e1423847c;../fake-data/blob/hipster.png;image/png;reciprocal Croatia Programmable;../fake-data/blob/hipster.txt;REPETITIONS;Bike
-8;a47f66f2-0700-4c13-952b-643f89814589;../fake-data/blob/hipster.png;image/png;compressing EXE;../fake-data/blob/hipster.txt;DISTANCE;index
-9;f96a9d1c-1ff6-4686-929e-4e498cd58316;../fake-data/blob/hipster.png;image/png;IB visionary;../fake-data/blob/hipster.txt;DISTANCE;Plastic Ville software
-10;7e45ec96-2ffa-410b-9623-d197796af1b8;../fake-data/blob/hipster.png;image/png;Product;../fake-data/blob/hipster.txt;DISTANCE;syndicate Plastic Bedfordshire
+1;d8ecaaf0-a3c7-4432-a485-53d5daa86c11;../fake-data/blob/exercises/flutter_kicks.jpg;image/jpg;flutter kicks;../fake-data/blob/exercises/flutter_kicks.txt;DURATION;Group B2C
+2;f067e8da-568d-42b6-a9af-7970f006335e;../fake-data/blob/exercises/high_pulley_one_arm_row.png;image/png;high pulley one arm row;../fake-data/blob/exercises/high_pulley_one_arm_row.txt;WEIGHT;Agent Shoes bleeding-edge
+3;fabaec29-f67d-47f0-8eed-a0fe7fe154d2;../fake-data/blob/hipster.png;image/png;plank;../fake-data/blob/exercises/plank.txt;WEIGHT;Hat Club

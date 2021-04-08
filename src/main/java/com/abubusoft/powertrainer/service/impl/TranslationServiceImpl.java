@@ -49,6 +49,9 @@ public class TranslationServiceImpl implements TranslationService {
                     if (translation.getValue() != null) {
                         existingTranslation.setValue(translation.getValue());
                     }
+                    if (translation.getEntityField() != null) {
+                        existingTranslation.setEntityField(translation.getEntityField());
+                    }
 
                     return existingTranslation;
                 }
