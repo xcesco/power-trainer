@@ -1,11 +1,14 @@
 id;uuid;name;image;image_content_type;note
-1;f9fa2ed8-5721-4bc1-a203-76905fffedd5;ABDOMINALS;../fake-data/blob/hipster.png;image/png;transmit magenta Gloves
-2;5e934646-3732-4258-87cb-5f5c2ef6bd8f;LAT;../fake-data/blob/hipster.png;image/png;turn-key
-3;d26da342-c1d2-454a-96bc-b766a201bc21;Territory tertiary;../fake-data/blob/hipster.png;image/png;Automotive
-4;afd799bf-9f35-4271-89a9-874b0c32fe20;morph Krona;../fake-data/blob/hipster.png;image/png;innovative
-5;a73e43e0-fb89-4a34-a24f-385484a2c012;Handmade static SSL;../fake-data/blob/hipster.png;image/png;Georgia
-6;ac6aca06-ff54-4fe8-aa0c-8619aef6db6f;Executive base;../fake-data/blob/hipster.png;image/png;Infrastructure
-7;109323ed-6940-4bb2-aed9-9fe5b51ceb72;next-generation Fork;../fake-data/blob/hipster.png;image/png;drive Netherlands convergence
-8;bc25b184-3980-4a69-9ad1-2627b15551f5;turn-key microchip;../fake-data/blob/hipster.png;image/png;Agent teal
-9;98bbc5eb-9b98-446f-9694-400cf2e067df;Versatile green e-business;../fake-data/blob/hipster.png;image/png;global Ball Gorgeous
-10;bf8775bb-d69e-461b-bbe0-ea2532e3228b;Optimized Extended;../fake-data/blob/hipster.png;image/png;Enhanced
+1;f079f252-3c43-46d7-b618-2b097ab249e2;gastrocnemius;../fake-data/blob/muscles/muscles_gastrocnemius.png;image/png;
+2;1869c990-5de6-444e-9bbb-4c174a021f7c;biceps;../fake-data/blob/muscles/muscles_biceps.png;image/png;
+3;c4ce74a1-a304-4f8d-837f-728d93c4c83d;deltoid;../fake-data/blob/muscles/muscles_deltoid.png;image/png;
+4;8b20c3ab-8dd4-49c8-b07c-e58a4dc03ec4;glutes;../fake-data/blob/muscles/muscles_glutes.png;image/png;
+5;af8d9e9e-8937-4ca0-a396-23eb9880485c;hamstring;../fake-data/blob/muscles/muscles_hamstring.png;image/png;
+6;222e9860-77aa-4f0e-ad10-3009b9c5e6d3;infraspinatus;../fake-data/blob/muscles/muscles_infraspinatus.png;image/png;
+7;28cda3fb-c42c-4b4b-8706-8c4bd800df08;latissimus;../fake-data/blob/muscles/muscles_latissimus_dorsi.png;image/png;
+8;1312f3b0-6579-4644-95be-9c0394e5ec82;obliques;../fake-data/blob/muscles/muscles_obliques.png;image/png;
+9;973c1624-f29f-4582-aa4f-b06afd90e510;pectoral;../fake-data/blob/muscles/muscles_pectoral_major.png;image/png;
+10;f418e4ab-4ff3-4671-8055-9c7f46523c33;quadriceps;../fake-data/blob/muscles/muscles_quadriceps.png;image/png;
+11;71cfb3dc-ef8a-4b6c-af9f-5ca51679996b;rectus abdominis;../fake-data/blob/muscles/muscles_rectus_abdominis.png;image/png;
+12;2dc34df5-f8ce-43cd-815e-e7c0f656e62b;trapezius;../fake-data/blob/muscles/muscles_trapezius.png;image/png;
+13;b03efef0-6cd8-4b21-b7c8-9356ed0c4a9c;triceps;../fake-data/blob/muscles/muscles_triceps.png;image/png;

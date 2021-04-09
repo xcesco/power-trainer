@@ -14,6 +14,7 @@ import { DataUtils } from 'app/core/util/data-util.service';
 @Component({
   selector: 'jhi-muscle',
   templateUrl: './muscle.component.html',
+  styleUrls: ['./muscle.component.scss'],
 })
 export class MuscleComponent implements OnInit {
   muscles?: IMuscle[];

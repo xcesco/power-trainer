@@ -12,7 +12,7 @@ const muscleRoute: Routes = [
     path: '',
     component: MuscleComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'name,asc',
     },
     canActivate: [UserRouteAccessService],
   },

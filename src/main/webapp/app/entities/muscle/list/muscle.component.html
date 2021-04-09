@@ -29,51 +29,83 @@
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="muscles && muscles.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
+    <table class="table table-borderless" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
-          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="uuid"><span jhiTranslate="powerTrainerApp.muscle.uuid">Uuid</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="name"><span jhiTranslate="powerTrainerApp.muscle.name">Name</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="image">
-            <span jhiTranslate="powerTrainerApp.muscle.image">Image</span> <fa-icon icon="sort"></fa-icon>
+          <!--          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>-->
+          <!--          <th scope="col" jhiSortBy="uuid"><span jhiTranslate="powerTrainerApp.muscle.uuid">Uuid</span> <fa-icon icon="sort"></fa-icon></th>-->
+          <!--        <th scope="col">-->
+          <!--          <span jhiTranslate="powerTrainerApp.muscle.image">Image</span>-->
+          <!--        </th>-->
+          <th scope="col" jhiSortBy="name">
+            <span jhiTranslate="powerTrainerApp.muscle.name">Name</span>
+            <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="note"><span jhiTranslate="powerTrainerApp.muscle.note">Note</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col"></th>
+          <!--        <th scope="col" jhiSortBy="note"><span jhiTranslate="powerTrainerApp.muscle.note">Note</span>-->
+          <!--          <fa-icon icon="sort"></fa-icon>-->
+          <!--        </th>-->
+          <!--        <th scope="col"></th>-->
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let muscle of muscles; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/muscle', muscle.id, 'view']">{{ muscle.id }}</a>
-          </td>
-          <td>{{ muscle.uuid }}</td>
-          <td>{{ muscle.name }}</td>
-          <td>
-            <a *ngIf="muscle.image" (click)="openFile(muscle.image, muscle.imageContentType)">
-              <img [src]="'data:' + muscle.imageContentType + ';base64,' + muscle.image" style="max-height: 30px" alt="muscle image" />
-            </a>
-            <span *ngIf="muscle.image">{{ muscle.imageContentType }}, {{ byteSize(muscle.image) }}</span>
-          </td>
-          <td>{{ muscle.note }}</td>
-          <td class="text-right">
-            <div class="btn-group">
-              <button type="submit" [routerLink]="['/muscle', muscle.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </button>
+          <!--          <td>-->
+          <!--            <a [routerLink]="['/muscle', muscle.id, 'view']">{{ muscle.id }}</a>-->
+          <!--          </td>-->
+          <!--          <td>{{ muscle.uuid }}</td>-->
+          <!--        <td>-->
+          <!--          <a *ngIf="muscle.image" (click)="openFile(muscle.image, muscle.imageContentType)">-->
 
-              <button type="submit" [routerLink]="['/muscle', muscle.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </button>
+          <!--          </a>-->
+          <!--          &lt;!&ndash;            <span *ngIf="muscle.image">{{ muscle.imageContentType }}, {{ byteSize(muscle.image) }}</span>&ndash;&gt;-->
+          <!--        </td>-->
+          <td>
+            <div class="card">
+              <div class="card-header">
+                <h3 style="text-transform: capitalize">{{ muscle.name }}</h3>
+              </div>
+              <div class="card-img image-container m-auto">
+                <img class="image-base" src="content/images/muscles/muscles_base.jpg" alt="muscle image" />
+                <img class="image-overlay" [src]="'data:' + muscle.imageContentType + ';base64,' + muscle.image" alt="muscle image" />
+              </div>
+              <div class="card-body">
+                <p class="card-text">{{ muscle.note }}</p>
 
-              <button type="submit" (click)="delete(muscle)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-              </button>
+                <div class="text-right">
+                  <div class="btn-group">
+                    <button
+                      type="submit"
+                      [routerLink]="['/muscle', muscle.id, 'view']"
+                      class="btn btn-info btn-sm"
+                      data-cy="entityDetailsButton"
+                    >
+                      <fa-icon icon="eye"></fa-icon>
+                      <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                    </button>
+
+                    <button
+                      type="submit"
+                      [routerLink]="['/muscle', muscle.id, 'edit']"
+                      class="btn btn-primary btn-sm"
+                      data-cy="entityEditButton"
+                    >
+                      <fa-icon icon="pencil-alt"></fa-icon>
+                      <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                    </button>
+
+                    <button type="submit" (click)="delete(muscle)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                      <fa-icon icon="times"></fa-icon>
+                      <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </td>
+          <!--        <td>{{ muscle.note }}</td>-->
+          <!--        <td class="text-right">-->
+
+          <!--        </td>-->
         </tr>
       </tbody>
     </table>
