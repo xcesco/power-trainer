@@ -8,9 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.abubusoft.powertrainer.IntegrationTest;
 import com.abubusoft.powertrainer.domain.Exercise;
+import com.abubusoft.powertrainer.domain.ExerciseResource;
 import com.abubusoft.powertrainer.domain.ExerciseTool;
 import com.abubusoft.powertrainer.domain.Muscle;
-import com.abubusoft.powertrainer.domain.Note;
 import com.abubusoft.powertrainer.domain.enumeration.ValueType;
 import com.abubusoft.powertrainer.repository.ExerciseRepository;
 import com.abubusoft.powertrainer.service.ExerciseService;
@@ -560,21 +560,21 @@ class ExerciseResourceIT {
 
     @Test
     @Transactional
-    void getAllExercisesByNoteIsEqualToSomething() throws Exception {
+    void getAllExercisesByExerciseResourceIsEqualToSomething() throws Exception {
         // Initialize the database
         exerciseRepository.saveAndFlush(exercise);
-        Note note = NoteResourceIT.createEntity(em);
-        em.persist(note);
+        ExerciseResource exerciseResource = ExerciseResourceResourceIT.createEntity(em);
+        em.persist(exerciseResource);
         em.flush();
-        exercise.addNote(note);
+        exercise.addExerciseResource(exerciseResource);
         exerciseRepository.saveAndFlush(exercise);
-        Long noteId = note.getId();
+        Long exerciseResourceId = exerciseResource.getId();
 
-        // Get all the exerciseList where note equals to noteId
-        defaultExerciseShouldBeFound("noteId.equals=" + noteId);
+        // Get all the exerciseList where exerciseResource equals to exerciseResourceId
+        defaultExerciseShouldBeFound("exerciseResourceId.equals=" + exerciseResourceId);
 
-        // Get all the exerciseList where note equals to (noteId + 1)
-        defaultExerciseShouldNotBeFound("noteId.equals=" + (noteId + 1));
+        // Get all the exerciseList where exerciseResource equals to (exerciseResourceId + 1)
+        defaultExerciseShouldNotBeFound("exerciseResourceId.equals=" + (exerciseResourceId + 1));
     }
 
     @Test

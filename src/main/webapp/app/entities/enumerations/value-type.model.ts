@@ -1,9 +1,0 @@
-export enum ValueType {
-  DURATION = 'DURATION',
-
-  WEIGHT = 'WEIGHT',
-
-  DISTANCE = 'DISTANCE',
-
-  REPETITIONS = 'REPETITIONS',
-}

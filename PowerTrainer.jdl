@@ -202,31 +202,34 @@ entity Muscle(muscles) {
     note	String
 }
 
-entity Note(notes) {
+entity ExerciseResource(exerciseResources) {
 	uuid		UUID	    unique required ,
-	type		NoteType    required        ,
+	order		Integer                     ,
+	type		ExerciseResourceType      required ,
     url			String                      ,
     image		ImageBlob                   ,
     description	TextBlob
 }
 
-enum NoteType {
+enum ExerciseResourceType {
     VIDEO ,
+    IMAGE ,
+    SLIDE_SHOW ,
     TEXT,
     URL
 }
 
 relationship OneToMany {
-    Exercise to Note                    ,
+    Exercise to ExerciseResource            ,
 
-    Calendar to ExerciseValue,
-    Calendar to Misuration  ,
-    Calendar to Workout       ,
+    Calendar to ExerciseValue               ,
+    Calendar to Misuration                  ,
+    Calendar to Workout                     ,
 
-    MisurationType    to Misuration       ,
-    Language          to Translation  ,
+    MisurationType    to Misuration         ,
+    Language          to Translation        ,
 
-    Workout  to WorkoutStep   ,
+    Workout  to WorkoutStep                 ,
     WorkoutSheet to WorkoutSheetExercise
 }
 

@@ -1,4 +1,23 @@
 id;uuid;image;image_content_type;name;description;value_type;owner
-1;d8ecaaf0-a3c7-4432-a485-53d5daa86c11;../fake-data/blob/exercises/flutter_kicks.jpg;image/jpg;flutter kicks;../fake-data/blob/exercises/flutter_kicks.txt;DURATION;Group B2C
-2;f067e8da-568d-42b6-a9af-7970f006335e;../fake-data/blob/exercises/high_pulley_one_arm_row.png;image/png;high pulley one arm row;../fake-data/blob/exercises/high_pulley_one_arm_row.txt;WEIGHT;Agent Shoes bleeding-edge
-3;fabaec29-f67d-47f0-8eed-a0fe7fe154d2;../fake-data/blob/hipster.png;image/png;plank;../fake-data/blob/exercises/plank.txt;WEIGHT;Hat Club
+1;4b9dfaee-9e19-461d-8e2a-bfc0d3b94aa0;../fake-data/blob/exercises/flutter_kicks.jpg;image/jpg;flutter kicks;../fake-data/blob/exercises/flutter_kicks.txt;DURATION;admin
+2;8c483405-0385-4495-9a59-f1f3becf1bf0;../fake-data/blob/exercises/high_pulley_one_arm_row.png;image/png;high pulley one arm row;../fake-data/blob/exercises/high_pulley_one_arm_row.txt;WEIGHT;admin
+3;8fd4fc7a-3f56-4377-898f-c7e13f86e22e;../fake-data/blob/hipster.png;image/png;plank;../fake-data/blob/exercises/plank.txt;WEIGHT;admin
+4;28b9f039-db5a-41dd-900c-46045ab9e5f1;../fake-data/blob/hipster.png;image/png;addominali bassi;../fake-data/blob/empty_text.txt;REPETITIONS;admin
+5;e70ebcd2-3d90-4d4f-83de-9349533ca76f;../fake-data/blob/hipster.png;image/png;plank laterali;../fake-data/blob/empty_text.txt;REPETITIONS;admin
+6;23a71fef-80cd-44ec-a428-daa3b89df0d6;../fake-data/blob/hipster.png;image/png;addominali frontali;../fake-data/blob/empty_text.txt;REPETITIONS;admin
+7;8a2d8943-7e08-4f75-9813-09bd86cf8d75;../fake-data/blob/hipster.png;image/png;addominali lateriali;../fake-data/blob/empty_text.txt;REPETITIONS;admin
+8;348e4f63-6896-4169-94ec-18de9162476f;../fake-data/blob/hipster.png;image/png;tabata squat;../fake-data/blob/empty_text.txt;REPETITIONS;admin
+9;bfe8694e-05f7-4635-befa-7b8921e01873;../fake-data/blob/hipster.png;image/png;montain club;../fake-data/blob/empty_text.txt;REPETITIONS;admin
+10;2a41e050-8a4a-4901-b47a-c3b514361cd3;../fake-data/blob/hipster.png;image/png;bicipiti;../fake-data/blob/empty_text.txt;REPETITIONS;admin
+11;552569ee-ea67-4d29-b0c0-a8c97f834ea0;../fake-data/blob/exercises/push-up-strict/1.jpg;image/jpg;strict (military) push-up;../fake-data/blob/exercises/push-up-strict/info.md;REPETITIONS;admin
+12;c78b630d-1049-4cd3-9bcf-2e0e97f591d7;../fake-data/blob/exercises/push-up-wide/1.jpg;image/jpg;wide hands push-up;../fake-data/blob/exercises/push-up-wide/info.md;REPETITIONS;admin
+13;0b0d8266-424c-492c-afae-3e590ede199d;../fake-data/blob/exercises/push-up-triangle/1.jpg;image/jpg;triangle (diamond) push-up;../fake-data/blob/exercises/push-up-triangle/info.md;REPETITIONS;admin
+14;bdbe64f2-4aea-4e5c-9797-1f5425a642f1;../fake-data/blob/exercises/push-up-pike/1.jpg;image/jpg;pike push-up;../fake-data/blob/exercises/push-up-pike/info.md;REPETITIONS;admin
+15;c892e55b-0d09-4b16-8ffa-22d7314335f8;../fake-data/blob/exercises/push-up-super/1.jpg;image/jpg;super (hindu) push up;../fake-data/blob/exercises/push-up-super/info.md;REPETITIONS;admin
+16;027289c4-2faa-4b20-ad8c-11c9c7de75fc;../fake-data/blob/exercises/push-up-staggered-hands/1.jpg;image/jpg;staggered hands push-up;../fake-data/blob/exercises/push-up-staggered-hands/info.md;REPETITIONS;admin
+17;49492c9f-21a4-4860-ae78-2449fab0c457;../fake-data/blob/exercises/push-up-sphinx/1.jpg;image/jpg;sphinx push-up;../fake-data/blob/exercises/push-up-sphinx/info.md;REPETITIONS;admin
+18;777ecef9-2f7e-4b05-bf84-09b11c9e22dd;../fake-data/blob/exercises/push-up-spiderman/1.jpg;image/jpg;spiderman (side kick) push-up;../fake-data/blob/exercises/push-up-spiderman/info.md;REPETITIONS;admin
+19;ab76903e-4d8e-4eaf-b8bb-af441d4bc6f0;../fake-data/blob/exercises/push-up-cross-body/1.jpg;image/jpg;cross-body push-up;../fake-data/blob/exercises/push-up-cross-body/info.md;REPETITIONS;admin
+20;e4e332e0-a117-427f-a61b-046d4b46ca47;../fake-data/blob/exercises/push-up-archer/1.jpg;image/jpg;archer push-up;../fake-data/blob/exercises/push-up-archer/info.md;REPETITIONS;admin
+21;ace10ce0-29c2-4e31-9ef5-0889b6a8a174;../fake-data/blob/exercises/push-up-power-and-clap/1.jpg;image/jpg;power and clap push-up;../fake-data/blob/exercises/push-up-power-and-clap/info.md;REPETITIONS;admin
+22;a77144e3-37bd-4c4e-8898-2a802420a251;../fake-data/blob/exercises/push-up-one-arm/1.jpg;image/jpg;one-arm push-up;../fake-data/blob/exercises/push-up-one-arm/info.md;REPETITIONS;admin

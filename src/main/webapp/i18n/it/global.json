@@ -21,7 +21,7 @@
         "workoutStep": "Workout Step",
         "device": "Device",
         "muscle": "Muscle",
-        "note": "Note",
+        "exerciseResource": "Exercise Resource",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

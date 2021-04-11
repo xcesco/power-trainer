@@ -22,7 +22,7 @@ module.exports = (config, options, targetOptions) => {
       new FriendlyErrorsWebpackPlugin(),
       new WebpackNotifierPlugin({
         title: 'Power Trainer',
-        contentImage: path.join(__dirname, 'logo-jhipster.png'),
+        contentImage: path.join(__dirname, 'power_trainer_192.png'),
       })
     );
     if (!process.env.JHI_DISABLE_WEBPACK_LOGS) {
