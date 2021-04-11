@@ -1,8 +1,8 @@
 id;uuid;name;image;image_content_type;description;owner;prepare_time;cool_down_time;cycles;cycle_rest_time;set;set_rest_time;type
-1;a968e266-ded3-4f07-b919-e879cd1cbd32;Fresh;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt;analyzing Crest;95420;31358;32959;41336;20846;52365;SEQUENCE
-2;f0806732-1cd2-4cb5-8924-b0a1252898ed;innovate;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt;logistical panel;28709;1026;32958;96734;95643;42057;SUPERSET
-3;2f2e222c-c9f9-4c9b-b39a-9dd5f6ba1c5c;synthesize (Bouvetoya);../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt;Cheese Sausages Kuwaiti;25951;853;49187;57916;8568;39675;SUPERSET
-4;1061c2bd-2076-49c2-97fb-2ca563b34466;GB;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt;technologies Kuwait Dollar;1974;22366;36470;19737;29021;14371;SUPERSET
+1;a968e266-ded3-4f07-b919-e879cd1cbd32;Fresh;../fake-data/blob/hipster.png;image/png;../fake-data/blob/empty_text.txt;analyzing Crest;95420;31358;32959;41336;20846;52365;SEQUENCE
+2;f0806732-1cd2-4cb5-8924-b0a1252898ed;innovate;../fake-data/blob/hipster.png;image/png;../fake-data/blob/empty_text.txt;logistical panel;28709;1026;32958;96734;95643;42057;SUPERSET
+3;2f2e222c-c9f9-4c9b-b39a-9dd5f6ba1c5c;synthesize (Bouvetoya);../fake-data/blob/hipster.png;image/png;../fake-data/blob/empty_text.txt;Cheese Sausages Kuwaiti;25951;853;49187;57916;8568;39675;SUPERSET
+4;1061c2bd-2076-49c2-97fb-2ca563b34466;GB;../fake-data/blob/hipster.png;image/png;../fake-data/blob/empty_text.txt;technologies Kuwait Dollar;1974;22366;36470;19737;29021;14371;SUPERSET
 5;ba395f4a-4616-4ef4-912e-6eb8505128d3;International;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt;yellow;39504;44451;67427;61439;22684;35648;SEQUENCE
 6;bdcac4b5-4c24-4885-962b-b1250263d407;XSS upward-trending;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt;end-to-end;34801;14105;44467;19913;79758;51142;SEQUENCE
 7;7cb98460-6511-4fea-95cb-ba1fd3567f6c;innovate Rubber AI;../fake-data/blob/hipster.png;image/png;../fake-data/blob/hipster.txt;Niger bypass Loan;10940;97806;32528;43114;6771;67209;SEQUENCE
