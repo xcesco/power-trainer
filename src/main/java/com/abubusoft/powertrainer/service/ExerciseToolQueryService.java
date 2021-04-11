@@ -92,7 +92,7 @@ public class ExerciseToolQueryService extends QueryService<ExerciseTool> {
                     specification.and(
                         buildSpecification(
                             criteria.getExerciseId(),
-                            root -> root.join(ExerciseTool_.exercise, JoinType.LEFT).get(Exercise_.id)
+                            root -> root.join(ExerciseTool_.exercises, JoinType.LEFT).get(Exercise_.id)
                         )
                     );
             }

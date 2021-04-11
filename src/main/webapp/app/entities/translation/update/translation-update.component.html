@@ -70,29 +70,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="powerTrainerApp.translation.entityField" for="field_entityField"
-            >Entity Field</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="entityField"
-            id="field_entityField"
-            data-cy="entityField"
-            formControlName="entityField"
-          />
-          <div *ngIf="editForm.get('entityField')!.invalid && (editForm.get('entityField')!.dirty || editForm.get('entityField')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('entityField')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
-          </div>
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" jhiTranslate="powerTrainerApp.translation.language" for="field_language">Language</label>
           <select class="form-control" id="field_language" data-cy="language" name="language" formControlName="language">
             <option [ngValue]="null"></option>

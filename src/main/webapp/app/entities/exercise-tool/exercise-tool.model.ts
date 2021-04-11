@@ -7,7 +7,7 @@ export interface IExerciseTool {
   image?: string | null;
   name?: string;
   description?: string | null;
-  exercise?: IExercise | null;
+  exercises?: IExercise[] | null;
 }
 
 export class ExerciseTool implements IExerciseTool {
@@ -18,7 +18,7 @@ export class ExerciseTool implements IExerciseTool {
     public image?: string | null,
     public name?: string,
     public description?: string | null,
-    public exercise?: IExercise | null
+    public exercises?: IExercise[] | null
   ) {}
 }
 

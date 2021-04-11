@@ -34,7 +34,6 @@
     <include file="config/liquibase/changelog/20210408201313_added_entity_constraints_Translation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210408201315_added_entity_constraints_Exercise.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210408201316_added_entity_constraints_ExerciseValue.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20210408201317_added_entity_constraints_ExerciseTool.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210408201318_added_entity_constraints_Misuration.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210408201321_added_entity_constraints_WorkoutSheetExercise.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210408201322_added_entity_constraints_Workout.xml" relativeToChangelogFile="false"/>

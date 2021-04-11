@@ -1,6 +1,6 @@
-import { IExerciseTool } from 'app/entities/exercise-tool/exercise-tool.model';
 import { INote } from 'app/entities/note/note.model';
 import { IMuscle } from 'app/entities/muscle/muscle.model';
+import { IExerciseTool } from 'app/entities/exercise-tool/exercise-tool.model';
 import { ValueType } from 'app/entities/enumerations/value-type.model';
 
 export interface IExercise {
@@ -12,9 +12,9 @@ export interface IExercise {
   description?: string | null;
   valueType?: ValueType | null;
   owner?: string;
-  exerciseTools?: IExerciseTool[] | null;
   notes?: INote[] | null;
   muscles?: IMuscle[] | null;
+  exerciseTools?: IExerciseTool[] | null;
 }
 
 export class Exercise implements IExercise {
@@ -27,9 +27,9 @@ export class Exercise implements IExercise {
     public description?: string | null,
     public valueType?: ValueType | null,
     public owner?: string,
-    public exerciseTools?: IExerciseTool[] | null,
     public notes?: INote[] | null,
-    public muscles?: IMuscle[] | null
+    public muscles?: IMuscle[] | null,
+    public exerciseTools?: IExerciseTool[] | null
   ) {}
 }
 

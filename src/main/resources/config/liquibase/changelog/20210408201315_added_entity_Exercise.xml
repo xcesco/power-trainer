@@ -51,6 +51,17 @@
         </createTable>
 
         <addPrimaryKey columnNames="exercises_id, muscle_id" tableName="rel_exercises__muscle"/>
+
+        <createTable tableName="rel_exercises__exercise_tool">
+            <column name="exercise_tool_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="exercises_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="exercises_id, exercise_tool_id" tableName="rel_exercises__exercise_tool"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

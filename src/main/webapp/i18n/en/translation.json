@@ -21,7 +21,6 @@
       "entityType": "Entity Type",
       "entityUuid": "Entity Uuid",
       "value": "Value",
-      "entityField": "Entity Field",
       "language": "Language"
     }
   }

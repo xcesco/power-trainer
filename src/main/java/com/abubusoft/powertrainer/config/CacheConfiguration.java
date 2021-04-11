@@ -56,11 +56,12 @@ public class CacheConfiguration {
             createCache(cm, com.abubusoft.powertrainer.domain.Calendar.class.getName() + ".misurations");
             createCache(cm, com.abubusoft.powertrainer.domain.Calendar.class.getName() + ".workouts");
             createCache(cm, com.abubusoft.powertrainer.domain.Exercise.class.getName());
-            createCache(cm, com.abubusoft.powertrainer.domain.Exercise.class.getName() + ".exerciseTools");
             createCache(cm, com.abubusoft.powertrainer.domain.Exercise.class.getName() + ".notes");
             createCache(cm, com.abubusoft.powertrainer.domain.Exercise.class.getName() + ".muscles");
+            createCache(cm, com.abubusoft.powertrainer.domain.Exercise.class.getName() + ".exerciseTools");
             createCache(cm, com.abubusoft.powertrainer.domain.ExerciseValue.class.getName());
             createCache(cm, com.abubusoft.powertrainer.domain.ExerciseTool.class.getName());
+            createCache(cm, com.abubusoft.powertrainer.domain.ExerciseTool.class.getName() + ".exercises");
             createCache(cm, com.abubusoft.powertrainer.domain.Misuration.class.getName());
             createCache(cm, com.abubusoft.powertrainer.domain.MisurationType.class.getName());
             createCache(cm, com.abubusoft.powertrainer.domain.MisurationType.class.getName() + ".misurations");

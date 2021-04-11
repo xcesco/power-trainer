@@ -45,7 +45,7 @@ public class Muscle implements Serializable {
 
     @ManyToMany(mappedBy = "muscles")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "exerciseTools", "notes", "muscles" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "notes", "muscles", "exerciseTools" }, allowSetters = true)
     private Set<Exercise> exercises = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

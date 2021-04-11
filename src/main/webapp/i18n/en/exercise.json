@@ -24,9 +24,9 @@
       "description": "Description",
       "valueType": "Value Type",
       "owner": "Owner",
-      "exerciseTool": "Exercise Tool",
       "note": "Note",
-      "muscle": "Muscle"
+      "muscle": "Muscle",
+      "exerciseTool": "Exercise Tool"
     }
   }
 }

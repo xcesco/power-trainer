@@ -35,12 +35,6 @@
   "relationships": [
     {
       "relationshipType": "one-to-many",
-      "otherEntityName": "exerciseTool",
-      "otherEntityRelationshipName": "exercise",
-      "relationshipName": "exerciseTool"
-    },
-    {
-      "relationshipType": "one-to-many",
       "otherEntityName": "note",
       "otherEntityRelationshipName": "exercise",
       "relationshipName": "note"
@@ -50,6 +44,13 @@
       "otherEntityName": "muscle",
       "otherEntityRelationshipName": "exercise",
       "relationshipName": "muscle",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "exerciseTool",
+      "otherEntityRelationshipName": "exercise",
+      "relationshipName": "exerciseTool",
       "ownerSide": true
     }
   ],

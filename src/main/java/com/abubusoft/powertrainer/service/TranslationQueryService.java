@@ -90,9 +90,6 @@ public class TranslationQueryService extends QueryService<Translation> {
             if (criteria.getValue() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getValue(), Translation_.value));
             }
-            if (criteria.getEntityField() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getEntityField(), Translation_.entityField));
-            }
             if (criteria.getLanguageId() != null) {
                 specification =
                     specification.and(

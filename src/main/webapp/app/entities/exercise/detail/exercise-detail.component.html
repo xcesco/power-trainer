@@ -50,6 +50,13 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exercise.exerciseTool">Exercise Tool</span></dt>
+        <dd>
+          <span *ngFor="let exerciseTool of exercise.exerciseTools; let last = last">
+            <a [routerLink]="['/exercise-tool', exerciseTool?.id, 'view']">{{ exerciseTool.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

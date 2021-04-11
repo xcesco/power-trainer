@@ -3,15 +3,13 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 import { IExerciseTool, ExerciseTool } from '../exercise-tool.model';
 import { ExerciseToolService } from '../service/exercise-tool.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IExercise } from 'app/entities/exercise/exercise.model';
-import { ExerciseService } from 'app/entities/exercise/service/exercise.service';
 
 @Component({
   selector: 'jhi-exercise-tool-update',
@@ -20,8 +18,6 @@ import { ExerciseService } from 'app/entities/exercise/service/exercise.service'
 export class ExerciseToolUpdateComponent implements OnInit {
   isSaving = false;
 
-  exercisesSharedCollection: IExercise[] = [];
-
   editForm = this.fb.group({
     id: [],
     uuid: [null, [Validators.required]],
@@ -29,14 +25,12 @@ export class ExerciseToolUpdateComponent implements OnInit {
     imageContentType: [],
     name: [null, [Validators.required]],
     description: [],
-    exercise: [],
   });
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected exerciseToolService: ExerciseToolService,
-    protected exerciseService: ExerciseService,
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -45,8 +39,6 @@ export class ExerciseToolUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ exerciseTool }) => {
       this.updateForm(exerciseTool);
-
-      this.loadRelationshipsOptions();
     });
   }
 
@@ -91,10 +83,6 @@ export class ExerciseToolUpdateComponent implements OnInit {
     }
   }
 
-  trackExerciseById(index: number, item: IExercise): number {
-    return item.id!;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IExerciseTool>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -122,25 +110,7 @@ export class ExerciseToolUpdateComponent implements OnInit {
       imageContentType: exerciseTool.imageContentType,
       name: exerciseTool.name,
       description: exerciseTool.description,
-      exercise: exerciseTool.exercise,
     });
-
-    this.exercisesSharedCollection = this.exerciseService.addExerciseToCollectionIfMissing(
-      this.exercisesSharedCollection,
-      exerciseTool.exercise
-    );
-  }
-
-  protected loadRelationshipsOptions(): void {
-    this.exerciseService
-      .query()
-      .pipe(map((res: HttpResponse<IExercise[]>) => res.body ?? []))
-      .pipe(
-        map((exercises: IExercise[]) =>
-          this.exerciseService.addExerciseToCollectionIfMissing(exercises, this.editForm.get('exercise')!.value)
-        )
-      )
-      .subscribe((exercises: IExercise[]) => (this.exercisesSharedCollection = exercises));
   }
 
   protected createFromForm(): IExerciseTool {
@@ -152,7 +122,6 @@ export class ExerciseToolUpdateComponent implements OnInit {
       image: this.editForm.get(['image'])!.value,
       name: this.editForm.get(['name'])!.value,
       description: this.editForm.get(['description'])!.value,
-      exercise: this.editForm.get(['exercise'])!.value,
     };
   }
 }

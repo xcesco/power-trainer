@@ -12,6 +12,8 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IMuscle } from 'app/entities/muscle/muscle.model';
 import { MuscleService } from 'app/entities/muscle/service/muscle.service';
+import { IExerciseTool } from 'app/entities/exercise-tool/exercise-tool.model';
+import { ExerciseToolService } from 'app/entities/exercise-tool/service/exercise-tool.service';
 
 @Component({
   selector: 'jhi-exercise-update',
@@ -21,6 +23,7 @@ export class ExerciseUpdateComponent implements OnInit {
   isSaving = false;
 
   musclesSharedCollection: IMuscle[] = [];
+  exerciseToolsSharedCollection: IExerciseTool[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -32,6 +35,7 @@ export class ExerciseUpdateComponent implements OnInit {
     valueType: [],
     owner: [null, [Validators.required]],
     muscles: [],
+    exerciseTools: [],
   });
 
   constructor(
@@ -39,6 +43,7 @@ export class ExerciseUpdateComponent implements OnInit {
     protected eventManager: EventManager,
     protected exerciseService: ExerciseService,
     protected muscleService: MuscleService,
+    protected exerciseToolService: ExerciseToolService,
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -97,7 +102,22 @@ export class ExerciseUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackExerciseToolById(index: number, item: IExerciseTool): number {
+    return item.id!;
+  }
+
   getSelectedMuscle(option: IMuscle, selectedVals?: IMuscle[]): IMuscle {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedExerciseTool(option: IExerciseTool, selectedVals?: IExerciseTool[]): IExerciseTool {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
         if (option.id === selectedVal.id) {
@@ -138,11 +158,16 @@ export class ExerciseUpdateComponent implements OnInit {
       valueType: exercise.valueType,
       owner: exercise.owner,
       muscles: exercise.muscles,
+      exerciseTools: exercise.exerciseTools,
     });
 
     this.musclesSharedCollection = this.muscleService.addMuscleToCollectionIfMissing(
       this.musclesSharedCollection,
       ...(exercise.muscles ?? [])
+    );
+    this.exerciseToolsSharedCollection = this.exerciseToolService.addExerciseToolToCollectionIfMissing(
+      this.exerciseToolsSharedCollection,
+      ...(exercise.exerciseTools ?? [])
     );
   }
 
@@ -156,6 +181,16 @@ export class ExerciseUpdateComponent implements OnInit {
         )
       )
       .subscribe((muscles: IMuscle[]) => (this.musclesSharedCollection = muscles));
+
+    this.exerciseToolService
+      .query()
+      .pipe(map((res: HttpResponse<IExerciseTool[]>) => res.body ?? []))
+      .pipe(
+        map((exerciseTools: IExerciseTool[]) =>
+          this.exerciseToolService.addExerciseToolToCollectionIfMissing(exerciseTools, ...(this.editForm.get('exerciseTools')!.value ?? []))
+        )
+      )
+      .subscribe((exerciseTools: IExerciseTool[]) => (this.exerciseToolsSharedCollection = exerciseTools));
   }
 
   protected createFromForm(): IExercise {
@@ -170,6 +205,7 @@ export class ExerciseUpdateComponent implements OnInit {
       valueType: this.editForm.get(['valueType'])!.value,
       owner: this.editForm.get(['owner'])!.value,
       muscles: this.editForm.get(['muscles'])!.value,
+      exerciseTools: this.editForm.get(['exerciseTools'])!.value,
     };
   }
 }

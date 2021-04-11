@@ -5,7 +5,6 @@ export interface ITranslation {
   entityType?: string;
   entityUuid?: string;
   value?: string;
-  entityField?: string;
   language?: ILanguage | null;
 }
 
@@ -15,7 +14,6 @@ export class Translation implements ITranslation {
     public entityType?: string,
     public entityUuid?: string,
     public value?: string,
-    public entityField?: string,
     public language?: ILanguage | null
   ) {}
 }

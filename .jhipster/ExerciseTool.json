@@ -24,10 +24,11 @@
   ],
   "relationships": [
     {
-      "relationshipType": "many-to-one",
+      "relationshipType": "many-to-many",
       "otherEntityName": "exercise",
       "otherEntityRelationshipName": "exerciseTool",
-      "relationshipName": "exercise"
+      "relationshipName": "exercise",
+      "ownerSide": false
     }
   ],
   "entityTableName": "exercise_tools",

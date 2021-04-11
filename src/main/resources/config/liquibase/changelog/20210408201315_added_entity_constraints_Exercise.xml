@@ -19,5 +19,17 @@
                                  constraintName="fk_rel_exercises__muscle__muscle_id"
                                  referencedColumnNames="id"
                                  referencedTableName="muscles"/>
+
+        <addForeignKeyConstraint baseColumnNames="exercises_id"
+                                 baseTableName="rel_exercises__exercise_tool"
+                                 constraintName="fk_rel_exercises__exercise_tool__exercises_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="exercises"/>
+
+        <addForeignKeyConstraint baseColumnNames="exercise_tool_id"
+                                 baseTableName="rel_exercises__exercise_tool"
+                                 constraintName="fk_rel_exercises__exercise_tool__exercise_tool_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="exercise_tools"/>
     </changeSet>
 </databaseChangeLog>

@@ -15,14 +15,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ExerciseRepository extends JpaRepository<Exercise, Long>, JpaSpecificationExecutor<Exercise> {
     @Query(
-        value = "select distinct exercise from Exercise exercise left join fetch exercise.muscles",
+        value = "select distinct exercise from Exercise exercise left join fetch exercise.muscles left join fetch exercise.exerciseTools",
         countQuery = "select count(distinct exercise) from Exercise exercise"
     )
     Page<Exercise> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("select distinct exercise from Exercise exercise left join fetch exercise.muscles")
+    @Query("select distinct exercise from Exercise exercise left join fetch exercise.muscles left join fetch exercise.exerciseTools")
     List<Exercise> findAllWithEagerRelationships();
 
-    @Query("select exercise from Exercise exercise left join fetch exercise.muscles where exercise.id =:id")
+    @Query(
+        "select exercise from Exercise exercise left join fetch exercise.muscles left join fetch exercise.exerciseTools where exercise.id =:id"
+    )
     Optional<Exercise> findOneWithEagerRelationships(@Param("id") Long id);
 }

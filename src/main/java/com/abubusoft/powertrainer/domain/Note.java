@@ -50,7 +50,7 @@ public class Note implements Serializable {
     private String description;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "exerciseTools", "notes", "muscles" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "notes", "muscles", "exerciseTools" }, allowSetters = true)
     private Exercise exercise;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

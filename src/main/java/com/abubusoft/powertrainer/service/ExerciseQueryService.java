@@ -93,15 +93,6 @@ public class ExerciseQueryService extends QueryService<Exercise> {
             if (criteria.getOwner() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getOwner(), Exercise_.owner));
             }
-            if (criteria.getExerciseToolId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(
-                            criteria.getExerciseToolId(),
-                            root -> root.join(Exercise_.exerciseTools, JoinType.LEFT).get(ExerciseTool_.id)
-                        )
-                    );
-            }
             if (criteria.getNoteId() != null) {
                 specification =
                     specification.and(
@@ -112,6 +103,15 @@ public class ExerciseQueryService extends QueryService<Exercise> {
                 specification =
                     specification.and(
                         buildSpecification(criteria.getMuscleId(), root -> root.join(Exercise_.muscles, JoinType.LEFT).get(Muscle_.id))
+                    );
+            }
+            if (criteria.getExerciseToolId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getExerciseToolId(),
+                            root -> root.join(Exercise_.exerciseTools, JoinType.LEFT).get(ExerciseTool_.id)
+                        )
                     );
             }
         }

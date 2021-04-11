@@ -560,25 +560,6 @@ class ExerciseResourceIT {
 
     @Test
     @Transactional
-    void getAllExercisesByExerciseToolIsEqualToSomething() throws Exception {
-        // Initialize the database
-        exerciseRepository.saveAndFlush(exercise);
-        ExerciseTool exerciseTool = ExerciseToolResourceIT.createEntity(em);
-        em.persist(exerciseTool);
-        em.flush();
-        exercise.addExerciseTool(exerciseTool);
-        exerciseRepository.saveAndFlush(exercise);
-        Long exerciseToolId = exerciseTool.getId();
-
-        // Get all the exerciseList where exerciseTool equals to exerciseToolId
-        defaultExerciseShouldBeFound("exerciseToolId.equals=" + exerciseToolId);
-
-        // Get all the exerciseList where exerciseTool equals to (exerciseToolId + 1)
-        defaultExerciseShouldNotBeFound("exerciseToolId.equals=" + (exerciseToolId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllExercisesByNoteIsEqualToSomething() throws Exception {
         // Initialize the database
         exerciseRepository.saveAndFlush(exercise);
@@ -613,6 +594,25 @@ class ExerciseResourceIT {
 
         // Get all the exerciseList where muscle equals to (muscleId + 1)
         defaultExerciseShouldNotBeFound("muscleId.equals=" + (muscleId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllExercisesByExerciseToolIsEqualToSomething() throws Exception {
+        // Initialize the database
+        exerciseRepository.saveAndFlush(exercise);
+        ExerciseTool exerciseTool = ExerciseToolResourceIT.createEntity(em);
+        em.persist(exerciseTool);
+        em.flush();
+        exercise.addExerciseTool(exerciseTool);
+        exerciseRepository.saveAndFlush(exercise);
+        Long exerciseToolId = exerciseTool.getId();
+
+        // Get all the exerciseList where exerciseTool equals to exerciseToolId
+        defaultExerciseShouldBeFound("exerciseToolId.equals=" + exerciseToolId);
+
+        // Get all the exerciseList where exerciseTool equals to (exerciseToolId + 1)
+        defaultExerciseShouldNotBeFound("exerciseToolId.equals=" + (exerciseToolId + 1));
     }
 
     /**

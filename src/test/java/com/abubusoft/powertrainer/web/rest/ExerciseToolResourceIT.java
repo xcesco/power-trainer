@@ -367,7 +367,7 @@ class ExerciseToolResourceIT {
         Exercise exercise = ExerciseResourceIT.createEntity(em);
         em.persist(exercise);
         em.flush();
-        exerciseTool.setExercise(exercise);
+        exerciseTool.addExercise(exercise);
         exerciseToolRepository.saveAndFlush(exerciseTool);
         Long exerciseId = exercise.getId();
 

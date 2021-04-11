@@ -45,9 +45,6 @@
           <th scope="col" jhiSortBy="description">
             <span jhiTranslate="powerTrainerApp.exerciseTool.description">Description</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="exercise.id">
-            <span jhiTranslate="powerTrainerApp.exerciseTool.exercise">Exercise</span> <fa-icon icon="sort"></fa-icon>
-          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -69,11 +66,6 @@
           </td>
           <td>{{ exerciseTool.name }}</td>
           <td>{{ exerciseTool.description }}</td>
-          <td>
-            <div *ngIf="exerciseTool.exercise">
-              <a [routerLink]="['/exercise', exerciseTool.exercise?.id, 'view']">{{ exerciseTool.exercise?.id }}</a>
-            </div>
-          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

@@ -114,6 +114,25 @@
             </option>
           </select>
         </div>
+
+        <div class="form-group">
+          <label jhiTranslate="powerTrainerApp.exercise.exerciseTool" for="field_exerciseTools">Exercise Tool</label>
+          <select
+            class="form-control"
+            id="field_exerciseTools"
+            data-cy="exerciseTool"
+            multiple
+            name="exerciseTools"
+            formControlName="exerciseTools"
+          >
+            <option
+              [ngValue]="getSelectedExerciseTool(exerciseToolOption, editForm.get('exerciseTools')!.value)"
+              *ngFor="let exerciseToolOption of exerciseToolsSharedCollection; trackBy: trackExerciseToolById"
+            >
+              {{ exerciseToolOption.id }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

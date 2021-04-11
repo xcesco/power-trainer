@@ -58,11 +58,6 @@ public class Exercise implements Serializable {
     @OneToMany(mappedBy = "exercise")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "exercise" }, allowSetters = true)
-    private Set<ExerciseTool> exerciseTools = new HashSet<>();
-
-    @OneToMany(mappedBy = "exercise")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "exercise" }, allowSetters = true)
     private Set<Note> notes = new HashSet<>();
 
     @ManyToMany
@@ -74,6 +69,16 @@ public class Exercise implements Serializable {
     )
     @JsonIgnoreProperties(value = { "exercises" }, allowSetters = true)
     private Set<Muscle> muscles = new HashSet<>();
+
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JoinTable(
+        name = "rel_exercises__exercise_tool",
+        joinColumns = @JoinColumn(name = "exercises_id"),
+        inverseJoinColumns = @JoinColumn(name = "exercise_tool_id")
+    )
+    @JsonIgnoreProperties(value = { "exercises" }, allowSetters = true)
+    private Set<ExerciseTool> exerciseTools = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -180,37 +185,6 @@ public class Exercise implements Serializable {
         this.owner = owner;
     }
 
-    public Set<ExerciseTool> getExerciseTools() {
-        return this.exerciseTools;
-    }
-
-    public Exercise exerciseTools(Set<ExerciseTool> exerciseTools) {
-        this.setExerciseTools(exerciseTools);
-        return this;
-    }
-
-    public Exercise addExerciseTool(ExerciseTool exerciseTool) {
-        this.exerciseTools.add(exerciseTool);
-        exerciseTool.setExercise(this);
-        return this;
-    }
-
-    public Exercise removeExerciseTool(ExerciseTool exerciseTool) {
-        this.exerciseTools.remove(exerciseTool);
-        exerciseTool.setExercise(null);
-        return this;
-    }
-
-    public void setExerciseTools(Set<ExerciseTool> exerciseTools) {
-        if (this.exerciseTools != null) {
-            this.exerciseTools.forEach(i -> i.setExercise(null));
-        }
-        if (exerciseTools != null) {
-            exerciseTools.forEach(i -> i.setExercise(this));
-        }
-        this.exerciseTools = exerciseTools;
-    }
-
     public Set<Note> getNotes() {
         return this.notes;
     }
@@ -265,6 +239,31 @@ public class Exercise implements Serializable {
 
     public void setMuscles(Set<Muscle> muscles) {
         this.muscles = muscles;
+    }
+
+    public Set<ExerciseTool> getExerciseTools() {
+        return this.exerciseTools;
+    }
+
+    public Exercise exerciseTools(Set<ExerciseTool> exerciseTools) {
+        this.setExerciseTools(exerciseTools);
+        return this;
+    }
+
+    public Exercise addExerciseTool(ExerciseTool exerciseTool) {
+        this.exerciseTools.add(exerciseTool);
+        exerciseTool.getExercises().add(this);
+        return this;
+    }
+
+    public Exercise removeExerciseTool(ExerciseTool exerciseTool) {
+        this.exerciseTools.remove(exerciseTool);
+        exerciseTool.getExercises().remove(this);
+        return this;
+    }
+
+    public void setExerciseTools(Set<ExerciseTool> exerciseTools) {
+        this.exerciseTools = exerciseTools;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

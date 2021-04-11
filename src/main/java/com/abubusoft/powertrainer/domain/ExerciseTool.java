@@ -2,6 +2,8 @@ package com.abubusoft.powertrainer.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -44,9 +46,10 @@ public class ExerciseTool implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "exerciseTools", "notes", "muscles" }, allowSetters = true)
-    private Exercise exercise;
+    @ManyToMany(mappedBy = "exerciseTools")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "notes", "muscles", "exerciseTools" }, allowSetters = true)
+    private Set<Exercise> exercises = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -127,17 +130,35 @@ public class ExerciseTool implements Serializable {
         this.description = description;
     }
 
-    public Exercise getExercise() {
-        return this.exercise;
+    public Set<Exercise> getExercises() {
+        return this.exercises;
     }
 
-    public ExerciseTool exercise(Exercise exercise) {
-        this.setExercise(exercise);
+    public ExerciseTool exercises(Set<Exercise> exercises) {
+        this.setExercises(exercises);
         return this;
     }
 
-    public void setExercise(Exercise exercise) {
-        this.exercise = exercise;
+    public ExerciseTool addExercise(Exercise exercise) {
+        this.exercises.add(exercise);
+        exercise.getExerciseTools().add(this);
+        return this;
+    }
+
+    public ExerciseTool removeExercise(Exercise exercise) {
+        this.exercises.remove(exercise);
+        exercise.getExerciseTools().remove(this);
+        return this;
+    }
+
+    public void setExercises(Set<Exercise> exercises) {
+        if (this.exercises != null) {
+            this.exercises.forEach(i -> i.removeExerciseTool(this));
+        }
+        if (exercises != null) {
+            exercises.forEach(i -> i.addExerciseTool(this));
+        }
+        this.exercises = exercises;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

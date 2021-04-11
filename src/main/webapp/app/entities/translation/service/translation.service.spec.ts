@@ -25,7 +25,6 @@ describe('Service Tests', () => {
         entityType: 'AAAAAAA',
         entityUuid: 'AAAAAAA',
         value: 'AAAAAAA',
-        entityField: 'AAAAAAA',
       };
     });
 
@@ -64,7 +63,6 @@ describe('Service Tests', () => {
             entityType: 'BBBBBB',
             entityUuid: 'BBBBBB',
             value: 'BBBBBB',
-            entityField: 'BBBBBB',
           },
           elemDefault
         );
@@ -82,7 +80,6 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             value: 'BBBBBB',
-            entityField: 'BBBBBB',
           },
           new Translation()
         );
@@ -105,7 +102,6 @@ describe('Service Tests', () => {
             entityType: 'BBBBBB',
             entityUuid: 'BBBBBB',
             value: 'BBBBBB',
-            entityField: 'BBBBBB',
           },
           elemDefault
         );
@@ -157,7 +153,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Translation to an array', () => {
-          const translationArray: ITranslation[] = [{ id: 123 }, { id: 456 }, { id: 39600 }];
+          const translationArray: ITranslation[] = [{ id: 123 }, { id: 456 }, { id: 98407 }];
           const translationCollection: ITranslation[] = [{ id: 123 }];
           expectedResult = service.addTranslationToCollectionIfMissing(translationCollection, ...translationArray);
           expect(expectedResult).toHaveLength(3);

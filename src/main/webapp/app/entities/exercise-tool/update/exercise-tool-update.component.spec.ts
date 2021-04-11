@@ -9,8 +9,6 @@ import { of, Subject } from 'rxjs';
 
 import { ExerciseToolService } from '../service/exercise-tool.service';
 import { IExerciseTool, ExerciseTool } from '../exercise-tool.model';
-import { IExercise } from 'app/entities/exercise/exercise.model';
-import { ExerciseService } from 'app/entities/exercise/service/exercise.service';
 
 import { ExerciseToolUpdateComponent } from './exercise-tool-update.component';
 
@@ -20,7 +18,6 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<ExerciseToolUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let exerciseToolService: ExerciseToolService;
-    let exerciseService: ExerciseService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -34,41 +31,18 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(ExerciseToolUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       exerciseToolService = TestBed.inject(ExerciseToolService);
-      exerciseService = TestBed.inject(ExerciseService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
-      it('Should call Exercise query and add missing value', () => {
-        const exerciseTool: IExerciseTool = { id: 456 };
-        const exercise: IExercise = { id: 2309 };
-        exerciseTool.exercise = exercise;
-
-        const exerciseCollection: IExercise[] = [{ id: 67261 }];
-        spyOn(exerciseService, 'query').and.returnValue(of(new HttpResponse({ body: exerciseCollection })));
-        const additionalExercises = [exercise];
-        const expectedCollection: IExercise[] = [...additionalExercises, ...exerciseCollection];
-        spyOn(exerciseService, 'addExerciseToCollectionIfMissing').and.returnValue(expectedCollection);
-
-        activatedRoute.data = of({ exerciseTool });
-        comp.ngOnInit();
-
-        expect(exerciseService.query).toHaveBeenCalled();
-        expect(exerciseService.addExerciseToCollectionIfMissing).toHaveBeenCalledWith(exerciseCollection, ...additionalExercises);
-        expect(comp.exercisesSharedCollection).toEqual(expectedCollection);
-      });
-
       it('Should update editForm', () => {
         const exerciseTool: IExerciseTool = { id: 456 };
-        const exercise: IExercise = { id: 18995 };
-        exerciseTool.exercise = exercise;
 
         activatedRoute.data = of({ exerciseTool });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(exerciseTool));
-        expect(comp.exercisesSharedCollection).toContain(exercise);
       });
     });
 
@@ -133,16 +107,6 @@ describe('Component Tests', () => {
         expect(exerciseToolService.update).toHaveBeenCalledWith(exerciseTool);
         expect(comp.isSaving).toEqual(false);
         expect(comp.previousState).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('Tracking relationships identifiers', () => {
-      describe('trackExerciseById', () => {
-        it('Should return tracked Exercise primary key', () => {
-          const entity = { id: 123 };
-          const trackResult = comp.trackExerciseById(0, entity);
-          expect(trackResult).toEqual(entity.id);
-        });
       });
     });
   });

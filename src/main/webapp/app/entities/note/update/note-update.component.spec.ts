@@ -42,10 +42,10 @@ describe('Component Tests', () => {
     describe('ngOnInit', () => {
       it('Should call Exercise query and add missing value', () => {
         const note: INote = { id: 456 };
-        const exercise: IExercise = { id: 75307 };
+        const exercise: IExercise = { id: 2309 };
         note.exercise = exercise;
 
-        const exerciseCollection: IExercise[] = [{ id: 43974 }];
+        const exerciseCollection: IExercise[] = [{ id: 67261 }];
         spyOn(exerciseService, 'query').and.returnValue(of(new HttpResponse({ body: exerciseCollection })));
         const additionalExercises = [exercise];
         const expectedCollection: IExercise[] = [...additionalExercises, ...exerciseCollection];
@@ -61,7 +61,7 @@ describe('Component Tests', () => {
 
       it('Should update editForm', () => {
         const note: INote = { id: 456 };
-        const exercise: IExercise = { id: 28518 };
+        const exercise: IExercise = { id: 18995 };
         note.exercise = exercise;
 
         activatedRoute.data = of({ note });

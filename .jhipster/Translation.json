@@ -15,11 +15,6 @@
       "fieldName": "value",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "entityField",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
     }
   ],
   "relationships": [

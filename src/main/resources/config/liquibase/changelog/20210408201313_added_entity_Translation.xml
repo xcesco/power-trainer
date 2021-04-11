@@ -23,9 +23,6 @@
             <column name="value" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="entity_field" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
             <column name="language_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -52,7 +49,6 @@
             <column name="entity_type" type="string"/>
             <column name="entity_uuid" type="string"/>
             <column name="value" type="string"/>
-            <column name="entity_field" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
