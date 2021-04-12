@@ -6,9 +6,11 @@ import { ExerciseDetailComponent } from './detail/exercise-detail.component';
 import { ExerciseUpdateComponent } from './update/exercise-update.component';
 import { ExerciseDeleteDialogComponent } from './delete/exercise-delete-dialog.component';
 import { ExerciseRoutingModule } from './route/exercise-routing.module';
+import { MarkdownModule } from 'ngx-markdown';
+import { QuillModule } from 'ngx-quill';
 
 @NgModule({
-  imports: [SharedModule, ExerciseRoutingModule],
+  imports: [SharedModule, ExerciseRoutingModule, MarkdownModule.forRoot(), QuillModule.forRoot()],
   declarations: [ExerciseComponent, ExerciseDetailComponent, ExerciseUpdateComponent, ExerciseDeleteDialogComponent],
   entryComponents: [ExerciseDeleteDialogComponent],
 })

@@ -24,7 +24,6 @@
             <a (click)="openFile(exercise.image, exercise.imageContentType)">
               <img [src]="'data:' + exercise.imageContentType + ';base64,' + exercise.image" style="max-width: 100%" alt="exercise image" />
             </a>
-            {{ exercise.imageContentType }}, {{ byteSize(exercise.image) }}
           </div>
         </dd>
         <dt><span jhiTranslate="powerTrainerApp.exercise.name">Name</span></dt>
@@ -33,7 +32,7 @@
         </dd>
         <dt><span jhiTranslate="powerTrainerApp.exercise.description">Description</span></dt>
         <dd>
-          <span>{{ exercise.description }}</span>
+          <markdown>{{ exercise.description }}</markdown>
         </dd>
         <dt><span jhiTranslate="powerTrainerApp.exercise.valueType">Value Type</span></dt>
         <dd>
@@ -45,15 +44,17 @@
         </dd>
         <dt><span jhiTranslate="powerTrainerApp.exercise.muscle">Muscle</span></dt>
         <dd>
+          <jhi-overlayed-images [images]="exercise.muscles"></jhi-overlayed-images>
           <span *ngFor="let muscle of exercise.muscles; let last = last">
-            <a [routerLink]="['/muscle', muscle?.id, 'view']">{{ muscle.id }}</a
+            <a [routerLink]="['/muscle', muscle?.id, 'view']">{{ muscle.name }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span jhiTranslate="powerTrainerApp.exercise.exerciseTool">Exercise Tool</span></dt>
         <dd>
+          <jhi-images-carousel [images]="exercise.exerciseTools"></jhi-images-carousel>
           <span *ngFor="let exerciseTool of exercise.exerciseTools; let last = last">
-            <a [routerLink]="['/exercise-tool', exerciseTool?.id, 'view']">{{ exerciseTool.id }}</a
+            <a [routerLink]="['/exercise-tool', exerciseTool?.id, 'view']">{{ exerciseTool.name }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

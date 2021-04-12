@@ -21,3 +21,5 @@ id;uuid;image;image_content_type;name;description;value_type;owner
 20;e4e332e0-a117-427f-a61b-046d4b46ca47;../fake-data/blob/exercises/push-up-archer/1.jpg;image/jpg;archer push-up;../fake-data/blob/exercises/push-up-archer/info.md;REPETITIONS;admin
 21;ace10ce0-29c2-4e31-9ef5-0889b6a8a174;../fake-data/blob/exercises/push-up-power-and-clap/1.jpg;image/jpg;power and clap push-up;../fake-data/blob/exercises/push-up-power-and-clap/info.md;REPETITIONS;admin
 22;a77144e3-37bd-4c4e-8898-2a802420a251;../fake-data/blob/exercises/push-up-one-arm/1.jpg;image/jpg;one-arm push-up;../fake-data/blob/exercises/push-up-one-arm/info.md;REPETITIONS;admin
+23;a77144e3-37bd-4c4e-8898-2a802420a252;../fake-data/blob/exercises/push-up-pseudo-planche/img.png;image/png;pseudo-planche push-up;../fake-data/blob/exercises/push-up-pseudo-planche/info.md;REPETITIONS;admin
+24;a77144e3-37bd-4c4e-8898-2a802420a253;../fake-data/blob/exercises/push-up-feet-on-the-wall/img.png;image/png;feet on the wall push-up;../fake-data/blob/exercises/push-up-feet-on-the-wall/info.md;REPETITIONS;admin

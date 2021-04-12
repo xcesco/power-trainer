@@ -71,7 +71,9 @@
             <span *ngIf="exercise.image">{{ exercise.imageContentType }}, {{ byteSize(exercise.image) }}</span>
           </td>
           <td>{{ exercise.name }}</td>
-          <td>{{ exercise.description }}</td>
+          <td>
+            <markdown>{{ exercise.description }}</markdown>
+          </td>
           <td jhiTranslate="{{ 'powerTrainerApp.ValueType.' + exercise.valueType }}">{{ exercise.valueType }}</td>
           <td>{{ exercise.owner }}</td>
           <td class="text-right">

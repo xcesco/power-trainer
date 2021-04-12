@@ -73,13 +73,14 @@
 
         <div class="form-group">
           <label class="form-control-label" jhiTranslate="powerTrainerApp.exercise.description" for="field_description">Description</label>
-          <textarea
-            class="form-control"
-            name="description"
-            id="field_description"
-            data-cy="description"
-            formControlName="description"
-          ></textarea>
+          <!--          <textarea-->
+          <!--            class="form-control"-->
+          <!--            name="description"-->
+          <!--            id="field_description"-->
+          <!--            data-cy="description"-->
+          <!--            formControlName="description"-->
+          <!--          ></textarea>-->
+          <quill-editor name="description" id="field_description" data-cy="description" formControlName="description"></quill-editor>
         </div>
 
         <div class="form-group">
@@ -105,18 +106,20 @@
 
         <div class="form-group">
           <label jhiTranslate="powerTrainerApp.exercise.muscle" for="field_muscles">Muscle</label>
+          <jhi-overlayed-images [images]="editForm.get('muscles')?.value"></jhi-overlayed-images>
           <select class="form-control" id="field_muscles" data-cy="muscle" multiple name="muscles" formControlName="muscles">
             <option
               [ngValue]="getSelectedMuscle(muscleOption, editForm.get('muscles')!.value)"
               *ngFor="let muscleOption of musclesSharedCollection; trackBy: trackMuscleById"
             >
-              {{ muscleOption.id }}
+              {{ muscleOption.name }}
             </option>
           </select>
         </div>
 
         <div class="form-group">
           <label jhiTranslate="powerTrainerApp.exercise.exerciseTool" for="field_exerciseTools">Exercise Tool</label>
+          <jhi-images-carousel [images]="editForm.get('exerciseTools')?.value"></jhi-images-carousel>
           <select
             class="form-control"
             id="field_exerciseTools"
@@ -129,7 +132,7 @@
               [ngValue]="getSelectedExerciseTool(exerciseToolOption, editForm.get('exerciseTools')!.value)"
               *ngFor="let exerciseToolOption of exerciseToolsSharedCollection; trackBy: trackExerciseToolById"
             >
-              {{ exerciseToolOption.id }}
+              {{ exerciseToolOption.name }}
             </option>
           </select>
         </div>

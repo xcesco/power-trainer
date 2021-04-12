@@ -1,0 +1,9 @@
+<div class="image-container m-auto">
+  <img class="image-base" [src]="baseImageSource" alt="muscle image" />
+  <img
+    *ngFor="let image of images; index as i"
+    class="image-overlay"
+    [src]="'data:' + image.imageContentType + ';base64,' + image.image"
+    alt="muscle image"
+  />
+</div>

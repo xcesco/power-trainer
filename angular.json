@@ -31,11 +31,27 @@
                 "output": "swagger-ui",
                 "ignore": ["**/index.html"]
               },
-              { "glob": "axios.min.js", "input": "./node_modules/axios/dist", "output": "swagger-ui" },
-              { "glob": "**/*", "input": "src/main/webapp/swagger-ui/", "output": "swagger-ui" }
+              {
+                "glob": "axios.min.js",
+                "input": "./node_modules/axios/dist",
+                "output": "swagger-ui"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/main/webapp/swagger-ui/",
+                "output": "swagger-ui"
+              }
             ],
-            "styles": ["src/main/webapp/content/scss/vendor.scss", "src/main/webapp/content/scss/global.scss"],
-            "scripts": []
+            "styles": [
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.bubble.css",
+              "node_modules/quill/dist/quill.snow.css",
+              "node_modules/quill-emoji/dist/quill-emoji.css",
+              "node_modules/quill-mention/dist/quill.mention.min.css",
+              "src/main/webapp/content/scss/vendor.scss",
+              "src/main/webapp/content/scss/global.scss"
+            ],
+            "scripts": ["node_modules/marked/lib/marked.js", "node_modules/quill/dist/quill.min.js"]
           },
           "configurations": {
             "production": {

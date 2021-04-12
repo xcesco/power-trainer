@@ -64,10 +64,7 @@
               <div class="card-header">
                 <h3 style="text-transform: capitalize">{{ muscle.name }}</h3>
               </div>
-              <div class="card-img image-container m-auto">
-                <img class="image-base" src="content/images/muscles/muscles_base.jpg" alt="muscle image" />
-                <img class="image-overlay" [src]="'data:' + muscle.imageContentType + ';base64,' + muscle.image" alt="muscle image" />
-              </div>
+              <jhi-overlayed-images class="card-img" [images]="[muscle]"></jhi-overlayed-images>
               <div class="card-body">
                 <p class="card-text">{{ muscle.note }}</p>
 
