@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <!--
+        Added the constraints for entity Exercise.
+    -->
+    <changeSet id="20210408201246-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="exercises_id"
+                                 baseTableName="rel_exercises__muscle"
+                                 constraintName="fk_rel_exercises__muscle__exercises_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="exercises"/>
+
+        <addForeignKeyConstraint baseColumnNames="muscle_id"
+                                 baseTableName="rel_exercises__muscle"
+                                 constraintName="fk_rel_exercises__muscle__muscle_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="muscles"/>
+
+        <addForeignKeyConstraint baseColumnNames="exercises_id"
+                                 baseTableName="rel_exercises__exercise_tool"
+                                 constraintName="fk_rel_exercises__exercise_tool__exercises_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="exercises"/>
+
+        <addForeignKeyConstraint baseColumnNames="exercise_tool_id"
+                                 baseTableName="rel_exercises__exercise_tool"
+                                 constraintName="fk_rel_exercises__exercise_tool__exercise_tool_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="exercise_tools"/>
+    </changeSet>
+</databaseChangeLog>

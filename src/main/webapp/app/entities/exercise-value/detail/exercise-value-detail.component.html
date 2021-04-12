@@ -1,0 +1,60 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="exerciseValue">
+      <h2 data-cy="exerciseValueDetailsHeading"><span jhiTranslate="powerTrainerApp.exerciseValue.detail.title">Exercise Value</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ exerciseValue.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.uuid">Uuid</span></dt>
+        <dd>
+          <span>{{ exerciseValue.uuid }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.date">Date</span></dt>
+        <dd>
+          <span>{{ exerciseValue.date | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.exerciseUuid">Exercise Uuid</span></dt>
+        <dd>
+          <span>{{ exerciseValue.exerciseUuid }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.exerciseName">Exercise Name</span></dt>
+        <dd>
+          <span>{{ exerciseValue.exerciseName }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.exerciseValue">Exercise Value</span></dt>
+        <dd>
+          <span>{{ exerciseValue.exerciseValue }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.exerciseValueType">Exercise Value Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'powerTrainerApp.ValueType.' + exerciseValue.exerciseValueType }}">{{
+            exerciseValue.exerciseValueType
+          }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseValue.calendar">Calendar</span></dt>
+        <dd>
+          <div *ngIf="exerciseValue.calendar">
+            <a [routerLink]="['/calendar', exerciseValue.calendar?.id, 'view']">{{ exerciseValue.calendar?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/exercise-value', exerciseValue.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

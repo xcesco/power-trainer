@@ -1,0 +1,67 @@
+{
+  "name": "Exercise",
+  "fields": [
+    {
+      "fieldName": "uuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique", "required"]
+    },
+    {
+      "fieldName": "image",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "valueType",
+      "fieldType": "ValueType",
+      "fieldValues": "DURATION,WEIGHT,DISTANCE,REPETITIONS"
+    },
+    {
+      "fieldName": "owner",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "exerciseResource",
+      "otherEntityRelationshipName": "exercise",
+      "relationshipName": "exerciseResource"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "muscle",
+      "otherEntityRelationshipName": "exercise",
+      "relationshipName": "muscle",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "exerciseTool",
+      "otherEntityRelationshipName": "exercise",
+      "relationshipName": "exerciseTool",
+      "ownerSide": true
+    }
+  ],
+  "entityTableName": "exercises",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["PowerTrainer"],
+  "changelogDate": "20210408201246"
+}

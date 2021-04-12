@@ -1,0 +1,11 @@
+{
+  "powerTrainerApp": {
+    "ReferenceType": {
+      "null": "",
+      "VIDEO": "VIDEO",
+      "IMAGE": "IMAGE",
+      "TEXT": "TEXT",
+      "URL": "URL"
+    }
+  }
+}

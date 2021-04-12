@@ -1,0 +1,68 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="workoutSheetExercise">
+      <h2 data-cy="workoutSheetExerciseDetailsHeading">
+        <span jhiTranslate="powerTrainerApp.workoutSheetExercise.detail.title">Workout Sheet Exercise</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ workoutSheetExercise.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.uuid">Uuid</span></dt>
+        <dd>
+          <span>{{ workoutSheetExercise.uuid }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.order">Order</span></dt>
+        <dd>
+          <span>{{ workoutSheetExercise.order }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.repetitions">Repetitions</span></dt>
+        <dd>
+          <span>{{ workoutSheetExercise.repetitions }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseUuid">Exercise Uuid</span></dt>
+        <dd>
+          <span>{{ workoutSheetExercise.exerciseUuid }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseName">Exercise Name</span></dt>
+        <dd>
+          <span>{{ workoutSheetExercise.exerciseName }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseValue">Exercise Value</span></dt>
+        <dd>
+          <span>{{ workoutSheetExercise.exerciseValue }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.exerciseValueType">Exercise Value Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'powerTrainerApp.ValueType.' + workoutSheetExercise.exerciseValueType }}">{{
+            workoutSheetExercise.exerciseValueType
+          }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.workoutSheetExercise.workoutSheet">Workout Sheet</span></dt>
+        <dd>
+          <div *ngIf="workoutSheetExercise.workoutSheet">
+            <a [routerLink]="['/workout-sheet', workoutSheetExercise.workoutSheet?.id, 'view']">{{
+              workoutSheetExercise.workoutSheet?.id
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/workout-sheet-exercise', workoutSheetExercise.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

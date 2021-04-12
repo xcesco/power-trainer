@@ -1,0 +1,135 @@
+<div>
+  <h2 id="page-heading" data-cy="ExerciseResourceHeading">
+    <span jhiTranslate="powerTrainerApp.exerciseResource.home.title">Exercise Resources</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="powerTrainerApp.exerciseResource.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-exercise-resource"
+        [routerLink]="['/exercise-resource/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="powerTrainerApp.exerciseResource.home.createLabel"> Create a new Exercise Resource </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="exerciseResources?.length === 0">
+    <span jhiTranslate="powerTrainerApp.exerciseResource.home.notFound">No exerciseResources found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="exerciseResources && exerciseResources.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="uuid">
+            <span jhiTranslate="powerTrainerApp.exerciseResource.uuid">Uuid</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="order">
+            <span jhiTranslate="powerTrainerApp.exerciseResource.order">Order</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="type">
+            <span jhiTranslate="powerTrainerApp.exerciseResource.type">Type</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="url">
+            <span jhiTranslate="powerTrainerApp.exerciseResource.url">Url</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="image">
+            <span jhiTranslate="powerTrainerApp.exerciseResource.image">Image</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="description">
+            <span jhiTranslate="powerTrainerApp.exerciseResource.description">Description</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="exercise.id">
+            <span jhiTranslate="powerTrainerApp.exerciseResource.exercise">Exercise</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let exerciseResource of exerciseResources; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/exercise-resource', exerciseResource.id, 'view']">{{ exerciseResource.id }}</a>
+          </td>
+          <td>{{ exerciseResource.uuid }}</td>
+          <td>{{ exerciseResource.order }}</td>
+          <td jhiTranslate="{{ 'powerTrainerApp.ExerciseResourceType.' + exerciseResource.type }}">{{ exerciseResource.type }}</td>
+          <td>{{ exerciseResource.url }}</td>
+          <td>
+            <a *ngIf="exerciseResource.image" (click)="openFile(exerciseResource.image, exerciseResource.imageContentType)">
+              <img
+                [src]="'data:' + exerciseResource.imageContentType + ';base64,' + exerciseResource.image"
+                style="max-height: 30px"
+                alt="exerciseResource image"
+              />
+            </a>
+            <span *ngIf="exerciseResource.image">{{ exerciseResource.imageContentType }}, {{ byteSize(exerciseResource.image) }}</span>
+          </td>
+          <td>{{ exerciseResource.description }}</td>
+          <td>
+            <div *ngIf="exerciseResource.exercise">
+              <a [routerLink]="['/exercise', exerciseResource.exercise?.id, 'view']">{{ exerciseResource.exercise?.id }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/exercise-resource', exerciseResource.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/exercise-resource', exerciseResource.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(exerciseResource)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="exerciseResources && exerciseResources.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

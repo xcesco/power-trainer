@@ -1,0 +1,30 @@
+{
+  "powerTrainerApp": {
+    "exerciseReference": {
+      "home": {
+        "title": "ExerciseReferences",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Exercise Reference",
+        "createOrEditLabel": "Genera o modifica un Exercise Reference",
+        "notFound": "No Exercise References found"
+      },
+      "created": "&Egrave; stato generato un nuovo Exercise Reference con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Exercise Reference identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Exercise Reference con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Exercise Reference {{ id }}?"
+      },
+      "detail": {
+        "title": "Exercise Reference"
+      },
+      "id": "ID",
+      "uuid": "Uuid",
+      "order": "Order",
+      "type": "Type",
+      "url": "Url",
+      "image": "Image",
+      "description": "Description",
+      "exercise": "Exercise"
+    }
+  }
+}

@@ -1,0 +1,189 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-workout-sheet-heading"
+        data-cy="WorkoutSheetCreateUpdateHeading"
+        jhiTranslate="powerTrainerApp.workoutSheet.home.createOrEditLabel"
+      >
+        Create or edit a Workout Sheet
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheet.uuid" for="field_uuid">Uuid</label>
+          <input type="text" class="form-control" name="uuid" id="field_uuid" data-cy="uuid" formControlName="uuid" />
+          <div *ngIf="editForm.get('uuid')!.invalid && (editForm.get('uuid')!.dirty || editForm.get('uuid')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('uuid')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheet.name" for="field_name">Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+          <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheet.image" for="field_image">Image</label>
+          <div>
+            <img
+              [src]="'data:' + editForm.get('imageContentType')!.value + ';base64,' + editForm.get('image')!.value"
+              style="max-height: 100px"
+              *ngIf="editForm.get('image')!.value"
+              alt="workoutSheet image"
+            />
+            <div *ngIf="editForm.get('image')!.value" class="form-text text-danger clearfix">
+              <span class="pull-left">{{ editForm.get('imageContentType')!.value }}, {{ byteSize(editForm.get('image')!.value) }}</span>
+              <button
+                type="button"
+                (click)="clearInputImage('image', 'imageContentType', 'file_image')"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input
+              type="file"
+              id="file_image"
+              data-cy="image"
+              (change)="setFileData($event, 'image', true)"
+              accept="image/*"
+              jhiTranslate="entity.action.addimage"
+            />
+          </div>
+          <input type="hidden" class="form-control" name="image" id="field_image" data-cy="image" formControlName="image" />
+          <input
+            type="hidden"
+            class="form-control"
+            name="imageContentType"
+            id="field_imageContentType"
+            formControlName="imageContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheet.description" for="field_description"
+            >Description</label
+          >
+          <textarea
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheet.owner" for="field_owner">Owner</label>
+          <input type="text" class="form-control" name="owner" id="field_owner" data-cy="owner" formControlName="owner" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheet.prepareTime" for="field_prepareTime"
+            >Prepare Time</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="prepareTime"
+            id="field_prepareTime"
+            data-cy="prepareTime"
+            formControlName="prepareTime"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheet.coolDownTime" for="field_coolDownTime"
+            >Cool Down Time</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="coolDownTime"
+            id="field_coolDownTime"
+            data-cy="coolDownTime"
+            formControlName="coolDownTime"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheet.cycles" for="field_cycles">Cycles</label>
+          <input type="number" class="form-control" name="cycles" id="field_cycles" data-cy="cycles" formControlName="cycles" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheet.cycleRestTime" for="field_cycleRestTime"
+            >Cycle Rest Time</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="cycleRestTime"
+            id="field_cycleRestTime"
+            data-cy="cycleRestTime"
+            formControlName="cycleRestTime"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheet.set" for="field_set">Set</label>
+          <input type="number" class="form-control" name="set" id="field_set" data-cy="set" formControlName="set" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheet.setRestTime" for="field_setRestTime"
+            >Set Rest Time</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="setRestTime"
+            id="field_setRestTime"
+            data-cy="setRestTime"
+            formControlName="setRestTime"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="powerTrainerApp.workoutSheet.type" for="field_type">Type</label>
+          <select class="form-control" name="type" formControlName="type" id="field_type" data-cy="type">
+            <option [ngValue]="null">{{ 'powerTrainerApp.WorkoutType.null' | translate }}</option>
+            <option value="SEQUENCE">{{ 'powerTrainerApp.WorkoutType.SEQUENCE' | translate }}</option>
+            <option value="SUPERSET">{{ 'powerTrainerApp.WorkoutType.SUPERSET' | translate }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

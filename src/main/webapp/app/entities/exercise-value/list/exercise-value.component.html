@@ -1,0 +1,126 @@
+<div>
+  <h2 id="page-heading" data-cy="ExerciseValueHeading">
+    <span jhiTranslate="powerTrainerApp.exerciseValue.home.title">Exercise Values</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="powerTrainerApp.exerciseValue.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-exercise-value"
+        [routerLink]="['/exercise-value/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="powerTrainerApp.exerciseValue.home.createLabel"> Create a new Exercise Value </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="exerciseValues?.length === 0">
+    <span jhiTranslate="powerTrainerApp.exerciseValue.home.notFound">No exerciseValues found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="exerciseValues && exerciseValues.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="uuid">
+            <span jhiTranslate="powerTrainerApp.exerciseValue.uuid">Uuid</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="date">
+            <span jhiTranslate="powerTrainerApp.exerciseValue.date">Date</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="exerciseUuid">
+            <span jhiTranslate="powerTrainerApp.exerciseValue.exerciseUuid">Exercise Uuid</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="exerciseName">
+            <span jhiTranslate="powerTrainerApp.exerciseValue.exerciseName">Exercise Name</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="exerciseValue">
+            <span jhiTranslate="powerTrainerApp.exerciseValue.exerciseValue">Exercise Value</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="exerciseValueType">
+            <span jhiTranslate="powerTrainerApp.exerciseValue.exerciseValueType">Exercise Value Type</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="calendar.id">
+            <span jhiTranslate="powerTrainerApp.exerciseValue.calendar">Calendar</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let exerciseValue of exerciseValues; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/exercise-value', exerciseValue.id, 'view']">{{ exerciseValue.id }}</a>
+          </td>
+          <td>{{ exerciseValue.uuid }}</td>
+          <td>{{ exerciseValue.date | formatMediumDatetime }}</td>
+          <td>{{ exerciseValue.exerciseUuid }}</td>
+          <td>{{ exerciseValue.exerciseName }}</td>
+          <td>{{ exerciseValue.exerciseValue }}</td>
+          <td jhiTranslate="{{ 'powerTrainerApp.ValueType.' + exerciseValue.exerciseValueType }}">{{ exerciseValue.exerciseValueType }}</td>
+          <td>
+            <div *ngIf="exerciseValue.calendar">
+              <a [routerLink]="['/calendar', exerciseValue.calendar?.id, 'view']">{{ exerciseValue.calendar?.id }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/exercise-value', exerciseValue.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/exercise-value', exerciseValue.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(exerciseValue)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="exerciseValues && exerciseValues.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

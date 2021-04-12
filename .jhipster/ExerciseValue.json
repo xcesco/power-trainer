@@ -1,0 +1,54 @@
+{
+  "name": "ExerciseValue",
+  "fields": [
+    {
+      "fieldName": "uuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique", "required"]
+    },
+    {
+      "fieldName": "date",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "exerciseUuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "exerciseName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "exerciseValue",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "exerciseValueType",
+      "fieldType": "ValueType",
+      "fieldValues": "DURATION,WEIGHT,DISTANCE,REPETITIONS",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "calendar",
+      "otherEntityRelationshipName": "exerciseValue",
+      "relationshipName": "calendar"
+    }
+  ],
+  "entityTableName": "exercise_values",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["PowerTrainer"],
+  "changelogDate": "20210408201346"
+}

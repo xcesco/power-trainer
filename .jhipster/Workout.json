@@ -1,0 +1,69 @@
+{
+  "name": "Workout",
+  "fields": [
+    {
+      "fieldName": "uuid",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["unique", "required"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "image",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "WorkoutType",
+      "fieldValues": "SEQUENCE,SUPERSET"
+    },
+    {
+      "fieldName": "executionTime",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "previewTime",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "WorkoutStatus",
+      "fieldValues": "SCHEDULED,CANCELLED,DONE"
+    },
+    {
+      "fieldName": "date",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "note",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "workoutStep",
+      "otherEntityRelationshipName": "workout",
+      "relationshipName": "workoutStep"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "calendar",
+      "otherEntityRelationshipName": "workout",
+      "relationshipName": "calendar"
+    }
+  ],
+  "entityTableName": "workouts",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["PowerTrainer"],
+  "changelogDate": "20210408201946"
+}

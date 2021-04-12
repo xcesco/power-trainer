@@ -1,0 +1,69 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="exerciseResource">
+      <h2 data-cy="exerciseResourceDetailsHeading">
+        <span jhiTranslate="powerTrainerApp.exerciseResource.detail.title">Exercise Resource</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ exerciseResource.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseResource.uuid">Uuid</span></dt>
+        <dd>
+          <span>{{ exerciseResource.uuid }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseResource.order">Order</span></dt>
+        <dd>
+          <span>{{ exerciseResource.order }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseResource.type">Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'powerTrainerApp.ExerciseResourceType.' + exerciseResource.type }}">{{ exerciseResource.type }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseResource.url">Url</span></dt>
+        <dd>
+          <span>{{ exerciseResource.url }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseResource.image">Image</span></dt>
+        <dd>
+          <div *ngIf="exerciseResource.image">
+            <a (click)="openFile(exerciseResource.image, exerciseResource.imageContentType)">
+              <img
+                [src]="'data:' + exerciseResource.imageContentType + ';base64,' + exerciseResource.image"
+                style="max-width: 100%"
+                alt="exerciseResource image"
+              />
+            </a>
+            {{ exerciseResource.imageContentType }}, {{ byteSize(exerciseResource.image) }}
+          </div>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseResource.description">Description</span></dt>
+        <dd>
+          <span>{{ exerciseResource.description }}</span>
+        </dd>
+        <dt><span jhiTranslate="powerTrainerApp.exerciseResource.exercise">Exercise</span></dt>
+        <dd>
+          <div *ngIf="exerciseResource.exercise">
+            <a [routerLink]="['/exercise', exerciseResource.exercise?.id, 'view']">{{ exerciseResource.exercise?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/exercise-resource', exerciseResource.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

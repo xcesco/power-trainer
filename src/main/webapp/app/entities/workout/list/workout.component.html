@@ -1,0 +1,143 @@
+<div>
+  <h2 id="page-heading" data-cy="WorkoutHeading">
+    <span jhiTranslate="powerTrainerApp.workout.home.title">Workouts</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="powerTrainerApp.workout.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-workout"
+        [routerLink]="['/workout/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="powerTrainerApp.workout.home.createLabel"> Create a new Workout </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="workouts?.length === 0">
+    <span jhiTranslate="powerTrainerApp.workout.home.notFound">No workouts found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="workouts && workouts.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+          <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="uuid">
+            <span jhiTranslate="powerTrainerApp.workout.uuid">Uuid</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="name">
+            <span jhiTranslate="powerTrainerApp.workout.name">Name</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="image">
+            <span jhiTranslate="powerTrainerApp.workout.image">Image</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="type">
+            <span jhiTranslate="powerTrainerApp.workout.type">Type</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="executionTime">
+            <span jhiTranslate="powerTrainerApp.workout.executionTime">Execution Time</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="previewTime">
+            <span jhiTranslate="powerTrainerApp.workout.previewTime">Preview Time</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="status">
+            <span jhiTranslate="powerTrainerApp.workout.status">Status</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="date">
+            <span jhiTranslate="powerTrainerApp.workout.date">Date</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="note">
+            <span jhiTranslate="powerTrainerApp.workout.note">Note</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="calendar.id">
+            <span jhiTranslate="powerTrainerApp.workout.calendar">Calendar</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let workout of workouts; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/workout', workout.id, 'view']">{{ workout.id }}</a>
+          </td>
+          <td>{{ workout.uuid }}</td>
+          <td>{{ workout.name }}</td>
+          <td>
+            <a *ngIf="workout.image" (click)="openFile(workout.image, workout.imageContentType)">
+              <img [src]="'data:' + workout.imageContentType + ';base64,' + workout.image" style="max-height: 30px" alt="workout image" />
+            </a>
+            <span *ngIf="workout.image">{{ workout.imageContentType }}, {{ byteSize(workout.image) }}</span>
+          </td>
+          <td jhiTranslate="{{ 'powerTrainerApp.WorkoutType.' + workout.type }}">{{ workout.type }}</td>
+          <td>{{ workout.executionTime }}</td>
+          <td>{{ workout.previewTime }}</td>
+          <td jhiTranslate="{{ 'powerTrainerApp.WorkoutStatus.' + workout.status }}">{{ workout.status }}</td>
+          <td>{{ workout.date | formatMediumDatetime }}</td>
+          <td>{{ workout.note }}</td>
+          <td>
+            <div *ngIf="workout.calendar">
+              <a [routerLink]="['/calendar', workout.calendar?.id, 'view']">{{ workout.calendar?.id }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/workout', workout.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/workout', workout.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(workout)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="workouts && workouts.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>
