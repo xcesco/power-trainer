@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
+import { v4 as uuid } from 'uuid';
 
 import { IExercise, Exercise } from '../exercise.model';
 import { ExerciseService } from '../service/exercise.service';
@@ -150,7 +151,7 @@ export class ExerciseUpdateComponent implements OnInit {
   protected updateForm(exercise: IExercise): void {
     this.editForm.patchValue({
       id: exercise.id,
-      uuid: exercise.uuid,
+      uuid: exercise.uuid ?? uuid().toString(),
       image: exercise.image,
       imageContentType: exercise.imageContentType,
       name: exercise.name,
