@@ -1,7 +1,9 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <div *ngIf="exercise">
-      <h2 data-cy="exerciseDetailsHeading"><span jhiTranslate="powerTrainerApp.exercise.detail.title">Exercise</span></h2>
+      <h2 data-cy="exerciseDetailsHeading">
+        <span jhiTranslate="powerTrainerApp.exercise.detail.title">Exercise</span>: {{ exercise.name }}
+      </h2>
 
       <hr />
 
@@ -26,10 +28,10 @@
             </a>
           </div>
         </dd>
-        <dt><span jhiTranslate="powerTrainerApp.exercise.name">Name</span></dt>
-        <dd>
-          <span>{{ exercise.name }}</span>
-        </dd>
+        <!--        <dt><span jhiTranslate="powerTrainerApp.exercise.name">Name</span></dt>-->
+        <!--        <dd>-->
+        <!--          <span>{{ exercise.name }}</span>-->
+        <!--        </dd>-->
         <dt><span jhiTranslate="powerTrainerApp.exercise.description">Description</span></dt>
         <dd>
           <markdown>{{ exercise.description }}</markdown>

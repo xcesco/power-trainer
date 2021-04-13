@@ -29,7 +29,7 @@
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="exercises && exercises.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
+    <table class="table table-hover" aria-describedby="page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
@@ -42,9 +42,9 @@
           <th scope="col" jhiSortBy="name">
             <span jhiTranslate="powerTrainerApp.exercise.name">Name</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="description">
-            <span jhiTranslate="powerTrainerApp.exercise.description">Description</span> <fa-icon icon="sort"></fa-icon>
-          </th>
+          <!--          <th scope="col" jhiSortBy="description">-->
+          <!--            <span jhiTranslate="powerTrainerApp.exercise.description">Description</span> <fa-icon icon="sort"></fa-icon>-->
+          <!--          </th>-->
           <th scope="col" jhiSortBy="valueType">
             <span jhiTranslate="powerTrainerApp.exercise.valueType">Value Type</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -68,14 +68,19 @@
                 alt="exercise image"
               />
             </a>
-            <span *ngIf="exercise.image">{{ exercise.imageContentType }}, {{ byteSize(exercise.image) }}</span>
           </td>
-          <td>{{ exercise.name }}</td>
           <td>
-            <markdown>{{ exercise.description }}</markdown>
+            <ng-expandable-area [title]="exercise.name || ''" [opened]="false">
+              <markdown>{{ exercise.description }}</markdown>
+            </ng-expandable-area>
           </td>
-          <td jhiTranslate="{{ 'powerTrainerApp.ValueType.' + exercise.valueType }}">{{ exercise.valueType }}</td>
-          <td>{{ exercise.owner }}</td>
+          <!--          <td>-->
+          <!--            -->
+          <!--          </td>-->
+          <td style="vertical-align: middle" jhiTranslate="{{ 'powerTrainerApp.ValueType.' + exercise.valueType }}">
+            {{ exercise.valueType }}
+          </td>
+          <td style="vertical-align: middle">{{ exercise.owner }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button
