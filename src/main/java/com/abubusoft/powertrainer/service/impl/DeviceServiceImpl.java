@@ -3,6 +3,8 @@ package com.abubusoft.powertrainer.service.impl;
 import com.abubusoft.powertrainer.domain.Device;
 import com.abubusoft.powertrainer.repository.DeviceRepository;
 import com.abubusoft.powertrainer.service.DeviceService;
+import com.abubusoft.powertrainer.service.dto.DeviceDTO;
+import com.abubusoft.powertrainer.service.mapper.DeviceMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,49 +24,49 @@ public class DeviceServiceImpl implements DeviceService {
 
     private final DeviceRepository deviceRepository;
 
-    public DeviceServiceImpl(DeviceRepository deviceRepository) {
+    private final DeviceMapper deviceMapper;
+
+    public DeviceServiceImpl(DeviceRepository deviceRepository, DeviceMapper deviceMapper) {
         this.deviceRepository = deviceRepository;
+        this.deviceMapper = deviceMapper;
     }
 
     @Override
-    public Device save(Device device) {
-        log.debug("Request to save Device : {}", device);
-        return deviceRepository.save(device);
+    public DeviceDTO save(DeviceDTO deviceDTO) {
+        log.debug("Request to save Device : {}", deviceDTO);
+        Device device = deviceMapper.toEntity(deviceDTO);
+        device = deviceRepository.save(device);
+        return deviceMapper.toDto(device);
     }
 
     @Override
-    public Optional<Device> partialUpdate(Device device) {
-        log.debug("Request to partially update Device : {}", device);
+    public Optional<DeviceDTO> partialUpdate(DeviceDTO deviceDTO) {
+        log.debug("Request to partially update Device : {}", deviceDTO);
 
         return deviceRepository
-            .findById(device.getId())
+            .findById(deviceDTO.getId())
             .map(
                 existingDevice -> {
-                    if (device.getOwner() != null) {
-                        existingDevice.setOwner(device.getOwner());
-                    }
-                    if (device.getDeviceUuid() != null) {
-                        existingDevice.setDeviceUuid(device.getDeviceUuid());
-                    }
-
+                    deviceMapper.partialUpdate(existingDevice, deviceDTO);
                     return existingDevice;
                 }
             )
-            .map(deviceRepository::save);
+            .map(deviceRepository::save)
+            .map(deviceMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Device> findAll(Pageable pageable) {
+    public Page<DeviceDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Devices");
-        return deviceRepository.findAll(pageable);
+        return deviceRepository.findAll(pageable).map(deviceMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Device> findOne(Long id) {
+    public Optional<DeviceDTO> findOne(Long id) {
         log.debug("Request to get Device : {}", id);
-        return deviceRepository.findById(id);
+        return deviceRepository.findById(id).map(deviceMapper::toDto);
     }
 
     @Override

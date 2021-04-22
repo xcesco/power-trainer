@@ -4,7 +4,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
-import { v4 as uuid } from 'uuid';
 
 import { IExercise, Exercise } from '../exercise.model';
 import { ExerciseService } from '../service/exercise.service';

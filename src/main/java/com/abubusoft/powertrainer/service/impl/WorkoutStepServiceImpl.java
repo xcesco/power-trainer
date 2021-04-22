@@ -3,6 +3,8 @@ package com.abubusoft.powertrainer.service.impl;
 import com.abubusoft.powertrainer.domain.WorkoutStep;
 import com.abubusoft.powertrainer.repository.WorkoutStepRepository;
 import com.abubusoft.powertrainer.service.WorkoutStepService;
+import com.abubusoft.powertrainer.service.dto.WorkoutStepDTO;
+import com.abubusoft.powertrainer.service.mapper.WorkoutStepMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,70 +24,49 @@ public class WorkoutStepServiceImpl implements WorkoutStepService {
 
     private final WorkoutStepRepository workoutStepRepository;
 
-    public WorkoutStepServiceImpl(WorkoutStepRepository workoutStepRepository) {
+    private final WorkoutStepMapper workoutStepMapper;
+
+    public WorkoutStepServiceImpl(WorkoutStepRepository workoutStepRepository, WorkoutStepMapper workoutStepMapper) {
         this.workoutStepRepository = workoutStepRepository;
+        this.workoutStepMapper = workoutStepMapper;
     }
 
     @Override
-    public WorkoutStep save(WorkoutStep workoutStep) {
-        log.debug("Request to save WorkoutStep : {}", workoutStep);
-        return workoutStepRepository.save(workoutStep);
+    public WorkoutStepDTO save(WorkoutStepDTO workoutStepDTO) {
+        log.debug("Request to save WorkoutStep : {}", workoutStepDTO);
+        WorkoutStep workoutStep = workoutStepMapper.toEntity(workoutStepDTO);
+        workoutStep = workoutStepRepository.save(workoutStep);
+        return workoutStepMapper.toDto(workoutStep);
     }
 
     @Override
-    public Optional<WorkoutStep> partialUpdate(WorkoutStep workoutStep) {
-        log.debug("Request to partially update WorkoutStep : {}", workoutStep);
+    public Optional<WorkoutStepDTO> partialUpdate(WorkoutStepDTO workoutStepDTO) {
+        log.debug("Request to partially update WorkoutStep : {}", workoutStepDTO);
 
         return workoutStepRepository
-            .findById(workoutStep.getId())
+            .findById(workoutStepDTO.getId())
             .map(
                 existingWorkoutStep -> {
-                    if (workoutStep.getUuid() != null) {
-                        existingWorkoutStep.setUuid(workoutStep.getUuid());
-                    }
-                    if (workoutStep.getOrder() != null) {
-                        existingWorkoutStep.setOrder(workoutStep.getOrder());
-                    }
-                    if (workoutStep.getExecutionTime() != null) {
-                        existingWorkoutStep.setExecutionTime(workoutStep.getExecutionTime());
-                    }
-                    if (workoutStep.getType() != null) {
-                        existingWorkoutStep.setType(workoutStep.getType());
-                    }
-                    if (workoutStep.getStatus() != null) {
-                        existingWorkoutStep.setStatus(workoutStep.getStatus());
-                    }
-                    if (workoutStep.getExerciseUuid() != null) {
-                        existingWorkoutStep.setExerciseUuid(workoutStep.getExerciseUuid());
-                    }
-                    if (workoutStep.getExerciseName() != null) {
-                        existingWorkoutStep.setExerciseName(workoutStep.getExerciseName());
-                    }
-                    if (workoutStep.getExerciseValue() != null) {
-                        existingWorkoutStep.setExerciseValue(workoutStep.getExerciseValue());
-                    }
-                    if (workoutStep.getExerciseValueType() != null) {
-                        existingWorkoutStep.setExerciseValueType(workoutStep.getExerciseValueType());
-                    }
-
+                    workoutStepMapper.partialUpdate(existingWorkoutStep, workoutStepDTO);
                     return existingWorkoutStep;
                 }
             )
-            .map(workoutStepRepository::save);
+            .map(workoutStepRepository::save)
+            .map(workoutStepMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<WorkoutStep> findAll(Pageable pageable) {
+    public Page<WorkoutStepDTO> findAll(Pageable pageable) {
         log.debug("Request to get all WorkoutSteps");
-        return workoutStepRepository.findAll(pageable);
+        return workoutStepRepository.findAll(pageable).map(workoutStepMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<WorkoutStep> findOne(Long id) {
+    public Optional<WorkoutStepDTO> findOne(Long id) {
         log.debug("Request to get WorkoutStep : {}", id);
-        return workoutStepRepository.findById(id);
+        return workoutStepRepository.findById(id).map(workoutStepMapper::toDto);
     }
 
     @Override

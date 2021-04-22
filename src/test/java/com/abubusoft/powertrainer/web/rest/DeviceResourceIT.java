@@ -9,6 +9,8 @@ import com.abubusoft.powertrainer.IntegrationTest;
 import com.abubusoft.powertrainer.domain.Device;
 import com.abubusoft.powertrainer.repository.DeviceRepository;
 import com.abubusoft.powertrainer.service.criteria.DeviceCriteria;
+import com.abubusoft.powertrainer.service.dto.DeviceDTO;
+import com.abubusoft.powertrainer.service.mapper.DeviceMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -44,6 +46,9 @@ class DeviceResourceIT {
 
     @Autowired
     private DeviceRepository deviceRepository;
+
+    @Autowired
+    private DeviceMapper deviceMapper;
 
     @Autowired
     private EntityManager em;
@@ -85,8 +90,9 @@ class DeviceResourceIT {
     void createDevice() throws Exception {
         int databaseSizeBeforeCreate = deviceRepository.findAll().size();
         // Create the Device
+        DeviceDTO deviceDTO = deviceMapper.toDto(device);
         restDeviceMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(device)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(deviceDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Device in the database
@@ -102,12 +108,13 @@ class DeviceResourceIT {
     void createDeviceWithExistingId() throws Exception {
         // Create the Device with an existing ID
         device.setId(1L);
+        DeviceDTO deviceDTO = deviceMapper.toDto(device);
 
         int databaseSizeBeforeCreate = deviceRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restDeviceMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(device)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(deviceDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Device in the database
@@ -123,9 +130,10 @@ class DeviceResourceIT {
         device.setOwner(null);
 
         // Create the Device, which fails.
+        DeviceDTO deviceDTO = deviceMapper.toDto(device);
 
         restDeviceMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(device)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(deviceDTO)))
             .andExpect(status().isBadRequest());
 
         List<Device> deviceList = deviceRepository.findAll();
@@ -140,9 +148,10 @@ class DeviceResourceIT {
         device.setDeviceUuid(null);
 
         // Create the Device, which fails.
+        DeviceDTO deviceDTO = deviceMapper.toDto(device);
 
         restDeviceMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(device)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(deviceDTO)))
             .andExpect(status().isBadRequest());
 
         List<Device> deviceList = deviceRepository.findAll();
@@ -414,12 +423,13 @@ class DeviceResourceIT {
         // Disconnect from session so that the updates on updatedDevice are not directly saved in db
         em.detach(updatedDevice);
         updatedDevice.owner(UPDATED_OWNER).deviceUuid(UPDATED_DEVICE_UUID);
+        DeviceDTO deviceDTO = deviceMapper.toDto(updatedDevice);
 
         restDeviceMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedDevice.getId())
+                put(ENTITY_API_URL_ID, deviceDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedDevice))
+                    .content(TestUtil.convertObjectToJsonBytes(deviceDTO))
             )
             .andExpect(status().isOk());
 
@@ -437,12 +447,15 @@ class DeviceResourceIT {
         int databaseSizeBeforeUpdate = deviceRepository.findAll().size();
         device.setId(count.incrementAndGet());
 
+        // Create the Device
+        DeviceDTO deviceDTO = deviceMapper.toDto(device);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDeviceMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, device.getId())
+                put(ENTITY_API_URL_ID, deviceDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(device))
+                    .content(TestUtil.convertObjectToJsonBytes(deviceDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -457,12 +470,15 @@ class DeviceResourceIT {
         int databaseSizeBeforeUpdate = deviceRepository.findAll().size();
         device.setId(count.incrementAndGet());
 
+        // Create the Device
+        DeviceDTO deviceDTO = deviceMapper.toDto(device);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDeviceMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(device))
+                    .content(TestUtil.convertObjectToJsonBytes(deviceDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -477,9 +493,12 @@ class DeviceResourceIT {
         int databaseSizeBeforeUpdate = deviceRepository.findAll().size();
         device.setId(count.incrementAndGet());
 
+        // Create the Device
+        DeviceDTO deviceDTO = deviceMapper.toDto(device);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDeviceMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(device)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(deviceDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Device in the database
@@ -551,12 +570,15 @@ class DeviceResourceIT {
         int databaseSizeBeforeUpdate = deviceRepository.findAll().size();
         device.setId(count.incrementAndGet());
 
+        // Create the Device
+        DeviceDTO deviceDTO = deviceMapper.toDto(device);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDeviceMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, device.getId())
+                patch(ENTITY_API_URL_ID, deviceDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(device))
+                    .content(TestUtil.convertObjectToJsonBytes(deviceDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -571,12 +593,15 @@ class DeviceResourceIT {
         int databaseSizeBeforeUpdate = deviceRepository.findAll().size();
         device.setId(count.incrementAndGet());
 
+        // Create the Device
+        DeviceDTO deviceDTO = deviceMapper.toDto(device);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDeviceMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(device))
+                    .content(TestUtil.convertObjectToJsonBytes(deviceDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -591,9 +616,14 @@ class DeviceResourceIT {
         int databaseSizeBeforeUpdate = deviceRepository.findAll().size();
         device.setId(count.incrementAndGet());
 
+        // Create the Device
+        DeviceDTO deviceDTO = deviceMapper.toDto(device);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restDeviceMockMvc
-            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(device)))
+            .perform(
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(deviceDTO))
+            )
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Device in the database

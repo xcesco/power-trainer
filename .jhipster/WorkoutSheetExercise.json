@@ -45,7 +45,7 @@
     }
   ],
   "entityTableName": "workout_sheet_exercises",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "pagination",
   "service": "serviceImpl",
   "jpaMetamodelFiltering": true,

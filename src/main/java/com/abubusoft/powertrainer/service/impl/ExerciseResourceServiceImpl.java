@@ -3,6 +3,8 @@ package com.abubusoft.powertrainer.service.impl;
 import com.abubusoft.powertrainer.domain.ExerciseResource;
 import com.abubusoft.powertrainer.repository.ExerciseResourceRepository;
 import com.abubusoft.powertrainer.service.ExerciseResourceService;
+import com.abubusoft.powertrainer.service.dto.ExerciseResourceDTO;
+import com.abubusoft.powertrainer.service.mapper.ExerciseResourceMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,64 +24,52 @@ public class ExerciseResourceServiceImpl implements ExerciseResourceService {
 
     private final ExerciseResourceRepository exerciseResourceRepository;
 
-    public ExerciseResourceServiceImpl(ExerciseResourceRepository exerciseResourceRepository) {
+    private final ExerciseResourceMapper exerciseResourceMapper;
+
+    public ExerciseResourceServiceImpl(
+        ExerciseResourceRepository exerciseResourceRepository,
+        ExerciseResourceMapper exerciseResourceMapper
+    ) {
         this.exerciseResourceRepository = exerciseResourceRepository;
+        this.exerciseResourceMapper = exerciseResourceMapper;
     }
 
     @Override
-    public ExerciseResource save(ExerciseResource exerciseResource) {
-        log.debug("Request to save ExerciseResource : {}", exerciseResource);
-        return exerciseResourceRepository.save(exerciseResource);
+    public ExerciseResourceDTO save(ExerciseResourceDTO exerciseResourceDTO) {
+        log.debug("Request to save ExerciseResource : {}", exerciseResourceDTO);
+        ExerciseResource exerciseResource = exerciseResourceMapper.toEntity(exerciseResourceDTO);
+        exerciseResource = exerciseResourceRepository.save(exerciseResource);
+        return exerciseResourceMapper.toDto(exerciseResource);
     }
 
     @Override
-    public Optional<ExerciseResource> partialUpdate(ExerciseResource exerciseResource) {
-        log.debug("Request to partially update ExerciseResource : {}", exerciseResource);
+    public Optional<ExerciseResourceDTO> partialUpdate(ExerciseResourceDTO exerciseResourceDTO) {
+        log.debug("Request to partially update ExerciseResource : {}", exerciseResourceDTO);
 
         return exerciseResourceRepository
-            .findById(exerciseResource.getId())
+            .findById(exerciseResourceDTO.getId())
             .map(
                 existingExerciseResource -> {
-                    if (exerciseResource.getUuid() != null) {
-                        existingExerciseResource.setUuid(exerciseResource.getUuid());
-                    }
-                    if (exerciseResource.getOrder() != null) {
-                        existingExerciseResource.setOrder(exerciseResource.getOrder());
-                    }
-                    if (exerciseResource.getType() != null) {
-                        existingExerciseResource.setType(exerciseResource.getType());
-                    }
-                    if (exerciseResource.getUrl() != null) {
-                        existingExerciseResource.setUrl(exerciseResource.getUrl());
-                    }
-                    if (exerciseResource.getImage() != null) {
-                        existingExerciseResource.setImage(exerciseResource.getImage());
-                    }
-                    if (exerciseResource.getImageContentType() != null) {
-                        existingExerciseResource.setImageContentType(exerciseResource.getImageContentType());
-                    }
-                    if (exerciseResource.getDescription() != null) {
-                        existingExerciseResource.setDescription(exerciseResource.getDescription());
-                    }
-
+                    exerciseResourceMapper.partialUpdate(existingExerciseResource, exerciseResourceDTO);
                     return existingExerciseResource;
                 }
             )
-            .map(exerciseResourceRepository::save);
+            .map(exerciseResourceRepository::save)
+            .map(exerciseResourceMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ExerciseResource> findAll(Pageable pageable) {
+    public Page<ExerciseResourceDTO> findAll(Pageable pageable) {
         log.debug("Request to get all ExerciseResources");
-        return exerciseResourceRepository.findAll(pageable);
+        return exerciseResourceRepository.findAll(pageable).map(exerciseResourceMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<ExerciseResource> findOne(Long id) {
+    public Optional<ExerciseResourceDTO> findOne(Long id) {
         log.debug("Request to get ExerciseResource : {}", id);
-        return exerciseResourceRepository.findById(id);
+        return exerciseResourceRepository.findById(id).map(exerciseResourceMapper::toDto);
     }
 
     @Override

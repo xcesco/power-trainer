@@ -12,6 +12,8 @@ import com.abubusoft.powertrainer.domain.Misuration;
 import com.abubusoft.powertrainer.domain.Workout;
 import com.abubusoft.powertrainer.repository.CalendarRepository;
 import com.abubusoft.powertrainer.service.criteria.CalendarCriteria;
+import com.abubusoft.powertrainer.service.dto.CalendarDTO;
+import com.abubusoft.powertrainer.service.mapper.CalendarMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -53,6 +55,9 @@ class CalendarResourceIT {
     private CalendarRepository calendarRepository;
 
     @Autowired
+    private CalendarMapper calendarMapper;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -92,8 +97,9 @@ class CalendarResourceIT {
     void createCalendar() throws Exception {
         int databaseSizeBeforeCreate = calendarRepository.findAll().size();
         // Create the Calendar
+        CalendarDTO calendarDTO = calendarMapper.toDto(calendar);
         restCalendarMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(calendar)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(calendarDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Calendar in the database
@@ -110,12 +116,13 @@ class CalendarResourceIT {
     void createCalendarWithExistingId() throws Exception {
         // Create the Calendar with an existing ID
         calendar.setId(1L);
+        CalendarDTO calendarDTO = calendarMapper.toDto(calendar);
 
         int databaseSizeBeforeCreate = calendarRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restCalendarMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(calendar)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(calendarDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Calendar in the database
@@ -131,9 +138,10 @@ class CalendarResourceIT {
         calendar.setUuid(null);
 
         // Create the Calendar, which fails.
+        CalendarDTO calendarDTO = calendarMapper.toDto(calendar);
 
         restCalendarMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(calendar)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(calendarDTO)))
             .andExpect(status().isBadRequest());
 
         List<Calendar> calendarList = calendarRepository.findAll();
@@ -148,9 +156,10 @@ class CalendarResourceIT {
         calendar.setName(null);
 
         // Create the Calendar, which fails.
+        CalendarDTO calendarDTO = calendarMapper.toDto(calendar);
 
         restCalendarMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(calendar)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(calendarDTO)))
             .andExpect(status().isBadRequest());
 
         List<Calendar> calendarList = calendarRepository.findAll();
@@ -165,9 +174,10 @@ class CalendarResourceIT {
         calendar.setOwner(null);
 
         // Create the Calendar, which fails.
+        CalendarDTO calendarDTO = calendarMapper.toDto(calendar);
 
         restCalendarMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(calendar)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(calendarDTO)))
             .andExpect(status().isBadRequest());
 
         List<Calendar> calendarList = calendarRepository.findAll();
@@ -551,12 +561,13 @@ class CalendarResourceIT {
         // Disconnect from session so that the updates on updatedCalendar are not directly saved in db
         em.detach(updatedCalendar);
         updatedCalendar.uuid(UPDATED_UUID).name(UPDATED_NAME).owner(UPDATED_OWNER);
+        CalendarDTO calendarDTO = calendarMapper.toDto(updatedCalendar);
 
         restCalendarMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedCalendar.getId())
+                put(ENTITY_API_URL_ID, calendarDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedCalendar))
+                    .content(TestUtil.convertObjectToJsonBytes(calendarDTO))
             )
             .andExpect(status().isOk());
 
@@ -575,12 +586,15 @@ class CalendarResourceIT {
         int databaseSizeBeforeUpdate = calendarRepository.findAll().size();
         calendar.setId(count.incrementAndGet());
 
+        // Create the Calendar
+        CalendarDTO calendarDTO = calendarMapper.toDto(calendar);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCalendarMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, calendar.getId())
+                put(ENTITY_API_URL_ID, calendarDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(calendar))
+                    .content(TestUtil.convertObjectToJsonBytes(calendarDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -595,12 +609,15 @@ class CalendarResourceIT {
         int databaseSizeBeforeUpdate = calendarRepository.findAll().size();
         calendar.setId(count.incrementAndGet());
 
+        // Create the Calendar
+        CalendarDTO calendarDTO = calendarMapper.toDto(calendar);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCalendarMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(calendar))
+                    .content(TestUtil.convertObjectToJsonBytes(calendarDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -615,9 +632,12 @@ class CalendarResourceIT {
         int databaseSizeBeforeUpdate = calendarRepository.findAll().size();
         calendar.setId(count.incrementAndGet());
 
+        // Create the Calendar
+        CalendarDTO calendarDTO = calendarMapper.toDto(calendar);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCalendarMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(calendar)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(calendarDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Calendar in the database
@@ -691,12 +711,15 @@ class CalendarResourceIT {
         int databaseSizeBeforeUpdate = calendarRepository.findAll().size();
         calendar.setId(count.incrementAndGet());
 
+        // Create the Calendar
+        CalendarDTO calendarDTO = calendarMapper.toDto(calendar);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCalendarMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, calendar.getId())
+                patch(ENTITY_API_URL_ID, calendarDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(calendar))
+                    .content(TestUtil.convertObjectToJsonBytes(calendarDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -711,12 +734,15 @@ class CalendarResourceIT {
         int databaseSizeBeforeUpdate = calendarRepository.findAll().size();
         calendar.setId(count.incrementAndGet());
 
+        // Create the Calendar
+        CalendarDTO calendarDTO = calendarMapper.toDto(calendar);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCalendarMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(calendar))
+                    .content(TestUtil.convertObjectToJsonBytes(calendarDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -731,9 +757,14 @@ class CalendarResourceIT {
         int databaseSizeBeforeUpdate = calendarRepository.findAll().size();
         calendar.setId(count.incrementAndGet());
 
+        // Create the Calendar
+        CalendarDTO calendarDTO = calendarMapper.toDto(calendar);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restCalendarMockMvc
-            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(calendar)))
+            .perform(
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(calendarDTO))
+            )
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Calendar in the database

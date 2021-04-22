@@ -14,6 +14,8 @@ import com.abubusoft.powertrainer.domain.enumeration.WorkoutStatus;
 import com.abubusoft.powertrainer.domain.enumeration.WorkoutType;
 import com.abubusoft.powertrainer.repository.WorkoutRepository;
 import com.abubusoft.powertrainer.service.criteria.WorkoutCriteria;
+import com.abubusoft.powertrainer.service.dto.WorkoutDTO;
+import com.abubusoft.powertrainer.service.mapper.WorkoutMapper;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -83,6 +85,9 @@ class WorkoutResourceIT {
     private WorkoutRepository workoutRepository;
 
     @Autowired
+    private WorkoutMapper workoutMapper;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -142,8 +147,9 @@ class WorkoutResourceIT {
     void createWorkout() throws Exception {
         int databaseSizeBeforeCreate = workoutRepository.findAll().size();
         // Create the Workout
+        WorkoutDTO workoutDTO = workoutMapper.toDto(workout);
         restWorkoutMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workout)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Workout in the database
@@ -167,12 +173,13 @@ class WorkoutResourceIT {
     void createWorkoutWithExistingId() throws Exception {
         // Create the Workout with an existing ID
         workout.setId(1L);
+        WorkoutDTO workoutDTO = workoutMapper.toDto(workout);
 
         int databaseSizeBeforeCreate = workoutRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restWorkoutMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workout)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Workout in the database
@@ -188,9 +195,10 @@ class WorkoutResourceIT {
         workout.setUuid(null);
 
         // Create the Workout, which fails.
+        WorkoutDTO workoutDTO = workoutMapper.toDto(workout);
 
         restWorkoutMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workout)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutDTO)))
             .andExpect(status().isBadRequest());
 
         List<Workout> workoutList = workoutRepository.findAll();
@@ -1002,12 +1010,13 @@ class WorkoutResourceIT {
             .status(UPDATED_STATUS)
             .date(UPDATED_DATE)
             .note(UPDATED_NOTE);
+        WorkoutDTO workoutDTO = workoutMapper.toDto(updatedWorkout);
 
         restWorkoutMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedWorkout.getId())
+                put(ENTITY_API_URL_ID, workoutDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedWorkout))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutDTO))
             )
             .andExpect(status().isOk());
 
@@ -1033,12 +1042,15 @@ class WorkoutResourceIT {
         int databaseSizeBeforeUpdate = workoutRepository.findAll().size();
         workout.setId(count.incrementAndGet());
 
+        // Create the Workout
+        WorkoutDTO workoutDTO = workoutMapper.toDto(workout);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWorkoutMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, workout.getId())
+                put(ENTITY_API_URL_ID, workoutDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workout))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1053,12 +1065,15 @@ class WorkoutResourceIT {
         int databaseSizeBeforeUpdate = workoutRepository.findAll().size();
         workout.setId(count.incrementAndGet());
 
+        // Create the Workout
+        WorkoutDTO workoutDTO = workoutMapper.toDto(workout);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWorkoutMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workout))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1073,9 +1088,12 @@ class WorkoutResourceIT {
         int databaseSizeBeforeUpdate = workoutRepository.findAll().size();
         workout.setId(count.incrementAndGet());
 
+        // Create the Workout
+        WorkoutDTO workoutDTO = workoutMapper.toDto(workout);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWorkoutMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workout)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Workout in the database
@@ -1175,12 +1193,15 @@ class WorkoutResourceIT {
         int databaseSizeBeforeUpdate = workoutRepository.findAll().size();
         workout.setId(count.incrementAndGet());
 
+        // Create the Workout
+        WorkoutDTO workoutDTO = workoutMapper.toDto(workout);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWorkoutMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, workout.getId())
+                patch(ENTITY_API_URL_ID, workoutDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(workout))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1195,12 +1216,15 @@ class WorkoutResourceIT {
         int databaseSizeBeforeUpdate = workoutRepository.findAll().size();
         workout.setId(count.incrementAndGet());
 
+        // Create the Workout
+        WorkoutDTO workoutDTO = workoutMapper.toDto(workout);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWorkoutMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(workout))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1215,9 +1239,14 @@ class WorkoutResourceIT {
         int databaseSizeBeforeUpdate = workoutRepository.findAll().size();
         workout.setId(count.incrementAndGet());
 
+        // Create the Workout
+        WorkoutDTO workoutDTO = workoutMapper.toDto(workout);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWorkoutMockMvc
-            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(workout)))
+            .perform(
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(workoutDTO))
+            )
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Workout in the database

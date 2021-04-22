@@ -3,6 +3,8 @@ package com.abubusoft.powertrainer.service.impl;
 import com.abubusoft.powertrainer.domain.Muscle;
 import com.abubusoft.powertrainer.repository.MuscleRepository;
 import com.abubusoft.powertrainer.service.MuscleService;
+import com.abubusoft.powertrainer.service.dto.MuscleDTO;
+import com.abubusoft.powertrainer.service.mapper.MuscleMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,58 +24,49 @@ public class MuscleServiceImpl implements MuscleService {
 
     private final MuscleRepository muscleRepository;
 
-    public MuscleServiceImpl(MuscleRepository muscleRepository) {
+    private final MuscleMapper muscleMapper;
+
+    public MuscleServiceImpl(MuscleRepository muscleRepository, MuscleMapper muscleMapper) {
         this.muscleRepository = muscleRepository;
+        this.muscleMapper = muscleMapper;
     }
 
     @Override
-    public Muscle save(Muscle muscle) {
-        log.debug("Request to save Muscle : {}", muscle);
-        return muscleRepository.save(muscle);
+    public MuscleDTO save(MuscleDTO muscleDTO) {
+        log.debug("Request to save Muscle : {}", muscleDTO);
+        Muscle muscle = muscleMapper.toEntity(muscleDTO);
+        muscle = muscleRepository.save(muscle);
+        return muscleMapper.toDto(muscle);
     }
 
     @Override
-    public Optional<Muscle> partialUpdate(Muscle muscle) {
-        log.debug("Request to partially update Muscle : {}", muscle);
+    public Optional<MuscleDTO> partialUpdate(MuscleDTO muscleDTO) {
+        log.debug("Request to partially update Muscle : {}", muscleDTO);
 
         return muscleRepository
-            .findById(muscle.getId())
+            .findById(muscleDTO.getId())
             .map(
                 existingMuscle -> {
-                    if (muscle.getUuid() != null) {
-                        existingMuscle.setUuid(muscle.getUuid());
-                    }
-                    if (muscle.getName() != null) {
-                        existingMuscle.setName(muscle.getName());
-                    }
-                    if (muscle.getImage() != null) {
-                        existingMuscle.setImage(muscle.getImage());
-                    }
-                    if (muscle.getImageContentType() != null) {
-                        existingMuscle.setImageContentType(muscle.getImageContentType());
-                    }
-                    if (muscle.getNote() != null) {
-                        existingMuscle.setNote(muscle.getNote());
-                    }
-
+                    muscleMapper.partialUpdate(existingMuscle, muscleDTO);
                     return existingMuscle;
                 }
             )
-            .map(muscleRepository::save);
+            .map(muscleRepository::save)
+            .map(muscleMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Muscle> findAll(Pageable pageable) {
+    public Page<MuscleDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Muscles");
-        return muscleRepository.findAll(pageable);
+        return muscleRepository.findAll(pageable).map(muscleMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Muscle> findOne(Long id) {
+    public Optional<MuscleDTO> findOne(Long id) {
         log.debug("Request to get Muscle : {}", id);
-        return muscleRepository.findById(id);
+        return muscleRepository.findById(id).map(muscleMapper::toDto);
     }
 
     @Override

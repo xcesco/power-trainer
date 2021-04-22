@@ -3,6 +3,8 @@ package com.abubusoft.powertrainer.service.impl;
 import com.abubusoft.powertrainer.domain.WorkoutSheetExercise;
 import com.abubusoft.powertrainer.repository.WorkoutSheetExerciseRepository;
 import com.abubusoft.powertrainer.service.WorkoutSheetExerciseService;
+import com.abubusoft.powertrainer.service.dto.WorkoutSheetExerciseDTO;
+import com.abubusoft.powertrainer.service.mapper.WorkoutSheetExerciseMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,64 +24,52 @@ public class WorkoutSheetExerciseServiceImpl implements WorkoutSheetExerciseServ
 
     private final WorkoutSheetExerciseRepository workoutSheetExerciseRepository;
 
-    public WorkoutSheetExerciseServiceImpl(WorkoutSheetExerciseRepository workoutSheetExerciseRepository) {
+    private final WorkoutSheetExerciseMapper workoutSheetExerciseMapper;
+
+    public WorkoutSheetExerciseServiceImpl(
+        WorkoutSheetExerciseRepository workoutSheetExerciseRepository,
+        WorkoutSheetExerciseMapper workoutSheetExerciseMapper
+    ) {
         this.workoutSheetExerciseRepository = workoutSheetExerciseRepository;
+        this.workoutSheetExerciseMapper = workoutSheetExerciseMapper;
     }
 
     @Override
-    public WorkoutSheetExercise save(WorkoutSheetExercise workoutSheetExercise) {
-        log.debug("Request to save WorkoutSheetExercise : {}", workoutSheetExercise);
-        return workoutSheetExerciseRepository.save(workoutSheetExercise);
+    public WorkoutSheetExerciseDTO save(WorkoutSheetExerciseDTO workoutSheetExerciseDTO) {
+        log.debug("Request to save WorkoutSheetExercise : {}", workoutSheetExerciseDTO);
+        WorkoutSheetExercise workoutSheetExercise = workoutSheetExerciseMapper.toEntity(workoutSheetExerciseDTO);
+        workoutSheetExercise = workoutSheetExerciseRepository.save(workoutSheetExercise);
+        return workoutSheetExerciseMapper.toDto(workoutSheetExercise);
     }
 
     @Override
-    public Optional<WorkoutSheetExercise> partialUpdate(WorkoutSheetExercise workoutSheetExercise) {
-        log.debug("Request to partially update WorkoutSheetExercise : {}", workoutSheetExercise);
+    public Optional<WorkoutSheetExerciseDTO> partialUpdate(WorkoutSheetExerciseDTO workoutSheetExerciseDTO) {
+        log.debug("Request to partially update WorkoutSheetExercise : {}", workoutSheetExerciseDTO);
 
         return workoutSheetExerciseRepository
-            .findById(workoutSheetExercise.getId())
+            .findById(workoutSheetExerciseDTO.getId())
             .map(
                 existingWorkoutSheetExercise -> {
-                    if (workoutSheetExercise.getUuid() != null) {
-                        existingWorkoutSheetExercise.setUuid(workoutSheetExercise.getUuid());
-                    }
-                    if (workoutSheetExercise.getOrder() != null) {
-                        existingWorkoutSheetExercise.setOrder(workoutSheetExercise.getOrder());
-                    }
-                    if (workoutSheetExercise.getRepetitions() != null) {
-                        existingWorkoutSheetExercise.setRepetitions(workoutSheetExercise.getRepetitions());
-                    }
-                    if (workoutSheetExercise.getExerciseUuid() != null) {
-                        existingWorkoutSheetExercise.setExerciseUuid(workoutSheetExercise.getExerciseUuid());
-                    }
-                    if (workoutSheetExercise.getExerciseName() != null) {
-                        existingWorkoutSheetExercise.setExerciseName(workoutSheetExercise.getExerciseName());
-                    }
-                    if (workoutSheetExercise.getExerciseValue() != null) {
-                        existingWorkoutSheetExercise.setExerciseValue(workoutSheetExercise.getExerciseValue());
-                    }
-                    if (workoutSheetExercise.getExerciseValueType() != null) {
-                        existingWorkoutSheetExercise.setExerciseValueType(workoutSheetExercise.getExerciseValueType());
-                    }
-
+                    workoutSheetExerciseMapper.partialUpdate(existingWorkoutSheetExercise, workoutSheetExerciseDTO);
                     return existingWorkoutSheetExercise;
                 }
             )
-            .map(workoutSheetExerciseRepository::save);
+            .map(workoutSheetExerciseRepository::save)
+            .map(workoutSheetExerciseMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<WorkoutSheetExercise> findAll(Pageable pageable) {
+    public Page<WorkoutSheetExerciseDTO> findAll(Pageable pageable) {
         log.debug("Request to get all WorkoutSheetExercises");
-        return workoutSheetExerciseRepository.findAll(pageable);
+        return workoutSheetExerciseRepository.findAll(pageable).map(workoutSheetExerciseMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<WorkoutSheetExercise> findOne(Long id) {
+    public Optional<WorkoutSheetExerciseDTO> findOne(Long id) {
         log.debug("Request to get WorkoutSheetExercise : {}", id);
-        return workoutSheetExerciseRepository.findById(id);
+        return workoutSheetExerciseRepository.findById(id).map(workoutSheetExerciseMapper::toDto);
     }
 
     @Override

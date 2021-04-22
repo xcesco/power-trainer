@@ -1,10 +1,10 @@
 package com.abubusoft.powertrainer.web.rest;
 
-import com.abubusoft.powertrainer.domain.Muscle;
 import com.abubusoft.powertrainer.repository.MuscleRepository;
 import com.abubusoft.powertrainer.service.MuscleQueryService;
 import com.abubusoft.powertrainer.service.MuscleService;
 import com.abubusoft.powertrainer.service.criteria.MuscleCriteria;
+import com.abubusoft.powertrainer.service.dto.MuscleDTO;
 import com.abubusoft.powertrainer.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -56,17 +56,17 @@ public class MuscleResource {
     /**
      * {@code POST  /muscles} : Create a new muscle.
      *
-     * @param muscle the muscle to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new muscle, or with status {@code 400 (Bad Request)} if the muscle has already an ID.
+     * @param muscleDTO the muscleDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new muscleDTO, or with status {@code 400 (Bad Request)} if the muscle has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/muscles")
-    public ResponseEntity<Muscle> createMuscle(@Valid @RequestBody Muscle muscle) throws URISyntaxException {
-        log.debug("REST request to save Muscle : {}", muscle);
-        if (muscle.getId() != null) {
+    public ResponseEntity<MuscleDTO> createMuscle(@Valid @RequestBody MuscleDTO muscleDTO) throws URISyntaxException {
+        log.debug("REST request to save Muscle : {}", muscleDTO);
+        if (muscleDTO.getId() != null) {
             throw new BadRequestAlertException("A new muscle cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Muscle result = muscleService.save(muscle);
+        MuscleDTO result = muscleService.save(muscleDTO);
         return ResponseEntity
             .created(new URI("/api/muscles/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -76,23 +76,23 @@ public class MuscleResource {
     /**
      * {@code PUT  /muscles/:id} : Updates an existing muscle.
      *
-     * @param id the id of the muscle to save.
-     * @param muscle the muscle to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated muscle,
-     * or with status {@code 400 (Bad Request)} if the muscle is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the muscle couldn't be updated.
+     * @param id the id of the muscleDTO to save.
+     * @param muscleDTO the muscleDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated muscleDTO,
+     * or with status {@code 400 (Bad Request)} if the muscleDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the muscleDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/muscles/{id}")
-    public ResponseEntity<Muscle> updateMuscle(
+    public ResponseEntity<MuscleDTO> updateMuscle(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Muscle muscle
+        @Valid @RequestBody MuscleDTO muscleDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update Muscle : {}, {}", id, muscle);
-        if (muscle.getId() == null) {
+        log.debug("REST request to update Muscle : {}, {}", id, muscleDTO);
+        if (muscleDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, muscle.getId())) {
+        if (!Objects.equals(id, muscleDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -100,34 +100,34 @@ public class MuscleResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Muscle result = muscleService.save(muscle);
+        MuscleDTO result = muscleService.save(muscleDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, muscle.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, muscleDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /muscles/:id} : Partial updates given fields of an existing muscle, field will ignore if it is null
      *
-     * @param id the id of the muscle to save.
-     * @param muscle the muscle to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated muscle,
-     * or with status {@code 400 (Bad Request)} if the muscle is not valid,
-     * or with status {@code 404 (Not Found)} if the muscle is not found,
-     * or with status {@code 500 (Internal Server Error)} if the muscle couldn't be updated.
+     * @param id the id of the muscleDTO to save.
+     * @param muscleDTO the muscleDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated muscleDTO,
+     * or with status {@code 400 (Bad Request)} if the muscleDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the muscleDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the muscleDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/muscles/{id}", consumes = "application/merge-patch+json")
-    public ResponseEntity<Muscle> partialUpdateMuscle(
+    public ResponseEntity<MuscleDTO> partialUpdateMuscle(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody Muscle muscle
+        @NotNull @RequestBody MuscleDTO muscleDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update Muscle partially : {}, {}", id, muscle);
-        if (muscle.getId() == null) {
+        log.debug("REST request to partial update Muscle partially : {}, {}", id, muscleDTO);
+        if (muscleDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, muscle.getId())) {
+        if (!Objects.equals(id, muscleDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -135,11 +135,11 @@ public class MuscleResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Muscle> result = muscleService.partialUpdate(muscle);
+        Optional<MuscleDTO> result = muscleService.partialUpdate(muscleDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, muscle.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, muscleDTO.getId().toString())
         );
     }
 
@@ -151,9 +151,9 @@ public class MuscleResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of muscles in body.
      */
     @GetMapping("/muscles")
-    public ResponseEntity<List<Muscle>> getAllMuscles(MuscleCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<MuscleDTO>> getAllMuscles(MuscleCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Muscles by criteria: {}", criteria);
-        Page<Muscle> page = muscleQueryService.findByCriteria(criteria, pageable);
+        Page<MuscleDTO> page = muscleQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -173,20 +173,20 @@ public class MuscleResource {
     /**
      * {@code GET  /muscles/:id} : get the "id" muscle.
      *
-     * @param id the id of the muscle to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the muscle, or with status {@code 404 (Not Found)}.
+     * @param id the id of the muscleDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the muscleDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/muscles/{id}")
-    public ResponseEntity<Muscle> getMuscle(@PathVariable Long id) {
+    public ResponseEntity<MuscleDTO> getMuscle(@PathVariable Long id) {
         log.debug("REST request to get Muscle : {}", id);
-        Optional<Muscle> muscle = muscleService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(muscle);
+        Optional<MuscleDTO> muscleDTO = muscleService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(muscleDTO);
     }
 
     /**
      * {@code DELETE  /muscles/:id} : delete the "id" muscle.
      *
-     * @param id the id of the muscle to delete.
+     * @param id the id of the muscleDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/muscles/{id}")

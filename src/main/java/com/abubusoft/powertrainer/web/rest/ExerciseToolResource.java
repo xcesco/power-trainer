@@ -1,10 +1,10 @@
 package com.abubusoft.powertrainer.web.rest;
 
-import com.abubusoft.powertrainer.domain.ExerciseTool;
 import com.abubusoft.powertrainer.repository.ExerciseToolRepository;
 import com.abubusoft.powertrainer.service.ExerciseToolQueryService;
 import com.abubusoft.powertrainer.service.ExerciseToolService;
 import com.abubusoft.powertrainer.service.criteria.ExerciseToolCriteria;
+import com.abubusoft.powertrainer.service.dto.ExerciseToolDTO;
 import com.abubusoft.powertrainer.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -60,17 +60,18 @@ public class ExerciseToolResource {
     /**
      * {@code POST  /exercise-tools} : Create a new exerciseTool.
      *
-     * @param exerciseTool the exerciseTool to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new exerciseTool, or with status {@code 400 (Bad Request)} if the exerciseTool has already an ID.
+     * @param exerciseToolDTO the exerciseToolDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new exerciseToolDTO, or with status {@code 400 (Bad Request)} if the exerciseTool has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/exercise-tools")
-    public ResponseEntity<ExerciseTool> createExerciseTool(@Valid @RequestBody ExerciseTool exerciseTool) throws URISyntaxException {
-        log.debug("REST request to save ExerciseTool : {}", exerciseTool);
-        if (exerciseTool.getId() != null) {
+    public ResponseEntity<ExerciseToolDTO> createExerciseTool(@Valid @RequestBody ExerciseToolDTO exerciseToolDTO)
+        throws URISyntaxException {
+        log.debug("REST request to save ExerciseTool : {}", exerciseToolDTO);
+        if (exerciseToolDTO.getId() != null) {
             throw new BadRequestAlertException("A new exerciseTool cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ExerciseTool result = exerciseToolService.save(exerciseTool);
+        ExerciseToolDTO result = exerciseToolService.save(exerciseToolDTO);
         return ResponseEntity
             .created(new URI("/api/exercise-tools/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -80,23 +81,23 @@ public class ExerciseToolResource {
     /**
      * {@code PUT  /exercise-tools/:id} : Updates an existing exerciseTool.
      *
-     * @param id the id of the exerciseTool to save.
-     * @param exerciseTool the exerciseTool to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exerciseTool,
-     * or with status {@code 400 (Bad Request)} if the exerciseTool is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the exerciseTool couldn't be updated.
+     * @param id the id of the exerciseToolDTO to save.
+     * @param exerciseToolDTO the exerciseToolDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exerciseToolDTO,
+     * or with status {@code 400 (Bad Request)} if the exerciseToolDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the exerciseToolDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/exercise-tools/{id}")
-    public ResponseEntity<ExerciseTool> updateExerciseTool(
+    public ResponseEntity<ExerciseToolDTO> updateExerciseTool(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody ExerciseTool exerciseTool
+        @Valid @RequestBody ExerciseToolDTO exerciseToolDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update ExerciseTool : {}, {}", id, exerciseTool);
-        if (exerciseTool.getId() == null) {
+        log.debug("REST request to update ExerciseTool : {}, {}", id, exerciseToolDTO);
+        if (exerciseToolDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, exerciseTool.getId())) {
+        if (!Objects.equals(id, exerciseToolDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -104,34 +105,34 @@ public class ExerciseToolResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        ExerciseTool result = exerciseToolService.save(exerciseTool);
+        ExerciseToolDTO result = exerciseToolService.save(exerciseToolDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exerciseTool.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exerciseToolDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /exercise-tools/:id} : Partial updates given fields of an existing exerciseTool, field will ignore if it is null
      *
-     * @param id the id of the exerciseTool to save.
-     * @param exerciseTool the exerciseTool to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exerciseTool,
-     * or with status {@code 400 (Bad Request)} if the exerciseTool is not valid,
-     * or with status {@code 404 (Not Found)} if the exerciseTool is not found,
-     * or with status {@code 500 (Internal Server Error)} if the exerciseTool couldn't be updated.
+     * @param id the id of the exerciseToolDTO to save.
+     * @param exerciseToolDTO the exerciseToolDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exerciseToolDTO,
+     * or with status {@code 400 (Bad Request)} if the exerciseToolDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the exerciseToolDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the exerciseToolDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/exercise-tools/{id}", consumes = "application/merge-patch+json")
-    public ResponseEntity<ExerciseTool> partialUpdateExerciseTool(
+    public ResponseEntity<ExerciseToolDTO> partialUpdateExerciseTool(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody ExerciseTool exerciseTool
+        @NotNull @RequestBody ExerciseToolDTO exerciseToolDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update ExerciseTool partially : {}, {}", id, exerciseTool);
-        if (exerciseTool.getId() == null) {
+        log.debug("REST request to partial update ExerciseTool partially : {}, {}", id, exerciseToolDTO);
+        if (exerciseToolDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, exerciseTool.getId())) {
+        if (!Objects.equals(id, exerciseToolDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -139,11 +140,11 @@ public class ExerciseToolResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<ExerciseTool> result = exerciseToolService.partialUpdate(exerciseTool);
+        Optional<ExerciseToolDTO> result = exerciseToolService.partialUpdate(exerciseToolDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exerciseTool.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exerciseToolDTO.getId().toString())
         );
     }
 
@@ -155,9 +156,9 @@ public class ExerciseToolResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of exerciseTools in body.
      */
     @GetMapping("/exercise-tools")
-    public ResponseEntity<List<ExerciseTool>> getAllExerciseTools(ExerciseToolCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<ExerciseToolDTO>> getAllExerciseTools(ExerciseToolCriteria criteria, Pageable pageable) {
         log.debug("REST request to get ExerciseTools by criteria: {}", criteria);
-        Page<ExerciseTool> page = exerciseToolQueryService.findByCriteria(criteria, pageable);
+        Page<ExerciseToolDTO> page = exerciseToolQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -177,20 +178,20 @@ public class ExerciseToolResource {
     /**
      * {@code GET  /exercise-tools/:id} : get the "id" exerciseTool.
      *
-     * @param id the id of the exerciseTool to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the exerciseTool, or with status {@code 404 (Not Found)}.
+     * @param id the id of the exerciseToolDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the exerciseToolDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/exercise-tools/{id}")
-    public ResponseEntity<ExerciseTool> getExerciseTool(@PathVariable Long id) {
+    public ResponseEntity<ExerciseToolDTO> getExerciseTool(@PathVariable Long id) {
         log.debug("REST request to get ExerciseTool : {}", id);
-        Optional<ExerciseTool> exerciseTool = exerciseToolService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(exerciseTool);
+        Optional<ExerciseToolDTO> exerciseToolDTO = exerciseToolService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(exerciseToolDTO);
     }
 
     /**
      * {@code DELETE  /exercise-tools/:id} : delete the "id" exerciseTool.
      *
-     * @param id the id of the exerciseTool to delete.
+     * @param id the id of the exerciseToolDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/exercise-tools/{id}")

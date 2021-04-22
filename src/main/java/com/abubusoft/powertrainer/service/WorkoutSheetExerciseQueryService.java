@@ -4,6 +4,8 @@ import com.abubusoft.powertrainer.domain.*; // for static metamodels
 import com.abubusoft.powertrainer.domain.WorkoutSheetExercise;
 import com.abubusoft.powertrainer.repository.WorkoutSheetExerciseRepository;
 import com.abubusoft.powertrainer.service.criteria.WorkoutSheetExerciseCriteria;
+import com.abubusoft.powertrainer.service.dto.WorkoutSheetExerciseDTO;
+import com.abubusoft.powertrainer.service.mapper.WorkoutSheetExerciseMapper;
 import java.util.List;
 import javax.persistence.criteria.JoinType;
 import org.slf4j.Logger;
@@ -19,7 +21,7 @@ import tech.jhipster.service.QueryService;
  * Service for executing complex queries for {@link WorkoutSheetExercise} entities in the database.
  * The main input is a {@link WorkoutSheetExerciseCriteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link List} of {@link WorkoutSheetExercise} or a {@link Page} of {@link WorkoutSheetExercise} which fulfills the criteria.
+ * It returns a {@link List} of {@link WorkoutSheetExerciseDTO} or a {@link Page} of {@link WorkoutSheetExerciseDTO} which fulfills the criteria.
  */
 @Service
 @Transactional(readOnly = true)
@@ -29,33 +31,39 @@ public class WorkoutSheetExerciseQueryService extends QueryService<WorkoutSheetE
 
     private final WorkoutSheetExerciseRepository workoutSheetExerciseRepository;
 
-    public WorkoutSheetExerciseQueryService(WorkoutSheetExerciseRepository workoutSheetExerciseRepository) {
+    private final WorkoutSheetExerciseMapper workoutSheetExerciseMapper;
+
+    public WorkoutSheetExerciseQueryService(
+        WorkoutSheetExerciseRepository workoutSheetExerciseRepository,
+        WorkoutSheetExerciseMapper workoutSheetExerciseMapper
+    ) {
         this.workoutSheetExerciseRepository = workoutSheetExerciseRepository;
+        this.workoutSheetExerciseMapper = workoutSheetExerciseMapper;
     }
 
     /**
-     * Return a {@link List} of {@link WorkoutSheetExercise} which matches the criteria from the database.
+     * Return a {@link List} of {@link WorkoutSheetExerciseDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public List<WorkoutSheetExercise> findByCriteria(WorkoutSheetExerciseCriteria criteria) {
+    public List<WorkoutSheetExerciseDTO> findByCriteria(WorkoutSheetExerciseCriteria criteria) {
         log.debug("find by criteria : {}", criteria);
         final Specification<WorkoutSheetExercise> specification = createSpecification(criteria);
-        return workoutSheetExerciseRepository.findAll(specification);
+        return workoutSheetExerciseMapper.toDto(workoutSheetExerciseRepository.findAll(specification));
     }
 
     /**
-     * Return a {@link Page} of {@link WorkoutSheetExercise} which matches the criteria from the database.
+     * Return a {@link Page} of {@link WorkoutSheetExerciseDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public Page<WorkoutSheetExercise> findByCriteria(WorkoutSheetExerciseCriteria criteria, Pageable page) {
+    public Page<WorkoutSheetExerciseDTO> findByCriteria(WorkoutSheetExerciseCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<WorkoutSheetExercise> specification = createSpecification(criteria);
-        return workoutSheetExerciseRepository.findAll(specification, page);
+        return workoutSheetExerciseRepository.findAll(specification, page).map(workoutSheetExerciseMapper::toDto);
     }
 
     /**

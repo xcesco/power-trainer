@@ -1,29 +1,29 @@
 package com.abubusoft.powertrainer.service;
 
-import com.abubusoft.powertrainer.domain.Device;
+import com.abubusoft.powertrainer.service.dto.DeviceDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Service Interface for managing {@link Device}.
+ * Service Interface for managing {@link com.abubusoft.powertrainer.domain.Device}.
  */
 public interface DeviceService {
     /**
      * Save a device.
      *
-     * @param device the entity to save.
+     * @param deviceDTO the entity to save.
      * @return the persisted entity.
      */
-    Device save(Device device);
+    DeviceDTO save(DeviceDTO deviceDTO);
 
     /**
      * Partially updates a device.
      *
-     * @param device the entity to update partially.
+     * @param deviceDTO the entity to update partially.
      * @return the persisted entity.
      */
-    Optional<Device> partialUpdate(Device device);
+    Optional<DeviceDTO> partialUpdate(DeviceDTO deviceDTO);
 
     /**
      * Get all the devices.
@@ -31,7 +31,7 @@ public interface DeviceService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<Device> findAll(Pageable pageable);
+    Page<DeviceDTO> findAll(Pageable pageable);
 
     /**
      * Get the "id" device.
@@ -39,7 +39,7 @@ public interface DeviceService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<Device> findOne(Long id);
+    Optional<DeviceDTO> findOne(Long id);
 
     /**
      * Delete the "id" device.

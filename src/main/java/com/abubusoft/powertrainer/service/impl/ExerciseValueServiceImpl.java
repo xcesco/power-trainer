@@ -3,6 +3,8 @@ package com.abubusoft.powertrainer.service.impl;
 import com.abubusoft.powertrainer.domain.ExerciseValue;
 import com.abubusoft.powertrainer.repository.ExerciseValueRepository;
 import com.abubusoft.powertrainer.service.ExerciseValueService;
+import com.abubusoft.powertrainer.service.dto.ExerciseValueDTO;
+import com.abubusoft.powertrainer.service.mapper.ExerciseValueMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,61 +24,49 @@ public class ExerciseValueServiceImpl implements ExerciseValueService {
 
     private final ExerciseValueRepository exerciseValueRepository;
 
-    public ExerciseValueServiceImpl(ExerciseValueRepository exerciseValueRepository) {
+    private final ExerciseValueMapper exerciseValueMapper;
+
+    public ExerciseValueServiceImpl(ExerciseValueRepository exerciseValueRepository, ExerciseValueMapper exerciseValueMapper) {
         this.exerciseValueRepository = exerciseValueRepository;
+        this.exerciseValueMapper = exerciseValueMapper;
     }
 
     @Override
-    public ExerciseValue save(ExerciseValue exerciseValue) {
-        log.debug("Request to save ExerciseValue : {}", exerciseValue);
-        return exerciseValueRepository.save(exerciseValue);
+    public ExerciseValueDTO save(ExerciseValueDTO exerciseValueDTO) {
+        log.debug("Request to save ExerciseValue : {}", exerciseValueDTO);
+        ExerciseValue exerciseValue = exerciseValueMapper.toEntity(exerciseValueDTO);
+        exerciseValue = exerciseValueRepository.save(exerciseValue);
+        return exerciseValueMapper.toDto(exerciseValue);
     }
 
     @Override
-    public Optional<ExerciseValue> partialUpdate(ExerciseValue exerciseValue) {
-        log.debug("Request to partially update ExerciseValue : {}", exerciseValue);
+    public Optional<ExerciseValueDTO> partialUpdate(ExerciseValueDTO exerciseValueDTO) {
+        log.debug("Request to partially update ExerciseValue : {}", exerciseValueDTO);
 
         return exerciseValueRepository
-            .findById(exerciseValue.getId())
+            .findById(exerciseValueDTO.getId())
             .map(
                 existingExerciseValue -> {
-                    if (exerciseValue.getUuid() != null) {
-                        existingExerciseValue.setUuid(exerciseValue.getUuid());
-                    }
-                    if (exerciseValue.getDate() != null) {
-                        existingExerciseValue.setDate(exerciseValue.getDate());
-                    }
-                    if (exerciseValue.getExerciseUuid() != null) {
-                        existingExerciseValue.setExerciseUuid(exerciseValue.getExerciseUuid());
-                    }
-                    if (exerciseValue.getExerciseName() != null) {
-                        existingExerciseValue.setExerciseName(exerciseValue.getExerciseName());
-                    }
-                    if (exerciseValue.getExerciseValue() != null) {
-                        existingExerciseValue.setExerciseValue(exerciseValue.getExerciseValue());
-                    }
-                    if (exerciseValue.getExerciseValueType() != null) {
-                        existingExerciseValue.setExerciseValueType(exerciseValue.getExerciseValueType());
-                    }
-
+                    exerciseValueMapper.partialUpdate(existingExerciseValue, exerciseValueDTO);
                     return existingExerciseValue;
                 }
             )
-            .map(exerciseValueRepository::save);
+            .map(exerciseValueRepository::save)
+            .map(exerciseValueMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ExerciseValue> findAll(Pageable pageable) {
+    public Page<ExerciseValueDTO> findAll(Pageable pageable) {
         log.debug("Request to get all ExerciseValues");
-        return exerciseValueRepository.findAll(pageable);
+        return exerciseValueRepository.findAll(pageable).map(exerciseValueMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<ExerciseValue> findOne(Long id) {
+    public Optional<ExerciseValueDTO> findOne(Long id) {
         log.debug("Request to get ExerciseValue : {}", id);
-        return exerciseValueRepository.findById(id);
+        return exerciseValueRepository.findById(id).map(exerciseValueMapper::toDto);
     }
 
     @Override

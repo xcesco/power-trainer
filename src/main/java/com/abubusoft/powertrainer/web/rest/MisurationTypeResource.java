@@ -1,10 +1,10 @@
 package com.abubusoft.powertrainer.web.rest;
 
-import com.abubusoft.powertrainer.domain.MisurationType;
 import com.abubusoft.powertrainer.repository.MisurationTypeRepository;
 import com.abubusoft.powertrainer.service.MisurationTypeQueryService;
 import com.abubusoft.powertrainer.service.MisurationTypeService;
 import com.abubusoft.powertrainer.service.criteria.MisurationTypeCriteria;
+import com.abubusoft.powertrainer.service.dto.MisurationTypeDTO;
 import com.abubusoft.powertrainer.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -60,18 +60,18 @@ public class MisurationTypeResource {
     /**
      * {@code POST  /misuration-types} : Create a new misurationType.
      *
-     * @param misurationType the misurationType to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new misurationType, or with status {@code 400 (Bad Request)} if the misurationType has already an ID.
+     * @param misurationTypeDTO the misurationTypeDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new misurationTypeDTO, or with status {@code 400 (Bad Request)} if the misurationType has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/misuration-types")
-    public ResponseEntity<MisurationType> createMisurationType(@Valid @RequestBody MisurationType misurationType)
+    public ResponseEntity<MisurationTypeDTO> createMisurationType(@Valid @RequestBody MisurationTypeDTO misurationTypeDTO)
         throws URISyntaxException {
-        log.debug("REST request to save MisurationType : {}", misurationType);
-        if (misurationType.getId() != null) {
+        log.debug("REST request to save MisurationType : {}", misurationTypeDTO);
+        if (misurationTypeDTO.getId() != null) {
             throw new BadRequestAlertException("A new misurationType cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        MisurationType result = misurationTypeService.save(misurationType);
+        MisurationTypeDTO result = misurationTypeService.save(misurationTypeDTO);
         return ResponseEntity
             .created(new URI("/api/misuration-types/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -81,23 +81,23 @@ public class MisurationTypeResource {
     /**
      * {@code PUT  /misuration-types/:id} : Updates an existing misurationType.
      *
-     * @param id the id of the misurationType to save.
-     * @param misurationType the misurationType to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated misurationType,
-     * or with status {@code 400 (Bad Request)} if the misurationType is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the misurationType couldn't be updated.
+     * @param id the id of the misurationTypeDTO to save.
+     * @param misurationTypeDTO the misurationTypeDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated misurationTypeDTO,
+     * or with status {@code 400 (Bad Request)} if the misurationTypeDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the misurationTypeDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/misuration-types/{id}")
-    public ResponseEntity<MisurationType> updateMisurationType(
+    public ResponseEntity<MisurationTypeDTO> updateMisurationType(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody MisurationType misurationType
+        @Valid @RequestBody MisurationTypeDTO misurationTypeDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update MisurationType : {}, {}", id, misurationType);
-        if (misurationType.getId() == null) {
+        log.debug("REST request to update MisurationType : {}, {}", id, misurationTypeDTO);
+        if (misurationTypeDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, misurationType.getId())) {
+        if (!Objects.equals(id, misurationTypeDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -105,34 +105,34 @@ public class MisurationTypeResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        MisurationType result = misurationTypeService.save(misurationType);
+        MisurationTypeDTO result = misurationTypeService.save(misurationTypeDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, misurationType.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, misurationTypeDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /misuration-types/:id} : Partial updates given fields of an existing misurationType, field will ignore if it is null
      *
-     * @param id the id of the misurationType to save.
-     * @param misurationType the misurationType to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated misurationType,
-     * or with status {@code 400 (Bad Request)} if the misurationType is not valid,
-     * or with status {@code 404 (Not Found)} if the misurationType is not found,
-     * or with status {@code 500 (Internal Server Error)} if the misurationType couldn't be updated.
+     * @param id the id of the misurationTypeDTO to save.
+     * @param misurationTypeDTO the misurationTypeDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated misurationTypeDTO,
+     * or with status {@code 400 (Bad Request)} if the misurationTypeDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the misurationTypeDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the misurationTypeDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/misuration-types/{id}", consumes = "application/merge-patch+json")
-    public ResponseEntity<MisurationType> partialUpdateMisurationType(
+    public ResponseEntity<MisurationTypeDTO> partialUpdateMisurationType(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody MisurationType misurationType
+        @NotNull @RequestBody MisurationTypeDTO misurationTypeDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update MisurationType partially : {}, {}", id, misurationType);
-        if (misurationType.getId() == null) {
+        log.debug("REST request to partial update MisurationType partially : {}, {}", id, misurationTypeDTO);
+        if (misurationTypeDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, misurationType.getId())) {
+        if (!Objects.equals(id, misurationTypeDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -140,11 +140,11 @@ public class MisurationTypeResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<MisurationType> result = misurationTypeService.partialUpdate(misurationType);
+        Optional<MisurationTypeDTO> result = misurationTypeService.partialUpdate(misurationTypeDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, misurationType.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, misurationTypeDTO.getId().toString())
         );
     }
 
@@ -156,9 +156,9 @@ public class MisurationTypeResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of misurationTypes in body.
      */
     @GetMapping("/misuration-types")
-    public ResponseEntity<List<MisurationType>> getAllMisurationTypes(MisurationTypeCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<MisurationTypeDTO>> getAllMisurationTypes(MisurationTypeCriteria criteria, Pageable pageable) {
         log.debug("REST request to get MisurationTypes by criteria: {}", criteria);
-        Page<MisurationType> page = misurationTypeQueryService.findByCriteria(criteria, pageable);
+        Page<MisurationTypeDTO> page = misurationTypeQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -178,20 +178,20 @@ public class MisurationTypeResource {
     /**
      * {@code GET  /misuration-types/:id} : get the "id" misurationType.
      *
-     * @param id the id of the misurationType to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the misurationType, or with status {@code 404 (Not Found)}.
+     * @param id the id of the misurationTypeDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the misurationTypeDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/misuration-types/{id}")
-    public ResponseEntity<MisurationType> getMisurationType(@PathVariable Long id) {
+    public ResponseEntity<MisurationTypeDTO> getMisurationType(@PathVariable Long id) {
         log.debug("REST request to get MisurationType : {}", id);
-        Optional<MisurationType> misurationType = misurationTypeService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(misurationType);
+        Optional<MisurationTypeDTO> misurationTypeDTO = misurationTypeService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(misurationTypeDTO);
     }
 
     /**
      * {@code DELETE  /misuration-types/:id} : delete the "id" misurationType.
      *
-     * @param id the id of the misurationType to delete.
+     * @param id the id of the misurationTypeDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/misuration-types/{id}")

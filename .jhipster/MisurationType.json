@@ -31,7 +31,7 @@
     }
   ],
   "entityTableName": "misuration_types",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "pagination",
   "service": "serviceImpl",
   "jpaMetamodelFiltering": true,

@@ -10,6 +10,8 @@ import com.abubusoft.powertrainer.domain.Exercise;
 import com.abubusoft.powertrainer.domain.ExerciseTool;
 import com.abubusoft.powertrainer.repository.ExerciseToolRepository;
 import com.abubusoft.powertrainer.service.criteria.ExerciseToolCriteria;
+import com.abubusoft.powertrainer.service.dto.ExerciseToolDTO;
+import com.abubusoft.powertrainer.service.mapper.ExerciseToolMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -55,6 +57,9 @@ class ExerciseToolResourceIT {
 
     @Autowired
     private ExerciseToolRepository exerciseToolRepository;
+
+    @Autowired
+    private ExerciseToolMapper exerciseToolMapper;
 
     @Autowired
     private EntityManager em;
@@ -106,8 +111,11 @@ class ExerciseToolResourceIT {
     void createExerciseTool() throws Exception {
         int databaseSizeBeforeCreate = exerciseToolRepository.findAll().size();
         // Create the ExerciseTool
+        ExerciseToolDTO exerciseToolDTO = exerciseToolMapper.toDto(exerciseTool);
         restExerciseToolMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(exerciseTool)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(exerciseToolDTO))
+            )
             .andExpect(status().isCreated());
 
         // Validate the ExerciseTool in the database
@@ -126,12 +134,15 @@ class ExerciseToolResourceIT {
     void createExerciseToolWithExistingId() throws Exception {
         // Create the ExerciseTool with an existing ID
         exerciseTool.setId(1L);
+        ExerciseToolDTO exerciseToolDTO = exerciseToolMapper.toDto(exerciseTool);
 
         int databaseSizeBeforeCreate = exerciseToolRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restExerciseToolMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(exerciseTool)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(exerciseToolDTO))
+            )
             .andExpect(status().isBadRequest());
 
         // Validate the ExerciseTool in the database
@@ -147,9 +158,12 @@ class ExerciseToolResourceIT {
         exerciseTool.setUuid(null);
 
         // Create the ExerciseTool, which fails.
+        ExerciseToolDTO exerciseToolDTO = exerciseToolMapper.toDto(exerciseTool);
 
         restExerciseToolMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(exerciseTool)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(exerciseToolDTO))
+            )
             .andExpect(status().isBadRequest());
 
         List<ExerciseTool> exerciseToolList = exerciseToolRepository.findAll();
@@ -164,9 +178,12 @@ class ExerciseToolResourceIT {
         exerciseTool.setName(null);
 
         // Create the ExerciseTool, which fails.
+        ExerciseToolDTO exerciseToolDTO = exerciseToolMapper.toDto(exerciseTool);
 
         restExerciseToolMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(exerciseTool)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(exerciseToolDTO))
+            )
             .andExpect(status().isBadRequest());
 
         List<ExerciseTool> exerciseToolList = exerciseToolRepository.findAll();
@@ -445,12 +462,13 @@ class ExerciseToolResourceIT {
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION);
+        ExerciseToolDTO exerciseToolDTO = exerciseToolMapper.toDto(updatedExerciseTool);
 
         restExerciseToolMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedExerciseTool.getId())
+                put(ENTITY_API_URL_ID, exerciseToolDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedExerciseTool))
+                    .content(TestUtil.convertObjectToJsonBytes(exerciseToolDTO))
             )
             .andExpect(status().isOk());
 
@@ -471,12 +489,15 @@ class ExerciseToolResourceIT {
         int databaseSizeBeforeUpdate = exerciseToolRepository.findAll().size();
         exerciseTool.setId(count.incrementAndGet());
 
+        // Create the ExerciseTool
+        ExerciseToolDTO exerciseToolDTO = exerciseToolMapper.toDto(exerciseTool);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restExerciseToolMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, exerciseTool.getId())
+                put(ENTITY_API_URL_ID, exerciseToolDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(exerciseTool))
+                    .content(TestUtil.convertObjectToJsonBytes(exerciseToolDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -491,12 +512,15 @@ class ExerciseToolResourceIT {
         int databaseSizeBeforeUpdate = exerciseToolRepository.findAll().size();
         exerciseTool.setId(count.incrementAndGet());
 
+        // Create the ExerciseTool
+        ExerciseToolDTO exerciseToolDTO = exerciseToolMapper.toDto(exerciseTool);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restExerciseToolMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(exerciseTool))
+                    .content(TestUtil.convertObjectToJsonBytes(exerciseToolDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -511,9 +535,14 @@ class ExerciseToolResourceIT {
         int databaseSizeBeforeUpdate = exerciseToolRepository.findAll().size();
         exerciseTool.setId(count.incrementAndGet());
 
+        // Create the ExerciseTool
+        ExerciseToolDTO exerciseToolDTO = exerciseToolMapper.toDto(exerciseTool);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restExerciseToolMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(exerciseTool)))
+            .perform(
+                put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(exerciseToolDTO))
+            )
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the ExerciseTool in the database
@@ -598,12 +627,15 @@ class ExerciseToolResourceIT {
         int databaseSizeBeforeUpdate = exerciseToolRepository.findAll().size();
         exerciseTool.setId(count.incrementAndGet());
 
+        // Create the ExerciseTool
+        ExerciseToolDTO exerciseToolDTO = exerciseToolMapper.toDto(exerciseTool);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restExerciseToolMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, exerciseTool.getId())
+                patch(ENTITY_API_URL_ID, exerciseToolDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(exerciseTool))
+                    .content(TestUtil.convertObjectToJsonBytes(exerciseToolDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -618,12 +650,15 @@ class ExerciseToolResourceIT {
         int databaseSizeBeforeUpdate = exerciseToolRepository.findAll().size();
         exerciseTool.setId(count.incrementAndGet());
 
+        // Create the ExerciseTool
+        ExerciseToolDTO exerciseToolDTO = exerciseToolMapper.toDto(exerciseTool);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restExerciseToolMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(exerciseTool))
+                    .content(TestUtil.convertObjectToJsonBytes(exerciseToolDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -638,10 +673,15 @@ class ExerciseToolResourceIT {
         int databaseSizeBeforeUpdate = exerciseToolRepository.findAll().size();
         exerciseTool.setId(count.incrementAndGet());
 
+        // Create the ExerciseTool
+        ExerciseToolDTO exerciseToolDTO = exerciseToolMapper.toDto(exerciseTool);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restExerciseToolMockMvc
             .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(exerciseTool))
+                patch(ENTITY_API_URL)
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(exerciseToolDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

@@ -3,6 +3,8 @@ package com.abubusoft.powertrainer.service.impl;
 import com.abubusoft.powertrainer.domain.ExerciseTool;
 import com.abubusoft.powertrainer.repository.ExerciseToolRepository;
 import com.abubusoft.powertrainer.service.ExerciseToolService;
+import com.abubusoft.powertrainer.service.dto.ExerciseToolDTO;
+import com.abubusoft.powertrainer.service.mapper.ExerciseToolMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,58 +24,49 @@ public class ExerciseToolServiceImpl implements ExerciseToolService {
 
     private final ExerciseToolRepository exerciseToolRepository;
 
-    public ExerciseToolServiceImpl(ExerciseToolRepository exerciseToolRepository) {
+    private final ExerciseToolMapper exerciseToolMapper;
+
+    public ExerciseToolServiceImpl(ExerciseToolRepository exerciseToolRepository, ExerciseToolMapper exerciseToolMapper) {
         this.exerciseToolRepository = exerciseToolRepository;
+        this.exerciseToolMapper = exerciseToolMapper;
     }
 
     @Override
-    public ExerciseTool save(ExerciseTool exerciseTool) {
-        log.debug("Request to save ExerciseTool : {}", exerciseTool);
-        return exerciseToolRepository.save(exerciseTool);
+    public ExerciseToolDTO save(ExerciseToolDTO exerciseToolDTO) {
+        log.debug("Request to save ExerciseTool : {}", exerciseToolDTO);
+        ExerciseTool exerciseTool = exerciseToolMapper.toEntity(exerciseToolDTO);
+        exerciseTool = exerciseToolRepository.save(exerciseTool);
+        return exerciseToolMapper.toDto(exerciseTool);
     }
 
     @Override
-    public Optional<ExerciseTool> partialUpdate(ExerciseTool exerciseTool) {
-        log.debug("Request to partially update ExerciseTool : {}", exerciseTool);
+    public Optional<ExerciseToolDTO> partialUpdate(ExerciseToolDTO exerciseToolDTO) {
+        log.debug("Request to partially update ExerciseTool : {}", exerciseToolDTO);
 
         return exerciseToolRepository
-            .findById(exerciseTool.getId())
+            .findById(exerciseToolDTO.getId())
             .map(
                 existingExerciseTool -> {
-                    if (exerciseTool.getUuid() != null) {
-                        existingExerciseTool.setUuid(exerciseTool.getUuid());
-                    }
-                    if (exerciseTool.getImage() != null) {
-                        existingExerciseTool.setImage(exerciseTool.getImage());
-                    }
-                    if (exerciseTool.getImageContentType() != null) {
-                        existingExerciseTool.setImageContentType(exerciseTool.getImageContentType());
-                    }
-                    if (exerciseTool.getName() != null) {
-                        existingExerciseTool.setName(exerciseTool.getName());
-                    }
-                    if (exerciseTool.getDescription() != null) {
-                        existingExerciseTool.setDescription(exerciseTool.getDescription());
-                    }
-
+                    exerciseToolMapper.partialUpdate(existingExerciseTool, exerciseToolDTO);
                     return existingExerciseTool;
                 }
             )
-            .map(exerciseToolRepository::save);
+            .map(exerciseToolRepository::save)
+            .map(exerciseToolMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ExerciseTool> findAll(Pageable pageable) {
+    public Page<ExerciseToolDTO> findAll(Pageable pageable) {
         log.debug("Request to get all ExerciseTools");
-        return exerciseToolRepository.findAll(pageable);
+        return exerciseToolRepository.findAll(pageable).map(exerciseToolMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<ExerciseTool> findOne(Long id) {
+    public Optional<ExerciseToolDTO> findOne(Long id) {
         log.debug("Request to get ExerciseTool : {}", id);
-        return exerciseToolRepository.findById(id);
+        return exerciseToolRepository.findById(id).map(exerciseToolMapper::toDto);
     }
 
     @Override

@@ -3,6 +3,8 @@ package com.abubusoft.powertrainer.service.impl;
 import com.abubusoft.powertrainer.domain.WorkoutSheet;
 import com.abubusoft.powertrainer.repository.WorkoutSheetRepository;
 import com.abubusoft.powertrainer.service.WorkoutSheetService;
+import com.abubusoft.powertrainer.service.dto.WorkoutSheetDTO;
+import com.abubusoft.powertrainer.service.mapper.WorkoutSheetMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,82 +24,49 @@ public class WorkoutSheetServiceImpl implements WorkoutSheetService {
 
     private final WorkoutSheetRepository workoutSheetRepository;
 
-    public WorkoutSheetServiceImpl(WorkoutSheetRepository workoutSheetRepository) {
+    private final WorkoutSheetMapper workoutSheetMapper;
+
+    public WorkoutSheetServiceImpl(WorkoutSheetRepository workoutSheetRepository, WorkoutSheetMapper workoutSheetMapper) {
         this.workoutSheetRepository = workoutSheetRepository;
+        this.workoutSheetMapper = workoutSheetMapper;
     }
 
     @Override
-    public WorkoutSheet save(WorkoutSheet workoutSheet) {
-        log.debug("Request to save WorkoutSheet : {}", workoutSheet);
-        return workoutSheetRepository.save(workoutSheet);
+    public WorkoutSheetDTO save(WorkoutSheetDTO workoutSheetDTO) {
+        log.debug("Request to save WorkoutSheet : {}", workoutSheetDTO);
+        WorkoutSheet workoutSheet = workoutSheetMapper.toEntity(workoutSheetDTO);
+        workoutSheet = workoutSheetRepository.save(workoutSheet);
+        return workoutSheetMapper.toDto(workoutSheet);
     }
 
     @Override
-    public Optional<WorkoutSheet> partialUpdate(WorkoutSheet workoutSheet) {
-        log.debug("Request to partially update WorkoutSheet : {}", workoutSheet);
+    public Optional<WorkoutSheetDTO> partialUpdate(WorkoutSheetDTO workoutSheetDTO) {
+        log.debug("Request to partially update WorkoutSheet : {}", workoutSheetDTO);
 
         return workoutSheetRepository
-            .findById(workoutSheet.getId())
+            .findById(workoutSheetDTO.getId())
             .map(
                 existingWorkoutSheet -> {
-                    if (workoutSheet.getUuid() != null) {
-                        existingWorkoutSheet.setUuid(workoutSheet.getUuid());
-                    }
-                    if (workoutSheet.getName() != null) {
-                        existingWorkoutSheet.setName(workoutSheet.getName());
-                    }
-                    if (workoutSheet.getImage() != null) {
-                        existingWorkoutSheet.setImage(workoutSheet.getImage());
-                    }
-                    if (workoutSheet.getImageContentType() != null) {
-                        existingWorkoutSheet.setImageContentType(workoutSheet.getImageContentType());
-                    }
-                    if (workoutSheet.getDescription() != null) {
-                        existingWorkoutSheet.setDescription(workoutSheet.getDescription());
-                    }
-                    if (workoutSheet.getOwner() != null) {
-                        existingWorkoutSheet.setOwner(workoutSheet.getOwner());
-                    }
-                    if (workoutSheet.getPrepareTime() != null) {
-                        existingWorkoutSheet.setPrepareTime(workoutSheet.getPrepareTime());
-                    }
-                    if (workoutSheet.getCoolDownTime() != null) {
-                        existingWorkoutSheet.setCoolDownTime(workoutSheet.getCoolDownTime());
-                    }
-                    if (workoutSheet.getCycles() != null) {
-                        existingWorkoutSheet.setCycles(workoutSheet.getCycles());
-                    }
-                    if (workoutSheet.getCycleRestTime() != null) {
-                        existingWorkoutSheet.setCycleRestTime(workoutSheet.getCycleRestTime());
-                    }
-                    if (workoutSheet.getSet() != null) {
-                        existingWorkoutSheet.setSet(workoutSheet.getSet());
-                    }
-                    if (workoutSheet.getSetRestTime() != null) {
-                        existingWorkoutSheet.setSetRestTime(workoutSheet.getSetRestTime());
-                    }
-                    if (workoutSheet.getType() != null) {
-                        existingWorkoutSheet.setType(workoutSheet.getType());
-                    }
-
+                    workoutSheetMapper.partialUpdate(existingWorkoutSheet, workoutSheetDTO);
                     return existingWorkoutSheet;
                 }
             )
-            .map(workoutSheetRepository::save);
+            .map(workoutSheetRepository::save)
+            .map(workoutSheetMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<WorkoutSheet> findAll(Pageable pageable) {
+    public Page<WorkoutSheetDTO> findAll(Pageable pageable) {
         log.debug("Request to get all WorkoutSheets");
-        return workoutSheetRepository.findAll(pageable);
+        return workoutSheetRepository.findAll(pageable).map(workoutSheetMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<WorkoutSheet> findOne(Long id) {
+    public Optional<WorkoutSheetDTO> findOne(Long id) {
         log.debug("Request to get WorkoutSheet : {}", id);
-        return workoutSheetRepository.findById(id);
+        return workoutSheetRepository.findById(id).map(workoutSheetMapper::toDto);
     }
 
     @Override

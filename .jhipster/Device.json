@@ -14,7 +14,7 @@
   ],
   "relationships": [],
   "entityTableName": "devices",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "pagination",
   "service": "serviceImpl",
   "jpaMetamodelFiltering": true,

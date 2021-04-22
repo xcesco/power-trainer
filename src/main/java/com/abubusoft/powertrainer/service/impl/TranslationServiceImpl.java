@@ -3,6 +3,8 @@ package com.abubusoft.powertrainer.service.impl;
 import com.abubusoft.powertrainer.domain.Translation;
 import com.abubusoft.powertrainer.repository.TranslationRepository;
 import com.abubusoft.powertrainer.service.TranslationService;
+import com.abubusoft.powertrainer.service.dto.TranslationDTO;
+import com.abubusoft.powertrainer.service.mapper.TranslationMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,52 +24,49 @@ public class TranslationServiceImpl implements TranslationService {
 
     private final TranslationRepository translationRepository;
 
-    public TranslationServiceImpl(TranslationRepository translationRepository) {
+    private final TranslationMapper translationMapper;
+
+    public TranslationServiceImpl(TranslationRepository translationRepository, TranslationMapper translationMapper) {
         this.translationRepository = translationRepository;
+        this.translationMapper = translationMapper;
     }
 
     @Override
-    public Translation save(Translation translation) {
-        log.debug("Request to save Translation : {}", translation);
-        return translationRepository.save(translation);
+    public TranslationDTO save(TranslationDTO translationDTO) {
+        log.debug("Request to save Translation : {}", translationDTO);
+        Translation translation = translationMapper.toEntity(translationDTO);
+        translation = translationRepository.save(translation);
+        return translationMapper.toDto(translation);
     }
 
     @Override
-    public Optional<Translation> partialUpdate(Translation translation) {
-        log.debug("Request to partially update Translation : {}", translation);
+    public Optional<TranslationDTO> partialUpdate(TranslationDTO translationDTO) {
+        log.debug("Request to partially update Translation : {}", translationDTO);
 
         return translationRepository
-            .findById(translation.getId())
+            .findById(translationDTO.getId())
             .map(
                 existingTranslation -> {
-                    if (translation.getEntityType() != null) {
-                        existingTranslation.setEntityType(translation.getEntityType());
-                    }
-                    if (translation.getEntityUuid() != null) {
-                        existingTranslation.setEntityUuid(translation.getEntityUuid());
-                    }
-                    if (translation.getValue() != null) {
-                        existingTranslation.setValue(translation.getValue());
-                    }
-
+                    translationMapper.partialUpdate(existingTranslation, translationDTO);
                     return existingTranslation;
                 }
             )
-            .map(translationRepository::save);
+            .map(translationRepository::save)
+            .map(translationMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Translation> findAll(Pageable pageable) {
+    public Page<TranslationDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Translations");
-        return translationRepository.findAll(pageable);
+        return translationRepository.findAll(pageable).map(translationMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Translation> findOne(Long id) {
+    public Optional<TranslationDTO> findOne(Long id) {
         log.debug("Request to get Translation : {}", id);
-        return translationRepository.findById(id);
+        return translationRepository.findById(id).map(translationMapper::toDto);
     }
 
     @Override

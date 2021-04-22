@@ -10,6 +10,8 @@ import com.abubusoft.powertrainer.domain.Misuration;
 import com.abubusoft.powertrainer.domain.MisurationType;
 import com.abubusoft.powertrainer.repository.MisurationTypeRepository;
 import com.abubusoft.powertrainer.service.criteria.MisurationTypeCriteria;
+import com.abubusoft.powertrainer.service.dto.MisurationTypeDTO;
+import com.abubusoft.powertrainer.service.mapper.MisurationTypeMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -55,6 +57,9 @@ class MisurationTypeResourceIT {
 
     @Autowired
     private MisurationTypeRepository misurationTypeRepository;
+
+    @Autowired
+    private MisurationTypeMapper misurationTypeMapper;
 
     @Autowired
     private EntityManager em;
@@ -106,9 +111,10 @@ class MisurationTypeResourceIT {
     void createMisurationType() throws Exception {
         int databaseSizeBeforeCreate = misurationTypeRepository.findAll().size();
         // Create the MisurationType
+        MisurationTypeDTO misurationTypeDTO = misurationTypeMapper.toDto(misurationType);
         restMisurationTypeMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(misurationType))
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(misurationTypeDTO))
             )
             .andExpect(status().isCreated());
 
@@ -128,13 +134,14 @@ class MisurationTypeResourceIT {
     void createMisurationTypeWithExistingId() throws Exception {
         // Create the MisurationType with an existing ID
         misurationType.setId(1L);
+        MisurationTypeDTO misurationTypeDTO = misurationTypeMapper.toDto(misurationType);
 
         int databaseSizeBeforeCreate = misurationTypeRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restMisurationTypeMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(misurationType))
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(misurationTypeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -151,10 +158,11 @@ class MisurationTypeResourceIT {
         misurationType.setUuid(null);
 
         // Create the MisurationType, which fails.
+        MisurationTypeDTO misurationTypeDTO = misurationTypeMapper.toDto(misurationType);
 
         restMisurationTypeMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(misurationType))
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(misurationTypeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -170,10 +178,11 @@ class MisurationTypeResourceIT {
         misurationType.setName(null);
 
         // Create the MisurationType, which fails.
+        MisurationTypeDTO misurationTypeDTO = misurationTypeMapper.toDto(misurationType);
 
         restMisurationTypeMockMvc
             .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(misurationType))
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(misurationTypeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -453,12 +462,13 @@ class MisurationTypeResourceIT {
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
             .description(UPDATED_DESCRIPTION);
+        MisurationTypeDTO misurationTypeDTO = misurationTypeMapper.toDto(updatedMisurationType);
 
         restMisurationTypeMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedMisurationType.getId())
+                put(ENTITY_API_URL_ID, misurationTypeDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedMisurationType))
+                    .content(TestUtil.convertObjectToJsonBytes(misurationTypeDTO))
             )
             .andExpect(status().isOk());
 
@@ -479,12 +489,15 @@ class MisurationTypeResourceIT {
         int databaseSizeBeforeUpdate = misurationTypeRepository.findAll().size();
         misurationType.setId(count.incrementAndGet());
 
+        // Create the MisurationType
+        MisurationTypeDTO misurationTypeDTO = misurationTypeMapper.toDto(misurationType);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMisurationTypeMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, misurationType.getId())
+                put(ENTITY_API_URL_ID, misurationTypeDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(misurationType))
+                    .content(TestUtil.convertObjectToJsonBytes(misurationTypeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -499,12 +512,15 @@ class MisurationTypeResourceIT {
         int databaseSizeBeforeUpdate = misurationTypeRepository.findAll().size();
         misurationType.setId(count.incrementAndGet());
 
+        // Create the MisurationType
+        MisurationTypeDTO misurationTypeDTO = misurationTypeMapper.toDto(misurationType);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restMisurationTypeMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(misurationType))
+                    .content(TestUtil.convertObjectToJsonBytes(misurationTypeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -519,9 +535,14 @@ class MisurationTypeResourceIT {
         int databaseSizeBeforeUpdate = misurationTypeRepository.findAll().size();
         misurationType.setId(count.incrementAndGet());
 
+        // Create the MisurationType
+        MisurationTypeDTO misurationTypeDTO = misurationTypeMapper.toDto(misurationType);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restMisurationTypeMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(misurationType)))
+            .perform(
+                put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(misurationTypeDTO))
+            )
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the MisurationType in the database
@@ -606,12 +627,15 @@ class MisurationTypeResourceIT {
         int databaseSizeBeforeUpdate = misurationTypeRepository.findAll().size();
         misurationType.setId(count.incrementAndGet());
 
+        // Create the MisurationType
+        MisurationTypeDTO misurationTypeDTO = misurationTypeMapper.toDto(misurationType);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMisurationTypeMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, misurationType.getId())
+                patch(ENTITY_API_URL_ID, misurationTypeDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(misurationType))
+                    .content(TestUtil.convertObjectToJsonBytes(misurationTypeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -626,12 +650,15 @@ class MisurationTypeResourceIT {
         int databaseSizeBeforeUpdate = misurationTypeRepository.findAll().size();
         misurationType.setId(count.incrementAndGet());
 
+        // Create the MisurationType
+        MisurationTypeDTO misurationTypeDTO = misurationTypeMapper.toDto(misurationType);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restMisurationTypeMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(misurationType))
+                    .content(TestUtil.convertObjectToJsonBytes(misurationTypeDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -646,10 +673,15 @@ class MisurationTypeResourceIT {
         int databaseSizeBeforeUpdate = misurationTypeRepository.findAll().size();
         misurationType.setId(count.incrementAndGet());
 
+        // Create the MisurationType
+        MisurationTypeDTO misurationTypeDTO = misurationTypeMapper.toDto(misurationType);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restMisurationTypeMockMvc
             .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(misurationType))
+                patch(ENTITY_API_URL)
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(misurationTypeDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

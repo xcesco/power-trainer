@@ -1,10 +1,10 @@
 package com.abubusoft.powertrainer.web.rest;
 
-import com.abubusoft.powertrainer.domain.ExerciseResource;
 import com.abubusoft.powertrainer.repository.ExerciseResourceRepository;
 import com.abubusoft.powertrainer.service.ExerciseResourceQueryService;
 import com.abubusoft.powertrainer.service.ExerciseResourceService;
 import com.abubusoft.powertrainer.service.criteria.ExerciseResourceCriteria;
+import com.abubusoft.powertrainer.service.dto.ExerciseResourceDTO;
 import com.abubusoft.powertrainer.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -60,18 +60,18 @@ public class ExerciseResourceResource {
     /**
      * {@code POST  /exercise-resources} : Create a new exerciseResource.
      *
-     * @param exerciseResource the exerciseResource to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new exerciseResource, or with status {@code 400 (Bad Request)} if the exerciseResource has already an ID.
+     * @param exerciseResourceDTO the exerciseResourceDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new exerciseResourceDTO, or with status {@code 400 (Bad Request)} if the exerciseResource has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/exercise-resources")
-    public ResponseEntity<ExerciseResource> createExerciseResource(@Valid @RequestBody ExerciseResource exerciseResource)
+    public ResponseEntity<ExerciseResourceDTO> createExerciseResource(@Valid @RequestBody ExerciseResourceDTO exerciseResourceDTO)
         throws URISyntaxException {
-        log.debug("REST request to save ExerciseResource : {}", exerciseResource);
-        if (exerciseResource.getId() != null) {
+        log.debug("REST request to save ExerciseResource : {}", exerciseResourceDTO);
+        if (exerciseResourceDTO.getId() != null) {
             throw new BadRequestAlertException("A new exerciseResource cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ExerciseResource result = exerciseResourceService.save(exerciseResource);
+        ExerciseResourceDTO result = exerciseResourceService.save(exerciseResourceDTO);
         return ResponseEntity
             .created(new URI("/api/exercise-resources/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -81,23 +81,23 @@ public class ExerciseResourceResource {
     /**
      * {@code PUT  /exercise-resources/:id} : Updates an existing exerciseResource.
      *
-     * @param id the id of the exerciseResource to save.
-     * @param exerciseResource the exerciseResource to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exerciseResource,
-     * or with status {@code 400 (Bad Request)} if the exerciseResource is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the exerciseResource couldn't be updated.
+     * @param id the id of the exerciseResourceDTO to save.
+     * @param exerciseResourceDTO the exerciseResourceDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exerciseResourceDTO,
+     * or with status {@code 400 (Bad Request)} if the exerciseResourceDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the exerciseResourceDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/exercise-resources/{id}")
-    public ResponseEntity<ExerciseResource> updateExerciseResource(
+    public ResponseEntity<ExerciseResourceDTO> updateExerciseResource(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody ExerciseResource exerciseResource
+        @Valid @RequestBody ExerciseResourceDTO exerciseResourceDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update ExerciseResource : {}, {}", id, exerciseResource);
-        if (exerciseResource.getId() == null) {
+        log.debug("REST request to update ExerciseResource : {}, {}", id, exerciseResourceDTO);
+        if (exerciseResourceDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, exerciseResource.getId())) {
+        if (!Objects.equals(id, exerciseResourceDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -105,34 +105,34 @@ public class ExerciseResourceResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        ExerciseResource result = exerciseResourceService.save(exerciseResource);
+        ExerciseResourceDTO result = exerciseResourceService.save(exerciseResourceDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exerciseResource.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exerciseResourceDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /exercise-resources/:id} : Partial updates given fields of an existing exerciseResource, field will ignore if it is null
      *
-     * @param id the id of the exerciseResource to save.
-     * @param exerciseResource the exerciseResource to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exerciseResource,
-     * or with status {@code 400 (Bad Request)} if the exerciseResource is not valid,
-     * or with status {@code 404 (Not Found)} if the exerciseResource is not found,
-     * or with status {@code 500 (Internal Server Error)} if the exerciseResource couldn't be updated.
+     * @param id the id of the exerciseResourceDTO to save.
+     * @param exerciseResourceDTO the exerciseResourceDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exerciseResourceDTO,
+     * or with status {@code 400 (Bad Request)} if the exerciseResourceDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the exerciseResourceDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the exerciseResourceDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/exercise-resources/{id}", consumes = "application/merge-patch+json")
-    public ResponseEntity<ExerciseResource> partialUpdateExerciseResource(
+    public ResponseEntity<ExerciseResourceDTO> partialUpdateExerciseResource(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody ExerciseResource exerciseResource
+        @NotNull @RequestBody ExerciseResourceDTO exerciseResourceDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update ExerciseResource partially : {}, {}", id, exerciseResource);
-        if (exerciseResource.getId() == null) {
+        log.debug("REST request to partial update ExerciseResource partially : {}, {}", id, exerciseResourceDTO);
+        if (exerciseResourceDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, exerciseResource.getId())) {
+        if (!Objects.equals(id, exerciseResourceDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -140,11 +140,11 @@ public class ExerciseResourceResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<ExerciseResource> result = exerciseResourceService.partialUpdate(exerciseResource);
+        Optional<ExerciseResourceDTO> result = exerciseResourceService.partialUpdate(exerciseResourceDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exerciseResource.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, exerciseResourceDTO.getId().toString())
         );
     }
 
@@ -156,9 +156,9 @@ public class ExerciseResourceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of exerciseResources in body.
      */
     @GetMapping("/exercise-resources")
-    public ResponseEntity<List<ExerciseResource>> getAllExerciseResources(ExerciseResourceCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<ExerciseResourceDTO>> getAllExerciseResources(ExerciseResourceCriteria criteria, Pageable pageable) {
         log.debug("REST request to get ExerciseResources by criteria: {}", criteria);
-        Page<ExerciseResource> page = exerciseResourceQueryService.findByCriteria(criteria, pageable);
+        Page<ExerciseResourceDTO> page = exerciseResourceQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -178,20 +178,20 @@ public class ExerciseResourceResource {
     /**
      * {@code GET  /exercise-resources/:id} : get the "id" exerciseResource.
      *
-     * @param id the id of the exerciseResource to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the exerciseResource, or with status {@code 404 (Not Found)}.
+     * @param id the id of the exerciseResourceDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the exerciseResourceDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/exercise-resources/{id}")
-    public ResponseEntity<ExerciseResource> getExerciseResource(@PathVariable Long id) {
+    public ResponseEntity<ExerciseResourceDTO> getExerciseResource(@PathVariable Long id) {
         log.debug("REST request to get ExerciseResource : {}", id);
-        Optional<ExerciseResource> exerciseResource = exerciseResourceService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(exerciseResource);
+        Optional<ExerciseResourceDTO> exerciseResourceDTO = exerciseResourceService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(exerciseResourceDTO);
     }
 
     /**
      * {@code DELETE  /exercise-resources/:id} : delete the "id" exerciseResource.
      *
-     * @param id the id of the exerciseResource to delete.
+     * @param id the id of the exerciseResourceDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/exercise-resources/{id}")

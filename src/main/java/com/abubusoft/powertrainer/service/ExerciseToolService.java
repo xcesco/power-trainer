@@ -1,29 +1,29 @@
 package com.abubusoft.powertrainer.service;
 
-import com.abubusoft.powertrainer.domain.ExerciseTool;
+import com.abubusoft.powertrainer.service.dto.ExerciseToolDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Service Interface for managing {@link ExerciseTool}.
+ * Service Interface for managing {@link com.abubusoft.powertrainer.domain.ExerciseTool}.
  */
 public interface ExerciseToolService {
     /**
      * Save a exerciseTool.
      *
-     * @param exerciseTool the entity to save.
+     * @param exerciseToolDTO the entity to save.
      * @return the persisted entity.
      */
-    ExerciseTool save(ExerciseTool exerciseTool);
+    ExerciseToolDTO save(ExerciseToolDTO exerciseToolDTO);
 
     /**
      * Partially updates a exerciseTool.
      *
-     * @param exerciseTool the entity to update partially.
+     * @param exerciseToolDTO the entity to update partially.
      * @return the persisted entity.
      */
-    Optional<ExerciseTool> partialUpdate(ExerciseTool exerciseTool);
+    Optional<ExerciseToolDTO> partialUpdate(ExerciseToolDTO exerciseToolDTO);
 
     /**
      * Get all the exerciseTools.
@@ -31,7 +31,7 @@ public interface ExerciseToolService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<ExerciseTool> findAll(Pageable pageable);
+    Page<ExerciseToolDTO> findAll(Pageable pageable);
 
     /**
      * Get the "id" exerciseTool.
@@ -39,7 +39,7 @@ public interface ExerciseToolService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<ExerciseTool> findOne(Long id);
+    Optional<ExerciseToolDTO> findOne(Long id);
 
     /**
      * Delete the "id" exerciseTool.

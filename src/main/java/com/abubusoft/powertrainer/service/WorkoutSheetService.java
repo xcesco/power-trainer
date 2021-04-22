@@ -1,29 +1,29 @@
 package com.abubusoft.powertrainer.service;
 
-import com.abubusoft.powertrainer.domain.WorkoutSheet;
+import com.abubusoft.powertrainer.service.dto.WorkoutSheetDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Service Interface for managing {@link WorkoutSheet}.
+ * Service Interface for managing {@link com.abubusoft.powertrainer.domain.WorkoutSheet}.
  */
 public interface WorkoutSheetService {
     /**
      * Save a workoutSheet.
      *
-     * @param workoutSheet the entity to save.
+     * @param workoutSheetDTO the entity to save.
      * @return the persisted entity.
      */
-    WorkoutSheet save(WorkoutSheet workoutSheet);
+    WorkoutSheetDTO save(WorkoutSheetDTO workoutSheetDTO);
 
     /**
      * Partially updates a workoutSheet.
      *
-     * @param workoutSheet the entity to update partially.
+     * @param workoutSheetDTO the entity to update partially.
      * @return the persisted entity.
      */
-    Optional<WorkoutSheet> partialUpdate(WorkoutSheet workoutSheet);
+    Optional<WorkoutSheetDTO> partialUpdate(WorkoutSheetDTO workoutSheetDTO);
 
     /**
      * Get all the workoutSheets.
@@ -31,7 +31,7 @@ public interface WorkoutSheetService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<WorkoutSheet> findAll(Pageable pageable);
+    Page<WorkoutSheetDTO> findAll(Pageable pageable);
 
     /**
      * Get the "id" workoutSheet.
@@ -39,7 +39,7 @@ public interface WorkoutSheetService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<WorkoutSheet> findOne(Long id);
+    Optional<WorkoutSheetDTO> findOne(Long id);
 
     /**
      * Delete the "id" workoutSheet.

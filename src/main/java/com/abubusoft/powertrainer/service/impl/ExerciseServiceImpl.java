@@ -3,6 +3,8 @@ package com.abubusoft.powertrainer.service.impl;
 import com.abubusoft.powertrainer.domain.Exercise;
 import com.abubusoft.powertrainer.repository.ExerciseRepository;
 import com.abubusoft.powertrainer.service.ExerciseService;
+import com.abubusoft.powertrainer.service.dto.ExerciseDTO;
+import com.abubusoft.powertrainer.service.mapper.ExerciseMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,68 +24,53 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
 
-    public ExerciseServiceImpl(ExerciseRepository exerciseRepository) {
+    private final ExerciseMapper exerciseMapper;
+
+    public ExerciseServiceImpl(ExerciseRepository exerciseRepository, ExerciseMapper exerciseMapper) {
         this.exerciseRepository = exerciseRepository;
+        this.exerciseMapper = exerciseMapper;
     }
 
     @Override
-    public Exercise save(Exercise exercise) {
-        log.debug("Request to save Exercise : {}", exercise);
-        return exerciseRepository.save(exercise);
+    public ExerciseDTO save(ExerciseDTO exerciseDTO) {
+        log.debug("Request to save Exercise : {}", exerciseDTO);
+        Exercise exercise = exerciseMapper.toEntity(exerciseDTO);
+        exercise = exerciseRepository.save(exercise);
+        return exerciseMapper.toDto(exercise);
     }
 
     @Override
-    public Optional<Exercise> partialUpdate(Exercise exercise) {
-        log.debug("Request to partially update Exercise : {}", exercise);
+    public Optional<ExerciseDTO> partialUpdate(ExerciseDTO exerciseDTO) {
+        log.debug("Request to partially update Exercise : {}", exerciseDTO);
 
         return exerciseRepository
-            .findById(exercise.getId())
+            .findById(exerciseDTO.getId())
             .map(
                 existingExercise -> {
-                    if (exercise.getUuid() != null) {
-                        existingExercise.setUuid(exercise.getUuid());
-                    }
-                    if (exercise.getImage() != null) {
-                        existingExercise.setImage(exercise.getImage());
-                    }
-                    if (exercise.getImageContentType() != null) {
-                        existingExercise.setImageContentType(exercise.getImageContentType());
-                    }
-                    if (exercise.getName() != null) {
-                        existingExercise.setName(exercise.getName());
-                    }
-                    if (exercise.getDescription() != null) {
-                        existingExercise.setDescription(exercise.getDescription());
-                    }
-                    if (exercise.getValueType() != null) {
-                        existingExercise.setValueType(exercise.getValueType());
-                    }
-                    if (exercise.getOwner() != null) {
-                        existingExercise.setOwner(exercise.getOwner());
-                    }
-
+                    exerciseMapper.partialUpdate(existingExercise, exerciseDTO);
                     return existingExercise;
                 }
             )
-            .map(exerciseRepository::save);
+            .map(exerciseRepository::save)
+            .map(exerciseMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Exercise> findAll(Pageable pageable) {
+    public Page<ExerciseDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Exercises");
-        return exerciseRepository.findAll(pageable);
+        return exerciseRepository.findAll(pageable).map(exerciseMapper::toDto);
     }
 
-    public Page<Exercise> findAllWithEagerRelationships(Pageable pageable) {
-        return exerciseRepository.findAllWithEagerRelationships(pageable);
+    public Page<ExerciseDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return exerciseRepository.findAllWithEagerRelationships(pageable).map(exerciseMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Exercise> findOne(Long id) {
+    public Optional<ExerciseDTO> findOne(Long id) {
         log.debug("Request to get Exercise : {}", id);
-        return exerciseRepository.findOneWithEagerRelationships(id);
+        return exerciseRepository.findOneWithEagerRelationships(id).map(exerciseMapper::toDto);
     }
 
     @Override

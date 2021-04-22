@@ -4,6 +4,8 @@ import com.abubusoft.powertrainer.domain.*; // for static metamodels
 import com.abubusoft.powertrainer.domain.ExerciseTool;
 import com.abubusoft.powertrainer.repository.ExerciseToolRepository;
 import com.abubusoft.powertrainer.service.criteria.ExerciseToolCriteria;
+import com.abubusoft.powertrainer.service.dto.ExerciseToolDTO;
+import com.abubusoft.powertrainer.service.mapper.ExerciseToolMapper;
 import java.util.List;
 import javax.persistence.criteria.JoinType;
 import org.slf4j.Logger;
@@ -19,7 +21,7 @@ import tech.jhipster.service.QueryService;
  * Service for executing complex queries for {@link ExerciseTool} entities in the database.
  * The main input is a {@link ExerciseToolCriteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link List} of {@link ExerciseTool} or a {@link Page} of {@link ExerciseTool} which fulfills the criteria.
+ * It returns a {@link List} of {@link ExerciseToolDTO} or a {@link Page} of {@link ExerciseToolDTO} which fulfills the criteria.
  */
 @Service
 @Transactional(readOnly = true)
@@ -29,33 +31,36 @@ public class ExerciseToolQueryService extends QueryService<ExerciseTool> {
 
     private final ExerciseToolRepository exerciseToolRepository;
 
-    public ExerciseToolQueryService(ExerciseToolRepository exerciseToolRepository) {
+    private final ExerciseToolMapper exerciseToolMapper;
+
+    public ExerciseToolQueryService(ExerciseToolRepository exerciseToolRepository, ExerciseToolMapper exerciseToolMapper) {
         this.exerciseToolRepository = exerciseToolRepository;
+        this.exerciseToolMapper = exerciseToolMapper;
     }
 
     /**
-     * Return a {@link List} of {@link ExerciseTool} which matches the criteria from the database.
+     * Return a {@link List} of {@link ExerciseToolDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public List<ExerciseTool> findByCriteria(ExerciseToolCriteria criteria) {
+    public List<ExerciseToolDTO> findByCriteria(ExerciseToolCriteria criteria) {
         log.debug("find by criteria : {}", criteria);
         final Specification<ExerciseTool> specification = createSpecification(criteria);
-        return exerciseToolRepository.findAll(specification);
+        return exerciseToolMapper.toDto(exerciseToolRepository.findAll(specification));
     }
 
     /**
-     * Return a {@link Page} of {@link ExerciseTool} which matches the criteria from the database.
+     * Return a {@link Page} of {@link ExerciseToolDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public Page<ExerciseTool> findByCriteria(ExerciseToolCriteria criteria, Pageable page) {
+    public Page<ExerciseToolDTO> findByCriteria(ExerciseToolCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<ExerciseTool> specification = createSpecification(criteria);
-        return exerciseToolRepository.findAll(specification, page);
+        return exerciseToolRepository.findAll(specification, page).map(exerciseToolMapper::toDto);
     }
 
     /**

@@ -3,6 +3,8 @@ package com.abubusoft.powertrainer.service.impl;
 import com.abubusoft.powertrainer.domain.Misuration;
 import com.abubusoft.powertrainer.repository.MisurationRepository;
 import com.abubusoft.powertrainer.service.MisurationService;
+import com.abubusoft.powertrainer.service.dto.MisurationDTO;
+import com.abubusoft.powertrainer.service.mapper.MisurationMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,61 +24,49 @@ public class MisurationServiceImpl implements MisurationService {
 
     private final MisurationRepository misurationRepository;
 
-    public MisurationServiceImpl(MisurationRepository misurationRepository) {
+    private final MisurationMapper misurationMapper;
+
+    public MisurationServiceImpl(MisurationRepository misurationRepository, MisurationMapper misurationMapper) {
         this.misurationRepository = misurationRepository;
+        this.misurationMapper = misurationMapper;
     }
 
     @Override
-    public Misuration save(Misuration misuration) {
-        log.debug("Request to save Misuration : {}", misuration);
-        return misurationRepository.save(misuration);
+    public MisurationDTO save(MisurationDTO misurationDTO) {
+        log.debug("Request to save Misuration : {}", misurationDTO);
+        Misuration misuration = misurationMapper.toEntity(misurationDTO);
+        misuration = misurationRepository.save(misuration);
+        return misurationMapper.toDto(misuration);
     }
 
     @Override
-    public Optional<Misuration> partialUpdate(Misuration misuration) {
-        log.debug("Request to partially update Misuration : {}", misuration);
+    public Optional<MisurationDTO> partialUpdate(MisurationDTO misurationDTO) {
+        log.debug("Request to partially update Misuration : {}", misurationDTO);
 
         return misurationRepository
-            .findById(misuration.getId())
+            .findById(misurationDTO.getId())
             .map(
                 existingMisuration -> {
-                    if (misuration.getUuid() != null) {
-                        existingMisuration.setUuid(misuration.getUuid());
-                    }
-                    if (misuration.getDate() != null) {
-                        existingMisuration.setDate(misuration.getDate());
-                    }
-                    if (misuration.getValue() != null) {
-                        existingMisuration.setValue(misuration.getValue());
-                    }
-                    if (misuration.getImage() != null) {
-                        existingMisuration.setImage(misuration.getImage());
-                    }
-                    if (misuration.getImageContentType() != null) {
-                        existingMisuration.setImageContentType(misuration.getImageContentType());
-                    }
-                    if (misuration.getNote() != null) {
-                        existingMisuration.setNote(misuration.getNote());
-                    }
-
+                    misurationMapper.partialUpdate(existingMisuration, misurationDTO);
                     return existingMisuration;
                 }
             )
-            .map(misurationRepository::save);
+            .map(misurationRepository::save)
+            .map(misurationMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Misuration> findAll(Pageable pageable) {
+    public Page<MisurationDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Misurations");
-        return misurationRepository.findAll(pageable);
+        return misurationRepository.findAll(pageable).map(misurationMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Misuration> findOne(Long id) {
+    public Optional<MisurationDTO> findOne(Long id) {
         log.debug("Request to get Misuration : {}", id);
-        return misurationRepository.findById(id);
+        return misurationRepository.findById(id).map(misurationMapper::toDto);
     }
 
     @Override

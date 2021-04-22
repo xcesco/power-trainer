@@ -3,6 +3,8 @@ package com.abubusoft.powertrainer.service.impl;
 import com.abubusoft.powertrainer.domain.Workout;
 import com.abubusoft.powertrainer.repository.WorkoutRepository;
 import com.abubusoft.powertrainer.service.WorkoutService;
+import com.abubusoft.powertrainer.service.dto.WorkoutDTO;
+import com.abubusoft.powertrainer.service.mapper.WorkoutMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,73 +24,49 @@ public class WorkoutServiceImpl implements WorkoutService {
 
     private final WorkoutRepository workoutRepository;
 
-    public WorkoutServiceImpl(WorkoutRepository workoutRepository) {
+    private final WorkoutMapper workoutMapper;
+
+    public WorkoutServiceImpl(WorkoutRepository workoutRepository, WorkoutMapper workoutMapper) {
         this.workoutRepository = workoutRepository;
+        this.workoutMapper = workoutMapper;
     }
 
     @Override
-    public Workout save(Workout workout) {
-        log.debug("Request to save Workout : {}", workout);
-        return workoutRepository.save(workout);
+    public WorkoutDTO save(WorkoutDTO workoutDTO) {
+        log.debug("Request to save Workout : {}", workoutDTO);
+        Workout workout = workoutMapper.toEntity(workoutDTO);
+        workout = workoutRepository.save(workout);
+        return workoutMapper.toDto(workout);
     }
 
     @Override
-    public Optional<Workout> partialUpdate(Workout workout) {
-        log.debug("Request to partially update Workout : {}", workout);
+    public Optional<WorkoutDTO> partialUpdate(WorkoutDTO workoutDTO) {
+        log.debug("Request to partially update Workout : {}", workoutDTO);
 
         return workoutRepository
-            .findById(workout.getId())
+            .findById(workoutDTO.getId())
             .map(
                 existingWorkout -> {
-                    if (workout.getUuid() != null) {
-                        existingWorkout.setUuid(workout.getUuid());
-                    }
-                    if (workout.getName() != null) {
-                        existingWorkout.setName(workout.getName());
-                    }
-                    if (workout.getImage() != null) {
-                        existingWorkout.setImage(workout.getImage());
-                    }
-                    if (workout.getImageContentType() != null) {
-                        existingWorkout.setImageContentType(workout.getImageContentType());
-                    }
-                    if (workout.getType() != null) {
-                        existingWorkout.setType(workout.getType());
-                    }
-                    if (workout.getExecutionTime() != null) {
-                        existingWorkout.setExecutionTime(workout.getExecutionTime());
-                    }
-                    if (workout.getPreviewTime() != null) {
-                        existingWorkout.setPreviewTime(workout.getPreviewTime());
-                    }
-                    if (workout.getStatus() != null) {
-                        existingWorkout.setStatus(workout.getStatus());
-                    }
-                    if (workout.getDate() != null) {
-                        existingWorkout.setDate(workout.getDate());
-                    }
-                    if (workout.getNote() != null) {
-                        existingWorkout.setNote(workout.getNote());
-                    }
-
+                    workoutMapper.partialUpdate(existingWorkout, workoutDTO);
                     return existingWorkout;
                 }
             )
-            .map(workoutRepository::save);
+            .map(workoutRepository::save)
+            .map(workoutMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Workout> findAll(Pageable pageable) {
+    public Page<WorkoutDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Workouts");
-        return workoutRepository.findAll(pageable);
+        return workoutRepository.findAll(pageable).map(workoutMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Workout> findOne(Long id) {
+    public Optional<WorkoutDTO> findOne(Long id) {
         log.debug("Request to get Workout : {}", id);
-        return workoutRepository.findById(id);
+        return workoutRepository.findById(id).map(workoutMapper::toDto);
     }
 
     @Override

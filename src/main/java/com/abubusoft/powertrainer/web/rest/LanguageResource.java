@@ -1,10 +1,10 @@
 package com.abubusoft.powertrainer.web.rest;
 
-import com.abubusoft.powertrainer.domain.Language;
 import com.abubusoft.powertrainer.repository.LanguageRepository;
 import com.abubusoft.powertrainer.service.LanguageQueryService;
 import com.abubusoft.powertrainer.service.LanguageService;
 import com.abubusoft.powertrainer.service.criteria.LanguageCriteria;
+import com.abubusoft.powertrainer.service.dto.LanguageDTO;
 import com.abubusoft.powertrainer.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -60,17 +60,17 @@ public class LanguageResource {
     /**
      * {@code POST  /languages} : Create a new language.
      *
-     * @param language the language to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new language, or with status {@code 400 (Bad Request)} if the language has already an ID.
+     * @param languageDTO the languageDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new languageDTO, or with status {@code 400 (Bad Request)} if the language has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/languages")
-    public ResponseEntity<Language> createLanguage(@Valid @RequestBody Language language) throws URISyntaxException {
-        log.debug("REST request to save Language : {}", language);
-        if (language.getId() != null) {
+    public ResponseEntity<LanguageDTO> createLanguage(@Valid @RequestBody LanguageDTO languageDTO) throws URISyntaxException {
+        log.debug("REST request to save Language : {}", languageDTO);
+        if (languageDTO.getId() != null) {
             throw new BadRequestAlertException("A new language cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Language result = languageService.save(language);
+        LanguageDTO result = languageService.save(languageDTO);
         return ResponseEntity
             .created(new URI("/api/languages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -80,23 +80,23 @@ public class LanguageResource {
     /**
      * {@code PUT  /languages/:id} : Updates an existing language.
      *
-     * @param id the id of the language to save.
-     * @param language the language to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated language,
-     * or with status {@code 400 (Bad Request)} if the language is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the language couldn't be updated.
+     * @param id the id of the languageDTO to save.
+     * @param languageDTO the languageDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated languageDTO,
+     * or with status {@code 400 (Bad Request)} if the languageDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the languageDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/languages/{id}")
-    public ResponseEntity<Language> updateLanguage(
+    public ResponseEntity<LanguageDTO> updateLanguage(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Language language
+        @Valid @RequestBody LanguageDTO languageDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update Language : {}, {}", id, language);
-        if (language.getId() == null) {
+        log.debug("REST request to update Language : {}, {}", id, languageDTO);
+        if (languageDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, language.getId())) {
+        if (!Objects.equals(id, languageDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -104,34 +104,34 @@ public class LanguageResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Language result = languageService.save(language);
+        LanguageDTO result = languageService.save(languageDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, language.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, languageDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /languages/:id} : Partial updates given fields of an existing language, field will ignore if it is null
      *
-     * @param id the id of the language to save.
-     * @param language the language to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated language,
-     * or with status {@code 400 (Bad Request)} if the language is not valid,
-     * or with status {@code 404 (Not Found)} if the language is not found,
-     * or with status {@code 500 (Internal Server Error)} if the language couldn't be updated.
+     * @param id the id of the languageDTO to save.
+     * @param languageDTO the languageDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated languageDTO,
+     * or with status {@code 400 (Bad Request)} if the languageDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the languageDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the languageDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/languages/{id}", consumes = "application/merge-patch+json")
-    public ResponseEntity<Language> partialUpdateLanguage(
+    public ResponseEntity<LanguageDTO> partialUpdateLanguage(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody Language language
+        @NotNull @RequestBody LanguageDTO languageDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update Language partially : {}, {}", id, language);
-        if (language.getId() == null) {
+        log.debug("REST request to partial update Language partially : {}, {}", id, languageDTO);
+        if (languageDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, language.getId())) {
+        if (!Objects.equals(id, languageDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -139,11 +139,11 @@ public class LanguageResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Language> result = languageService.partialUpdate(language);
+        Optional<LanguageDTO> result = languageService.partialUpdate(languageDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, language.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, languageDTO.getId().toString())
         );
     }
 
@@ -155,9 +155,9 @@ public class LanguageResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of languages in body.
      */
     @GetMapping("/languages")
-    public ResponseEntity<List<Language>> getAllLanguages(LanguageCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<LanguageDTO>> getAllLanguages(LanguageCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Languages by criteria: {}", criteria);
-        Page<Language> page = languageQueryService.findByCriteria(criteria, pageable);
+        Page<LanguageDTO> page = languageQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -177,20 +177,20 @@ public class LanguageResource {
     /**
      * {@code GET  /languages/:id} : get the "id" language.
      *
-     * @param id the id of the language to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the language, or with status {@code 404 (Not Found)}.
+     * @param id the id of the languageDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the languageDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/languages/{id}")
-    public ResponseEntity<Language> getLanguage(@PathVariable Long id) {
+    public ResponseEntity<LanguageDTO> getLanguage(@PathVariable Long id) {
         log.debug("REST request to get Language : {}", id);
-        Optional<Language> language = languageService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(language);
+        Optional<LanguageDTO> languageDTO = languageService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(languageDTO);
     }
 
     /**
      * {@code DELETE  /languages/:id} : delete the "id" language.
      *
-     * @param id the id of the language to delete.
+     * @param id the id of the languageDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/languages/{id}")

@@ -4,6 +4,8 @@ import com.abubusoft.powertrainer.domain.*; // for static metamodels
 import com.abubusoft.powertrainer.domain.Muscle;
 import com.abubusoft.powertrainer.repository.MuscleRepository;
 import com.abubusoft.powertrainer.service.criteria.MuscleCriteria;
+import com.abubusoft.powertrainer.service.dto.MuscleDTO;
+import com.abubusoft.powertrainer.service.mapper.MuscleMapper;
 import java.util.List;
 import javax.persistence.criteria.JoinType;
 import org.slf4j.Logger;
@@ -19,7 +21,7 @@ import tech.jhipster.service.QueryService;
  * Service for executing complex queries for {@link Muscle} entities in the database.
  * The main input is a {@link MuscleCriteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link List} of {@link Muscle} or a {@link Page} of {@link Muscle} which fulfills the criteria.
+ * It returns a {@link List} of {@link MuscleDTO} or a {@link Page} of {@link MuscleDTO} which fulfills the criteria.
  */
 @Service
 @Transactional(readOnly = true)
@@ -29,33 +31,36 @@ public class MuscleQueryService extends QueryService<Muscle> {
 
     private final MuscleRepository muscleRepository;
 
-    public MuscleQueryService(MuscleRepository muscleRepository) {
+    private final MuscleMapper muscleMapper;
+
+    public MuscleQueryService(MuscleRepository muscleRepository, MuscleMapper muscleMapper) {
         this.muscleRepository = muscleRepository;
+        this.muscleMapper = muscleMapper;
     }
 
     /**
-     * Return a {@link List} of {@link Muscle} which matches the criteria from the database.
+     * Return a {@link List} of {@link MuscleDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public List<Muscle> findByCriteria(MuscleCriteria criteria) {
+    public List<MuscleDTO> findByCriteria(MuscleCriteria criteria) {
         log.debug("find by criteria : {}", criteria);
         final Specification<Muscle> specification = createSpecification(criteria);
-        return muscleRepository.findAll(specification);
+        return muscleMapper.toDto(muscleRepository.findAll(specification));
     }
 
     /**
-     * Return a {@link Page} of {@link Muscle} which matches the criteria from the database.
+     * Return a {@link Page} of {@link MuscleDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public Page<Muscle> findByCriteria(MuscleCriteria criteria, Pageable page) {
+    public Page<MuscleDTO> findByCriteria(MuscleCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Muscle> specification = createSpecification(criteria);
-        return muscleRepository.findAll(specification, page);
+        return muscleRepository.findAll(specification, page).map(muscleMapper::toDto);
     }
 
     /**

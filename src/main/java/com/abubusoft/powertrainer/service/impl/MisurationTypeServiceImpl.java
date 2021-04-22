@@ -3,6 +3,8 @@ package com.abubusoft.powertrainer.service.impl;
 import com.abubusoft.powertrainer.domain.MisurationType;
 import com.abubusoft.powertrainer.repository.MisurationTypeRepository;
 import com.abubusoft.powertrainer.service.MisurationTypeService;
+import com.abubusoft.powertrainer.service.dto.MisurationTypeDTO;
+import com.abubusoft.powertrainer.service.mapper.MisurationTypeMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,58 +24,49 @@ public class MisurationTypeServiceImpl implements MisurationTypeService {
 
     private final MisurationTypeRepository misurationTypeRepository;
 
-    public MisurationTypeServiceImpl(MisurationTypeRepository misurationTypeRepository) {
+    private final MisurationTypeMapper misurationTypeMapper;
+
+    public MisurationTypeServiceImpl(MisurationTypeRepository misurationTypeRepository, MisurationTypeMapper misurationTypeMapper) {
         this.misurationTypeRepository = misurationTypeRepository;
+        this.misurationTypeMapper = misurationTypeMapper;
     }
 
     @Override
-    public MisurationType save(MisurationType misurationType) {
-        log.debug("Request to save MisurationType : {}", misurationType);
-        return misurationTypeRepository.save(misurationType);
+    public MisurationTypeDTO save(MisurationTypeDTO misurationTypeDTO) {
+        log.debug("Request to save MisurationType : {}", misurationTypeDTO);
+        MisurationType misurationType = misurationTypeMapper.toEntity(misurationTypeDTO);
+        misurationType = misurationTypeRepository.save(misurationType);
+        return misurationTypeMapper.toDto(misurationType);
     }
 
     @Override
-    public Optional<MisurationType> partialUpdate(MisurationType misurationType) {
-        log.debug("Request to partially update MisurationType : {}", misurationType);
+    public Optional<MisurationTypeDTO> partialUpdate(MisurationTypeDTO misurationTypeDTO) {
+        log.debug("Request to partially update MisurationType : {}", misurationTypeDTO);
 
         return misurationTypeRepository
-            .findById(misurationType.getId())
+            .findById(misurationTypeDTO.getId())
             .map(
                 existingMisurationType -> {
-                    if (misurationType.getUuid() != null) {
-                        existingMisurationType.setUuid(misurationType.getUuid());
-                    }
-                    if (misurationType.getName() != null) {
-                        existingMisurationType.setName(misurationType.getName());
-                    }
-                    if (misurationType.getImage() != null) {
-                        existingMisurationType.setImage(misurationType.getImage());
-                    }
-                    if (misurationType.getImageContentType() != null) {
-                        existingMisurationType.setImageContentType(misurationType.getImageContentType());
-                    }
-                    if (misurationType.getDescription() != null) {
-                        existingMisurationType.setDescription(misurationType.getDescription());
-                    }
-
+                    misurationTypeMapper.partialUpdate(existingMisurationType, misurationTypeDTO);
                     return existingMisurationType;
                 }
             )
-            .map(misurationTypeRepository::save);
+            .map(misurationTypeRepository::save)
+            .map(misurationTypeMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<MisurationType> findAll(Pageable pageable) {
+    public Page<MisurationTypeDTO> findAll(Pageable pageable) {
         log.debug("Request to get all MisurationTypes");
-        return misurationTypeRepository.findAll(pageable);
+        return misurationTypeRepository.findAll(pageable).map(misurationTypeMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<MisurationType> findOne(Long id) {
+    public Optional<MisurationTypeDTO> findOne(Long id) {
         log.debug("Request to get MisurationType : {}", id);
-        return misurationTypeRepository.findById(id);
+        return misurationTypeRepository.findById(id).map(misurationTypeMapper::toDto);
     }
 
     @Override

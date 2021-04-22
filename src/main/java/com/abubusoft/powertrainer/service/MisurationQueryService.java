@@ -4,6 +4,8 @@ import com.abubusoft.powertrainer.domain.*; // for static metamodels
 import com.abubusoft.powertrainer.domain.Misuration;
 import com.abubusoft.powertrainer.repository.MisurationRepository;
 import com.abubusoft.powertrainer.service.criteria.MisurationCriteria;
+import com.abubusoft.powertrainer.service.dto.MisurationDTO;
+import com.abubusoft.powertrainer.service.mapper.MisurationMapper;
 import java.util.List;
 import javax.persistence.criteria.JoinType;
 import org.slf4j.Logger;
@@ -19,7 +21,7 @@ import tech.jhipster.service.QueryService;
  * Service for executing complex queries for {@link Misuration} entities in the database.
  * The main input is a {@link MisurationCriteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link List} of {@link Misuration} or a {@link Page} of {@link Misuration} which fulfills the criteria.
+ * It returns a {@link List} of {@link MisurationDTO} or a {@link Page} of {@link MisurationDTO} which fulfills the criteria.
  */
 @Service
 @Transactional(readOnly = true)
@@ -29,33 +31,36 @@ public class MisurationQueryService extends QueryService<Misuration> {
 
     private final MisurationRepository misurationRepository;
 
-    public MisurationQueryService(MisurationRepository misurationRepository) {
+    private final MisurationMapper misurationMapper;
+
+    public MisurationQueryService(MisurationRepository misurationRepository, MisurationMapper misurationMapper) {
         this.misurationRepository = misurationRepository;
+        this.misurationMapper = misurationMapper;
     }
 
     /**
-     * Return a {@link List} of {@link Misuration} which matches the criteria from the database.
+     * Return a {@link List} of {@link MisurationDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public List<Misuration> findByCriteria(MisurationCriteria criteria) {
+    public List<MisurationDTO> findByCriteria(MisurationCriteria criteria) {
         log.debug("find by criteria : {}", criteria);
         final Specification<Misuration> specification = createSpecification(criteria);
-        return misurationRepository.findAll(specification);
+        return misurationMapper.toDto(misurationRepository.findAll(specification));
     }
 
     /**
-     * Return a {@link Page} of {@link Misuration} which matches the criteria from the database.
+     * Return a {@link Page} of {@link MisurationDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public Page<Misuration> findByCriteria(MisurationCriteria criteria, Pageable page) {
+    public Page<MisurationDTO> findByCriteria(MisurationCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Misuration> specification = createSpecification(criteria);
-        return misurationRepository.findAll(specification, page);
+        return misurationRepository.findAll(specification, page).map(misurationMapper::toDto);
     }
 
     /**

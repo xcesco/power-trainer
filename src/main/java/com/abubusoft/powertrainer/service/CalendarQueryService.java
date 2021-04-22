@@ -4,6 +4,8 @@ import com.abubusoft.powertrainer.domain.*; // for static metamodels
 import com.abubusoft.powertrainer.domain.Calendar;
 import com.abubusoft.powertrainer.repository.CalendarRepository;
 import com.abubusoft.powertrainer.service.criteria.CalendarCriteria;
+import com.abubusoft.powertrainer.service.dto.CalendarDTO;
+import com.abubusoft.powertrainer.service.mapper.CalendarMapper;
 import java.util.List;
 import javax.persistence.criteria.JoinType;
 import org.slf4j.Logger;
@@ -19,7 +21,7 @@ import tech.jhipster.service.QueryService;
  * Service for executing complex queries for {@link Calendar} entities in the database.
  * The main input is a {@link CalendarCriteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link List} of {@link Calendar} or a {@link Page} of {@link Calendar} which fulfills the criteria.
+ * It returns a {@link List} of {@link CalendarDTO} or a {@link Page} of {@link CalendarDTO} which fulfills the criteria.
  */
 @Service
 @Transactional(readOnly = true)
@@ -29,33 +31,36 @@ public class CalendarQueryService extends QueryService<Calendar> {
 
     private final CalendarRepository calendarRepository;
 
-    public CalendarQueryService(CalendarRepository calendarRepository) {
+    private final CalendarMapper calendarMapper;
+
+    public CalendarQueryService(CalendarRepository calendarRepository, CalendarMapper calendarMapper) {
         this.calendarRepository = calendarRepository;
+        this.calendarMapper = calendarMapper;
     }
 
     /**
-     * Return a {@link List} of {@link Calendar} which matches the criteria from the database.
+     * Return a {@link List} of {@link CalendarDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public List<Calendar> findByCriteria(CalendarCriteria criteria) {
+    public List<CalendarDTO> findByCriteria(CalendarCriteria criteria) {
         log.debug("find by criteria : {}", criteria);
         final Specification<Calendar> specification = createSpecification(criteria);
-        return calendarRepository.findAll(specification);
+        return calendarMapper.toDto(calendarRepository.findAll(specification));
     }
 
     /**
-     * Return a {@link Page} of {@link Calendar} which matches the criteria from the database.
+     * Return a {@link Page} of {@link CalendarDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public Page<Calendar> findByCriteria(CalendarCriteria criteria, Pageable page) {
+    public Page<CalendarDTO> findByCriteria(CalendarCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Calendar> specification = createSpecification(criteria);
-        return calendarRepository.findAll(specification, page);
+        return calendarRepository.findAll(specification, page).map(calendarMapper::toDto);
     }
 
     /**

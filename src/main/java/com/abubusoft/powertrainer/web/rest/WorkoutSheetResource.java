@@ -1,10 +1,10 @@
 package com.abubusoft.powertrainer.web.rest;
 
-import com.abubusoft.powertrainer.domain.WorkoutSheet;
 import com.abubusoft.powertrainer.repository.WorkoutSheetRepository;
 import com.abubusoft.powertrainer.service.WorkoutSheetQueryService;
 import com.abubusoft.powertrainer.service.WorkoutSheetService;
 import com.abubusoft.powertrainer.service.criteria.WorkoutSheetCriteria;
+import com.abubusoft.powertrainer.service.dto.WorkoutSheetDTO;
 import com.abubusoft.powertrainer.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -60,17 +60,18 @@ public class WorkoutSheetResource {
     /**
      * {@code POST  /workout-sheets} : Create a new workoutSheet.
      *
-     * @param workoutSheet the workoutSheet to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new workoutSheet, or with status {@code 400 (Bad Request)} if the workoutSheet has already an ID.
+     * @param workoutSheetDTO the workoutSheetDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new workoutSheetDTO, or with status {@code 400 (Bad Request)} if the workoutSheet has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/workout-sheets")
-    public ResponseEntity<WorkoutSheet> createWorkoutSheet(@Valid @RequestBody WorkoutSheet workoutSheet) throws URISyntaxException {
-        log.debug("REST request to save WorkoutSheet : {}", workoutSheet);
-        if (workoutSheet.getId() != null) {
+    public ResponseEntity<WorkoutSheetDTO> createWorkoutSheet(@Valid @RequestBody WorkoutSheetDTO workoutSheetDTO)
+        throws URISyntaxException {
+        log.debug("REST request to save WorkoutSheet : {}", workoutSheetDTO);
+        if (workoutSheetDTO.getId() != null) {
             throw new BadRequestAlertException("A new workoutSheet cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        WorkoutSheet result = workoutSheetService.save(workoutSheet);
+        WorkoutSheetDTO result = workoutSheetService.save(workoutSheetDTO);
         return ResponseEntity
             .created(new URI("/api/workout-sheets/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -80,23 +81,23 @@ public class WorkoutSheetResource {
     /**
      * {@code PUT  /workout-sheets/:id} : Updates an existing workoutSheet.
      *
-     * @param id the id of the workoutSheet to save.
-     * @param workoutSheet the workoutSheet to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated workoutSheet,
-     * or with status {@code 400 (Bad Request)} if the workoutSheet is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the workoutSheet couldn't be updated.
+     * @param id the id of the workoutSheetDTO to save.
+     * @param workoutSheetDTO the workoutSheetDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated workoutSheetDTO,
+     * or with status {@code 400 (Bad Request)} if the workoutSheetDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the workoutSheetDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/workout-sheets/{id}")
-    public ResponseEntity<WorkoutSheet> updateWorkoutSheet(
+    public ResponseEntity<WorkoutSheetDTO> updateWorkoutSheet(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody WorkoutSheet workoutSheet
+        @Valid @RequestBody WorkoutSheetDTO workoutSheetDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update WorkoutSheet : {}, {}", id, workoutSheet);
-        if (workoutSheet.getId() == null) {
+        log.debug("REST request to update WorkoutSheet : {}, {}", id, workoutSheetDTO);
+        if (workoutSheetDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, workoutSheet.getId())) {
+        if (!Objects.equals(id, workoutSheetDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -104,34 +105,34 @@ public class WorkoutSheetResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        WorkoutSheet result = workoutSheetService.save(workoutSheet);
+        WorkoutSheetDTO result = workoutSheetService.save(workoutSheetDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, workoutSheet.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, workoutSheetDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /workout-sheets/:id} : Partial updates given fields of an existing workoutSheet, field will ignore if it is null
      *
-     * @param id the id of the workoutSheet to save.
-     * @param workoutSheet the workoutSheet to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated workoutSheet,
-     * or with status {@code 400 (Bad Request)} if the workoutSheet is not valid,
-     * or with status {@code 404 (Not Found)} if the workoutSheet is not found,
-     * or with status {@code 500 (Internal Server Error)} if the workoutSheet couldn't be updated.
+     * @param id the id of the workoutSheetDTO to save.
+     * @param workoutSheetDTO the workoutSheetDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated workoutSheetDTO,
+     * or with status {@code 400 (Bad Request)} if the workoutSheetDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the workoutSheetDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the workoutSheetDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/workout-sheets/{id}", consumes = "application/merge-patch+json")
-    public ResponseEntity<WorkoutSheet> partialUpdateWorkoutSheet(
+    public ResponseEntity<WorkoutSheetDTO> partialUpdateWorkoutSheet(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody WorkoutSheet workoutSheet
+        @NotNull @RequestBody WorkoutSheetDTO workoutSheetDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update WorkoutSheet partially : {}, {}", id, workoutSheet);
-        if (workoutSheet.getId() == null) {
+        log.debug("REST request to partial update WorkoutSheet partially : {}, {}", id, workoutSheetDTO);
+        if (workoutSheetDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, workoutSheet.getId())) {
+        if (!Objects.equals(id, workoutSheetDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -139,11 +140,11 @@ public class WorkoutSheetResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<WorkoutSheet> result = workoutSheetService.partialUpdate(workoutSheet);
+        Optional<WorkoutSheetDTO> result = workoutSheetService.partialUpdate(workoutSheetDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, workoutSheet.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, workoutSheetDTO.getId().toString())
         );
     }
 
@@ -155,9 +156,9 @@ public class WorkoutSheetResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of workoutSheets in body.
      */
     @GetMapping("/workout-sheets")
-    public ResponseEntity<List<WorkoutSheet>> getAllWorkoutSheets(WorkoutSheetCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<WorkoutSheetDTO>> getAllWorkoutSheets(WorkoutSheetCriteria criteria, Pageable pageable) {
         log.debug("REST request to get WorkoutSheets by criteria: {}", criteria);
-        Page<WorkoutSheet> page = workoutSheetQueryService.findByCriteria(criteria, pageable);
+        Page<WorkoutSheetDTO> page = workoutSheetQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -177,20 +178,20 @@ public class WorkoutSheetResource {
     /**
      * {@code GET  /workout-sheets/:id} : get the "id" workoutSheet.
      *
-     * @param id the id of the workoutSheet to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the workoutSheet, or with status {@code 404 (Not Found)}.
+     * @param id the id of the workoutSheetDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the workoutSheetDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/workout-sheets/{id}")
-    public ResponseEntity<WorkoutSheet> getWorkoutSheet(@PathVariable Long id) {
+    public ResponseEntity<WorkoutSheetDTO> getWorkoutSheet(@PathVariable Long id) {
         log.debug("REST request to get WorkoutSheet : {}", id);
-        Optional<WorkoutSheet> workoutSheet = workoutSheetService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(workoutSheet);
+        Optional<WorkoutSheetDTO> workoutSheetDTO = workoutSheetService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(workoutSheetDTO);
     }
 
     /**
      * {@code DELETE  /workout-sheets/:id} : delete the "id" workoutSheet.
      *
-     * @param id the id of the workoutSheet to delete.
+     * @param id the id of the workoutSheetDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/workout-sheets/{id}")

@@ -4,6 +4,8 @@ import com.abubusoft.powertrainer.domain.*; // for static metamodels
 import com.abubusoft.powertrainer.domain.Translation;
 import com.abubusoft.powertrainer.repository.TranslationRepository;
 import com.abubusoft.powertrainer.service.criteria.TranslationCriteria;
+import com.abubusoft.powertrainer.service.dto.TranslationDTO;
+import com.abubusoft.powertrainer.service.mapper.TranslationMapper;
 import java.util.List;
 import javax.persistence.criteria.JoinType;
 import org.slf4j.Logger;
@@ -19,7 +21,7 @@ import tech.jhipster.service.QueryService;
  * Service for executing complex queries for {@link Translation} entities in the database.
  * The main input is a {@link TranslationCriteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link List} of {@link Translation} or a {@link Page} of {@link Translation} which fulfills the criteria.
+ * It returns a {@link List} of {@link TranslationDTO} or a {@link Page} of {@link TranslationDTO} which fulfills the criteria.
  */
 @Service
 @Transactional(readOnly = true)
@@ -29,33 +31,36 @@ public class TranslationQueryService extends QueryService<Translation> {
 
     private final TranslationRepository translationRepository;
 
-    public TranslationQueryService(TranslationRepository translationRepository) {
+    private final TranslationMapper translationMapper;
+
+    public TranslationQueryService(TranslationRepository translationRepository, TranslationMapper translationMapper) {
         this.translationRepository = translationRepository;
+        this.translationMapper = translationMapper;
     }
 
     /**
-     * Return a {@link List} of {@link Translation} which matches the criteria from the database.
+     * Return a {@link List} of {@link TranslationDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public List<Translation> findByCriteria(TranslationCriteria criteria) {
+    public List<TranslationDTO> findByCriteria(TranslationCriteria criteria) {
         log.debug("find by criteria : {}", criteria);
         final Specification<Translation> specification = createSpecification(criteria);
-        return translationRepository.findAll(specification);
+        return translationMapper.toDto(translationRepository.findAll(specification));
     }
 
     /**
-     * Return a {@link Page} of {@link Translation} which matches the criteria from the database.
+     * Return a {@link Page} of {@link TranslationDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public Page<Translation> findByCriteria(TranslationCriteria criteria, Pageable page) {
+    public Page<TranslationDTO> findByCriteria(TranslationCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Translation> specification = createSpecification(criteria);
-        return translationRepository.findAll(specification, page);
+        return translationRepository.findAll(specification, page).map(translationMapper::toDto);
     }
 
     /**

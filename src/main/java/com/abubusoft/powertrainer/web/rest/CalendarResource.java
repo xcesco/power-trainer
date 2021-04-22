@@ -1,10 +1,10 @@
 package com.abubusoft.powertrainer.web.rest;
 
-import com.abubusoft.powertrainer.domain.Calendar;
 import com.abubusoft.powertrainer.repository.CalendarRepository;
 import com.abubusoft.powertrainer.service.CalendarQueryService;
 import com.abubusoft.powertrainer.service.CalendarService;
 import com.abubusoft.powertrainer.service.criteria.CalendarCriteria;
+import com.abubusoft.powertrainer.service.dto.CalendarDTO;
 import com.abubusoft.powertrainer.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -60,17 +60,17 @@ public class CalendarResource {
     /**
      * {@code POST  /calendars} : Create a new calendar.
      *
-     * @param calendar the calendar to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new calendar, or with status {@code 400 (Bad Request)} if the calendar has already an ID.
+     * @param calendarDTO the calendarDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new calendarDTO, or with status {@code 400 (Bad Request)} if the calendar has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/calendars")
-    public ResponseEntity<Calendar> createCalendar(@Valid @RequestBody Calendar calendar) throws URISyntaxException {
-        log.debug("REST request to save Calendar : {}", calendar);
-        if (calendar.getId() != null) {
+    public ResponseEntity<CalendarDTO> createCalendar(@Valid @RequestBody CalendarDTO calendarDTO) throws URISyntaxException {
+        log.debug("REST request to save Calendar : {}", calendarDTO);
+        if (calendarDTO.getId() != null) {
             throw new BadRequestAlertException("A new calendar cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Calendar result = calendarService.save(calendar);
+        CalendarDTO result = calendarService.save(calendarDTO);
         return ResponseEntity
             .created(new URI("/api/calendars/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -80,23 +80,23 @@ public class CalendarResource {
     /**
      * {@code PUT  /calendars/:id} : Updates an existing calendar.
      *
-     * @param id the id of the calendar to save.
-     * @param calendar the calendar to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated calendar,
-     * or with status {@code 400 (Bad Request)} if the calendar is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the calendar couldn't be updated.
+     * @param id the id of the calendarDTO to save.
+     * @param calendarDTO the calendarDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated calendarDTO,
+     * or with status {@code 400 (Bad Request)} if the calendarDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the calendarDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/calendars/{id}")
-    public ResponseEntity<Calendar> updateCalendar(
+    public ResponseEntity<CalendarDTO> updateCalendar(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody Calendar calendar
+        @Valid @RequestBody CalendarDTO calendarDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update Calendar : {}, {}", id, calendar);
-        if (calendar.getId() == null) {
+        log.debug("REST request to update Calendar : {}, {}", id, calendarDTO);
+        if (calendarDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, calendar.getId())) {
+        if (!Objects.equals(id, calendarDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -104,34 +104,34 @@ public class CalendarResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Calendar result = calendarService.save(calendar);
+        CalendarDTO result = calendarService.save(calendarDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, calendar.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, calendarDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /calendars/:id} : Partial updates given fields of an existing calendar, field will ignore if it is null
      *
-     * @param id the id of the calendar to save.
-     * @param calendar the calendar to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated calendar,
-     * or with status {@code 400 (Bad Request)} if the calendar is not valid,
-     * or with status {@code 404 (Not Found)} if the calendar is not found,
-     * or with status {@code 500 (Internal Server Error)} if the calendar couldn't be updated.
+     * @param id the id of the calendarDTO to save.
+     * @param calendarDTO the calendarDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated calendarDTO,
+     * or with status {@code 400 (Bad Request)} if the calendarDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the calendarDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the calendarDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/calendars/{id}", consumes = "application/merge-patch+json")
-    public ResponseEntity<Calendar> partialUpdateCalendar(
+    public ResponseEntity<CalendarDTO> partialUpdateCalendar(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody Calendar calendar
+        @NotNull @RequestBody CalendarDTO calendarDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update Calendar partially : {}, {}", id, calendar);
-        if (calendar.getId() == null) {
+        log.debug("REST request to partial update Calendar partially : {}, {}", id, calendarDTO);
+        if (calendarDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, calendar.getId())) {
+        if (!Objects.equals(id, calendarDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -139,11 +139,11 @@ public class CalendarResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Calendar> result = calendarService.partialUpdate(calendar);
+        Optional<CalendarDTO> result = calendarService.partialUpdate(calendarDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, calendar.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, calendarDTO.getId().toString())
         );
     }
 
@@ -155,9 +155,9 @@ public class CalendarResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of calendars in body.
      */
     @GetMapping("/calendars")
-    public ResponseEntity<List<Calendar>> getAllCalendars(CalendarCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<CalendarDTO>> getAllCalendars(CalendarCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Calendars by criteria: {}", criteria);
-        Page<Calendar> page = calendarQueryService.findByCriteria(criteria, pageable);
+        Page<CalendarDTO> page = calendarQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -177,20 +177,20 @@ public class CalendarResource {
     /**
      * {@code GET  /calendars/:id} : get the "id" calendar.
      *
-     * @param id the id of the calendar to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the calendar, or with status {@code 404 (Not Found)}.
+     * @param id the id of the calendarDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the calendarDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/calendars/{id}")
-    public ResponseEntity<Calendar> getCalendar(@PathVariable Long id) {
+    public ResponseEntity<CalendarDTO> getCalendar(@PathVariable Long id) {
         log.debug("REST request to get Calendar : {}", id);
-        Optional<Calendar> calendar = calendarService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(calendar);
+        Optional<CalendarDTO> calendarDTO = calendarService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(calendarDTO);
     }
 
     /**
      * {@code DELETE  /calendars/:id} : delete the "id" calendar.
      *
-     * @param id the id of the calendar to delete.
+     * @param id the id of the calendarDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/calendars/{id}")

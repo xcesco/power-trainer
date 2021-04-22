@@ -11,6 +11,8 @@ import com.abubusoft.powertrainer.domain.WorkoutSheetExercise;
 import com.abubusoft.powertrainer.domain.enumeration.ValueType;
 import com.abubusoft.powertrainer.repository.WorkoutSheetExerciseRepository;
 import com.abubusoft.powertrainer.service.criteria.WorkoutSheetExerciseCriteria;
+import com.abubusoft.powertrainer.service.dto.WorkoutSheetExerciseDTO;
+import com.abubusoft.powertrainer.service.mapper.WorkoutSheetExerciseMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -67,6 +69,9 @@ class WorkoutSheetExerciseResourceIT {
     private WorkoutSheetExerciseRepository workoutSheetExerciseRepository;
 
     @Autowired
+    private WorkoutSheetExerciseMapper workoutSheetExerciseMapper;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -120,11 +125,12 @@ class WorkoutSheetExerciseResourceIT {
     void createWorkoutSheetExercise() throws Exception {
         int databaseSizeBeforeCreate = workoutSheetExerciseRepository.findAll().size();
         // Create the WorkoutSheetExercise
+        WorkoutSheetExerciseDTO workoutSheetExerciseDTO = workoutSheetExerciseMapper.toDto(workoutSheetExercise);
         restWorkoutSheetExerciseMockMvc
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExercise))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExerciseDTO))
             )
             .andExpect(status().isCreated());
 
@@ -146,6 +152,7 @@ class WorkoutSheetExerciseResourceIT {
     void createWorkoutSheetExerciseWithExistingId() throws Exception {
         // Create the WorkoutSheetExercise with an existing ID
         workoutSheetExercise.setId(1L);
+        WorkoutSheetExerciseDTO workoutSheetExerciseDTO = workoutSheetExerciseMapper.toDto(workoutSheetExercise);
 
         int databaseSizeBeforeCreate = workoutSheetExerciseRepository.findAll().size();
 
@@ -154,7 +161,7 @@ class WorkoutSheetExerciseResourceIT {
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExercise))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExerciseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -171,12 +178,13 @@ class WorkoutSheetExerciseResourceIT {
         workoutSheetExercise.setUuid(null);
 
         // Create the WorkoutSheetExercise, which fails.
+        WorkoutSheetExerciseDTO workoutSheetExerciseDTO = workoutSheetExerciseMapper.toDto(workoutSheetExercise);
 
         restWorkoutSheetExerciseMockMvc
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExercise))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExerciseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -192,12 +200,13 @@ class WorkoutSheetExerciseResourceIT {
         workoutSheetExercise.setExerciseUuid(null);
 
         // Create the WorkoutSheetExercise, which fails.
+        WorkoutSheetExerciseDTO workoutSheetExerciseDTO = workoutSheetExerciseMapper.toDto(workoutSheetExercise);
 
         restWorkoutSheetExerciseMockMvc
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExercise))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExerciseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -213,12 +222,13 @@ class WorkoutSheetExerciseResourceIT {
         workoutSheetExercise.setExerciseName(null);
 
         // Create the WorkoutSheetExercise, which fails.
+        WorkoutSheetExerciseDTO workoutSheetExerciseDTO = workoutSheetExerciseMapper.toDto(workoutSheetExercise);
 
         restWorkoutSheetExerciseMockMvc
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExercise))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExerciseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -234,12 +244,13 @@ class WorkoutSheetExerciseResourceIT {
         workoutSheetExercise.setExerciseValue(null);
 
         // Create the WorkoutSheetExercise, which fails.
+        WorkoutSheetExerciseDTO workoutSheetExerciseDTO = workoutSheetExerciseMapper.toDto(workoutSheetExercise);
 
         restWorkoutSheetExerciseMockMvc
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExercise))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExerciseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -255,12 +266,13 @@ class WorkoutSheetExerciseResourceIT {
         workoutSheetExercise.setExerciseValueType(null);
 
         // Create the WorkoutSheetExercise, which fails.
+        WorkoutSheetExerciseDTO workoutSheetExerciseDTO = workoutSheetExerciseMapper.toDto(workoutSheetExercise);
 
         restWorkoutSheetExerciseMockMvc
             .perform(
                 post(ENTITY_API_URL)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExercise))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExerciseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -964,12 +976,13 @@ class WorkoutSheetExerciseResourceIT {
             .exerciseName(UPDATED_EXERCISE_NAME)
             .exerciseValue(UPDATED_EXERCISE_VALUE)
             .exerciseValueType(UPDATED_EXERCISE_VALUE_TYPE);
+        WorkoutSheetExerciseDTO workoutSheetExerciseDTO = workoutSheetExerciseMapper.toDto(updatedWorkoutSheetExercise);
 
         restWorkoutSheetExerciseMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedWorkoutSheetExercise.getId())
+                put(ENTITY_API_URL_ID, workoutSheetExerciseDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedWorkoutSheetExercise))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExerciseDTO))
             )
             .andExpect(status().isOk());
 
@@ -992,12 +1005,15 @@ class WorkoutSheetExerciseResourceIT {
         int databaseSizeBeforeUpdate = workoutSheetExerciseRepository.findAll().size();
         workoutSheetExercise.setId(count.incrementAndGet());
 
+        // Create the WorkoutSheetExercise
+        WorkoutSheetExerciseDTO workoutSheetExerciseDTO = workoutSheetExerciseMapper.toDto(workoutSheetExercise);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWorkoutSheetExerciseMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, workoutSheetExercise.getId())
+                put(ENTITY_API_URL_ID, workoutSheetExerciseDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExercise))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExerciseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1012,12 +1028,15 @@ class WorkoutSheetExerciseResourceIT {
         int databaseSizeBeforeUpdate = workoutSheetExerciseRepository.findAll().size();
         workoutSheetExercise.setId(count.incrementAndGet());
 
+        // Create the WorkoutSheetExercise
+        WorkoutSheetExerciseDTO workoutSheetExerciseDTO = workoutSheetExerciseMapper.toDto(workoutSheetExercise);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWorkoutSheetExerciseMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExercise))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExerciseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1032,10 +1051,15 @@ class WorkoutSheetExerciseResourceIT {
         int databaseSizeBeforeUpdate = workoutSheetExerciseRepository.findAll().size();
         workoutSheetExercise.setId(count.incrementAndGet());
 
+        // Create the WorkoutSheetExercise
+        WorkoutSheetExerciseDTO workoutSheetExerciseDTO = workoutSheetExerciseMapper.toDto(workoutSheetExercise);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWorkoutSheetExerciseMockMvc
             .perform(
-                put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutSheetExercise))
+                put(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExerciseDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 
@@ -1132,12 +1156,15 @@ class WorkoutSheetExerciseResourceIT {
         int databaseSizeBeforeUpdate = workoutSheetExerciseRepository.findAll().size();
         workoutSheetExercise.setId(count.incrementAndGet());
 
+        // Create the WorkoutSheetExercise
+        WorkoutSheetExerciseDTO workoutSheetExerciseDTO = workoutSheetExerciseMapper.toDto(workoutSheetExercise);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWorkoutSheetExerciseMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, workoutSheetExercise.getId())
+                patch(ENTITY_API_URL_ID, workoutSheetExerciseDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExercise))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExerciseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1152,12 +1179,15 @@ class WorkoutSheetExerciseResourceIT {
         int databaseSizeBeforeUpdate = workoutSheetExerciseRepository.findAll().size();
         workoutSheetExercise.setId(count.incrementAndGet());
 
+        // Create the WorkoutSheetExercise
+        WorkoutSheetExerciseDTO workoutSheetExerciseDTO = workoutSheetExerciseMapper.toDto(workoutSheetExercise);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWorkoutSheetExerciseMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExercise))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExerciseDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1172,12 +1202,15 @@ class WorkoutSheetExerciseResourceIT {
         int databaseSizeBeforeUpdate = workoutSheetExerciseRepository.findAll().size();
         workoutSheetExercise.setId(count.incrementAndGet());
 
+        // Create the WorkoutSheetExercise
+        WorkoutSheetExerciseDTO workoutSheetExerciseDTO = workoutSheetExerciseMapper.toDto(workoutSheetExercise);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWorkoutSheetExerciseMockMvc
             .perform(
                 patch(ENTITY_API_URL)
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExercise))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutSheetExerciseDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

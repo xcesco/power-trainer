@@ -4,6 +4,8 @@ import com.abubusoft.powertrainer.domain.*; // for static metamodels
 import com.abubusoft.powertrainer.domain.Workout;
 import com.abubusoft.powertrainer.repository.WorkoutRepository;
 import com.abubusoft.powertrainer.service.criteria.WorkoutCriteria;
+import com.abubusoft.powertrainer.service.dto.WorkoutDTO;
+import com.abubusoft.powertrainer.service.mapper.WorkoutMapper;
 import java.util.List;
 import javax.persistence.criteria.JoinType;
 import org.slf4j.Logger;
@@ -19,7 +21,7 @@ import tech.jhipster.service.QueryService;
  * Service for executing complex queries for {@link Workout} entities in the database.
  * The main input is a {@link WorkoutCriteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link List} of {@link Workout} or a {@link Page} of {@link Workout} which fulfills the criteria.
+ * It returns a {@link List} of {@link WorkoutDTO} or a {@link Page} of {@link WorkoutDTO} which fulfills the criteria.
  */
 @Service
 @Transactional(readOnly = true)
@@ -29,33 +31,36 @@ public class WorkoutQueryService extends QueryService<Workout> {
 
     private final WorkoutRepository workoutRepository;
 
-    public WorkoutQueryService(WorkoutRepository workoutRepository) {
+    private final WorkoutMapper workoutMapper;
+
+    public WorkoutQueryService(WorkoutRepository workoutRepository, WorkoutMapper workoutMapper) {
         this.workoutRepository = workoutRepository;
+        this.workoutMapper = workoutMapper;
     }
 
     /**
-     * Return a {@link List} of {@link Workout} which matches the criteria from the database.
+     * Return a {@link List} of {@link WorkoutDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public List<Workout> findByCriteria(WorkoutCriteria criteria) {
+    public List<WorkoutDTO> findByCriteria(WorkoutCriteria criteria) {
         log.debug("find by criteria : {}", criteria);
         final Specification<Workout> specification = createSpecification(criteria);
-        return workoutRepository.findAll(specification);
+        return workoutMapper.toDto(workoutRepository.findAll(specification));
     }
 
     /**
-     * Return a {@link Page} of {@link Workout} which matches the criteria from the database.
+     * Return a {@link Page} of {@link WorkoutDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public Page<Workout> findByCriteria(WorkoutCriteria criteria, Pageable page) {
+    public Page<WorkoutDTO> findByCriteria(WorkoutCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Workout> specification = createSpecification(criteria);
-        return workoutRepository.findAll(specification, page);
+        return workoutRepository.findAll(specification, page).map(workoutMapper::toDto);
     }
 
     /**

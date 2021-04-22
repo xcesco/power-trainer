@@ -10,6 +10,8 @@ import com.abubusoft.powertrainer.domain.Exercise;
 import com.abubusoft.powertrainer.domain.Muscle;
 import com.abubusoft.powertrainer.repository.MuscleRepository;
 import com.abubusoft.powertrainer.service.criteria.MuscleCriteria;
+import com.abubusoft.powertrainer.service.dto.MuscleDTO;
+import com.abubusoft.powertrainer.service.mapper.MuscleMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -55,6 +57,9 @@ class MuscleResourceIT {
 
     @Autowired
     private MuscleRepository muscleRepository;
+
+    @Autowired
+    private MuscleMapper muscleMapper;
 
     @Autowired
     private EntityManager em;
@@ -106,8 +111,9 @@ class MuscleResourceIT {
     void createMuscle() throws Exception {
         int databaseSizeBeforeCreate = muscleRepository.findAll().size();
         // Create the Muscle
+        MuscleDTO muscleDTO = muscleMapper.toDto(muscle);
         restMuscleMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(muscle)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(muscleDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Muscle in the database
@@ -126,12 +132,13 @@ class MuscleResourceIT {
     void createMuscleWithExistingId() throws Exception {
         // Create the Muscle with an existing ID
         muscle.setId(1L);
+        MuscleDTO muscleDTO = muscleMapper.toDto(muscle);
 
         int databaseSizeBeforeCreate = muscleRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restMuscleMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(muscle)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(muscleDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Muscle in the database
@@ -147,9 +154,10 @@ class MuscleResourceIT {
         muscle.setUuid(null);
 
         // Create the Muscle, which fails.
+        MuscleDTO muscleDTO = muscleMapper.toDto(muscle);
 
         restMuscleMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(muscle)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(muscleDTO)))
             .andExpect(status().isBadRequest());
 
         List<Muscle> muscleList = muscleRepository.findAll();
@@ -164,9 +172,10 @@ class MuscleResourceIT {
         muscle.setName(null);
 
         // Create the Muscle, which fails.
+        MuscleDTO muscleDTO = muscleMapper.toDto(muscle);
 
         restMuscleMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(muscle)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(muscleDTO)))
             .andExpect(status().isBadRequest());
 
         List<Muscle> muscleList = muscleRepository.findAll();
@@ -523,12 +532,13 @@ class MuscleResourceIT {
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE)
             .note(UPDATED_NOTE);
+        MuscleDTO muscleDTO = muscleMapper.toDto(updatedMuscle);
 
         restMuscleMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedMuscle.getId())
+                put(ENTITY_API_URL_ID, muscleDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedMuscle))
+                    .content(TestUtil.convertObjectToJsonBytes(muscleDTO))
             )
             .andExpect(status().isOk());
 
@@ -549,12 +559,15 @@ class MuscleResourceIT {
         int databaseSizeBeforeUpdate = muscleRepository.findAll().size();
         muscle.setId(count.incrementAndGet());
 
+        // Create the Muscle
+        MuscleDTO muscleDTO = muscleMapper.toDto(muscle);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMuscleMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, muscle.getId())
+                put(ENTITY_API_URL_ID, muscleDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(muscle))
+                    .content(TestUtil.convertObjectToJsonBytes(muscleDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -569,12 +582,15 @@ class MuscleResourceIT {
         int databaseSizeBeforeUpdate = muscleRepository.findAll().size();
         muscle.setId(count.incrementAndGet());
 
+        // Create the Muscle
+        MuscleDTO muscleDTO = muscleMapper.toDto(muscle);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restMuscleMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(muscle))
+                    .content(TestUtil.convertObjectToJsonBytes(muscleDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -589,9 +605,12 @@ class MuscleResourceIT {
         int databaseSizeBeforeUpdate = muscleRepository.findAll().size();
         muscle.setId(count.incrementAndGet());
 
+        // Create the Muscle
+        MuscleDTO muscleDTO = muscleMapper.toDto(muscle);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restMuscleMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(muscle)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(muscleDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Muscle in the database
@@ -681,12 +700,15 @@ class MuscleResourceIT {
         int databaseSizeBeforeUpdate = muscleRepository.findAll().size();
         muscle.setId(count.incrementAndGet());
 
+        // Create the Muscle
+        MuscleDTO muscleDTO = muscleMapper.toDto(muscle);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMuscleMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, muscle.getId())
+                patch(ENTITY_API_URL_ID, muscleDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(muscle))
+                    .content(TestUtil.convertObjectToJsonBytes(muscleDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -701,12 +723,15 @@ class MuscleResourceIT {
         int databaseSizeBeforeUpdate = muscleRepository.findAll().size();
         muscle.setId(count.incrementAndGet());
 
+        // Create the Muscle
+        MuscleDTO muscleDTO = muscleMapper.toDto(muscle);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restMuscleMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(muscle))
+                    .content(TestUtil.convertObjectToJsonBytes(muscleDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -721,9 +746,14 @@ class MuscleResourceIT {
         int databaseSizeBeforeUpdate = muscleRepository.findAll().size();
         muscle.setId(count.incrementAndGet());
 
+        // Create the Muscle
+        MuscleDTO muscleDTO = muscleMapper.toDto(muscle);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restMuscleMockMvc
-            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(muscle)))
+            .perform(
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(muscleDTO))
+            )
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Muscle in the database

@@ -13,6 +13,8 @@ import com.abubusoft.powertrainer.domain.enumeration.WorkoutStatus;
 import com.abubusoft.powertrainer.domain.enumeration.WorkoutStepType;
 import com.abubusoft.powertrainer.repository.WorkoutStepRepository;
 import com.abubusoft.powertrainer.service.criteria.WorkoutStepCriteria;
+import com.abubusoft.powertrainer.service.dto.WorkoutStepDTO;
+import com.abubusoft.powertrainer.service.mapper.WorkoutStepMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -75,6 +77,9 @@ class WorkoutStepResourceIT {
     private WorkoutStepRepository workoutStepRepository;
 
     @Autowired
+    private WorkoutStepMapper workoutStepMapper;
+
+    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -132,8 +137,11 @@ class WorkoutStepResourceIT {
     void createWorkoutStep() throws Exception {
         int databaseSizeBeforeCreate = workoutStepRepository.findAll().size();
         // Create the WorkoutStep
+        WorkoutStepDTO workoutStepDTO = workoutStepMapper.toDto(workoutStep);
         restWorkoutStepMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStep)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStepDTO))
+            )
             .andExpect(status().isCreated());
 
         // Validate the WorkoutStep in the database
@@ -156,12 +164,15 @@ class WorkoutStepResourceIT {
     void createWorkoutStepWithExistingId() throws Exception {
         // Create the WorkoutStep with an existing ID
         workoutStep.setId(1L);
+        WorkoutStepDTO workoutStepDTO = workoutStepMapper.toDto(workoutStep);
 
         int databaseSizeBeforeCreate = workoutStepRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restWorkoutStepMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStep)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStepDTO))
+            )
             .andExpect(status().isBadRequest());
 
         // Validate the WorkoutStep in the database
@@ -177,9 +188,12 @@ class WorkoutStepResourceIT {
         workoutStep.setUuid(null);
 
         // Create the WorkoutStep, which fails.
+        WorkoutStepDTO workoutStepDTO = workoutStepMapper.toDto(workoutStep);
 
         restWorkoutStepMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStep)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStepDTO))
+            )
             .andExpect(status().isBadRequest());
 
         List<WorkoutStep> workoutStepList = workoutStepRepository.findAll();
@@ -194,9 +208,12 @@ class WorkoutStepResourceIT {
         workoutStep.setExerciseUuid(null);
 
         // Create the WorkoutStep, which fails.
+        WorkoutStepDTO workoutStepDTO = workoutStepMapper.toDto(workoutStep);
 
         restWorkoutStepMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStep)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStepDTO))
+            )
             .andExpect(status().isBadRequest());
 
         List<WorkoutStep> workoutStepList = workoutStepRepository.findAll();
@@ -211,9 +228,12 @@ class WorkoutStepResourceIT {
         workoutStep.setExerciseName(null);
 
         // Create the WorkoutStep, which fails.
+        WorkoutStepDTO workoutStepDTO = workoutStepMapper.toDto(workoutStep);
 
         restWorkoutStepMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStep)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStepDTO))
+            )
             .andExpect(status().isBadRequest());
 
         List<WorkoutStep> workoutStepList = workoutStepRepository.findAll();
@@ -228,9 +248,12 @@ class WorkoutStepResourceIT {
         workoutStep.setExerciseValue(null);
 
         // Create the WorkoutStep, which fails.
+        WorkoutStepDTO workoutStepDTO = workoutStepMapper.toDto(workoutStep);
 
         restWorkoutStepMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStep)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStepDTO))
+            )
             .andExpect(status().isBadRequest());
 
         List<WorkoutStep> workoutStepList = workoutStepRepository.findAll();
@@ -245,9 +268,12 @@ class WorkoutStepResourceIT {
         workoutStep.setExerciseValueType(null);
 
         // Create the WorkoutStep, which fails.
+        WorkoutStepDTO workoutStepDTO = workoutStepMapper.toDto(workoutStep);
 
         restWorkoutStepMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStep)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStepDTO))
+            )
             .andExpect(status().isBadRequest());
 
         List<WorkoutStep> workoutStepList = workoutStepRepository.findAll();
@@ -1062,12 +1088,13 @@ class WorkoutStepResourceIT {
             .exerciseName(UPDATED_EXERCISE_NAME)
             .exerciseValue(UPDATED_EXERCISE_VALUE)
             .exerciseValueType(UPDATED_EXERCISE_VALUE_TYPE);
+        WorkoutStepDTO workoutStepDTO = workoutStepMapper.toDto(updatedWorkoutStep);
 
         restWorkoutStepMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedWorkoutStep.getId())
+                put(ENTITY_API_URL_ID, workoutStepDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedWorkoutStep))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutStepDTO))
             )
             .andExpect(status().isOk());
 
@@ -1092,12 +1119,15 @@ class WorkoutStepResourceIT {
         int databaseSizeBeforeUpdate = workoutStepRepository.findAll().size();
         workoutStep.setId(count.incrementAndGet());
 
+        // Create the WorkoutStep
+        WorkoutStepDTO workoutStepDTO = workoutStepMapper.toDto(workoutStep);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWorkoutStepMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, workoutStep.getId())
+                put(ENTITY_API_URL_ID, workoutStepDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workoutStep))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutStepDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1112,12 +1142,15 @@ class WorkoutStepResourceIT {
         int databaseSizeBeforeUpdate = workoutStepRepository.findAll().size();
         workoutStep.setId(count.incrementAndGet());
 
+        // Create the WorkoutStep
+        WorkoutStepDTO workoutStepDTO = workoutStepMapper.toDto(workoutStep);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWorkoutStepMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(workoutStep))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutStepDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1132,9 +1165,12 @@ class WorkoutStepResourceIT {
         int databaseSizeBeforeUpdate = workoutStepRepository.findAll().size();
         workoutStep.setId(count.incrementAndGet());
 
+        // Create the WorkoutStep
+        WorkoutStepDTO workoutStepDTO = workoutStepMapper.toDto(workoutStep);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWorkoutStepMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStep)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(workoutStepDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the WorkoutStep in the database
@@ -1231,12 +1267,15 @@ class WorkoutStepResourceIT {
         int databaseSizeBeforeUpdate = workoutStepRepository.findAll().size();
         workoutStep.setId(count.incrementAndGet());
 
+        // Create the WorkoutStep
+        WorkoutStepDTO workoutStepDTO = workoutStepMapper.toDto(workoutStep);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restWorkoutStepMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, workoutStep.getId())
+                patch(ENTITY_API_URL_ID, workoutStepDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(workoutStep))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutStepDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1251,12 +1290,15 @@ class WorkoutStepResourceIT {
         int databaseSizeBeforeUpdate = workoutStepRepository.findAll().size();
         workoutStep.setId(count.incrementAndGet());
 
+        // Create the WorkoutStep
+        WorkoutStepDTO workoutStepDTO = workoutStepMapper.toDto(workoutStep);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWorkoutStepMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(workoutStep))
+                    .content(TestUtil.convertObjectToJsonBytes(workoutStepDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -1271,10 +1313,13 @@ class WorkoutStepResourceIT {
         int databaseSizeBeforeUpdate = workoutStepRepository.findAll().size();
         workoutStep.setId(count.incrementAndGet());
 
+        // Create the WorkoutStep
+        WorkoutStepDTO workoutStepDTO = workoutStepMapper.toDto(workoutStep);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restWorkoutStepMockMvc
             .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(workoutStep))
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(workoutStepDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

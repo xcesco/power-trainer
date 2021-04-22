@@ -1,29 +1,29 @@
 package com.abubusoft.powertrainer.service;
 
-import com.abubusoft.powertrainer.domain.MisurationType;
+import com.abubusoft.powertrainer.service.dto.MisurationTypeDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Service Interface for managing {@link MisurationType}.
+ * Service Interface for managing {@link com.abubusoft.powertrainer.domain.MisurationType}.
  */
 public interface MisurationTypeService {
     /**
      * Save a misurationType.
      *
-     * @param misurationType the entity to save.
+     * @param misurationTypeDTO the entity to save.
      * @return the persisted entity.
      */
-    MisurationType save(MisurationType misurationType);
+    MisurationTypeDTO save(MisurationTypeDTO misurationTypeDTO);
 
     /**
      * Partially updates a misurationType.
      *
-     * @param misurationType the entity to update partially.
+     * @param misurationTypeDTO the entity to update partially.
      * @return the persisted entity.
      */
-    Optional<MisurationType> partialUpdate(MisurationType misurationType);
+    Optional<MisurationTypeDTO> partialUpdate(MisurationTypeDTO misurationTypeDTO);
 
     /**
      * Get all the misurationTypes.
@@ -31,7 +31,7 @@ public interface MisurationTypeService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<MisurationType> findAll(Pageable pageable);
+    Page<MisurationTypeDTO> findAll(Pageable pageable);
 
     /**
      * Get the "id" misurationType.
@@ -39,7 +39,7 @@ public interface MisurationTypeService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<MisurationType> findOne(Long id);
+    Optional<MisurationTypeDTO> findOne(Long id);
 
     /**
      * Delete the "id" misurationType.

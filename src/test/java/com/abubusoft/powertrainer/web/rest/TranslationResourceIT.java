@@ -10,6 +10,8 @@ import com.abubusoft.powertrainer.domain.Language;
 import com.abubusoft.powertrainer.domain.Translation;
 import com.abubusoft.powertrainer.repository.TranslationRepository;
 import com.abubusoft.powertrainer.service.criteria.TranslationCriteria;
+import com.abubusoft.powertrainer.service.dto.TranslationDTO;
+import com.abubusoft.powertrainer.service.mapper.TranslationMapper;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -48,6 +50,9 @@ class TranslationResourceIT {
 
     @Autowired
     private TranslationRepository translationRepository;
+
+    @Autowired
+    private TranslationMapper translationMapper;
 
     @Autowired
     private EntityManager em;
@@ -89,8 +94,11 @@ class TranslationResourceIT {
     void createTranslation() throws Exception {
         int databaseSizeBeforeCreate = translationRepository.findAll().size();
         // Create the Translation
+        TranslationDTO translationDTO = translationMapper.toDto(translation);
         restTranslationMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(translation)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(translationDTO))
+            )
             .andExpect(status().isCreated());
 
         // Validate the Translation in the database
@@ -107,12 +115,15 @@ class TranslationResourceIT {
     void createTranslationWithExistingId() throws Exception {
         // Create the Translation with an existing ID
         translation.setId(1L);
+        TranslationDTO translationDTO = translationMapper.toDto(translation);
 
         int databaseSizeBeforeCreate = translationRepository.findAll().size();
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restTranslationMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(translation)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(translationDTO))
+            )
             .andExpect(status().isBadRequest());
 
         // Validate the Translation in the database
@@ -128,9 +139,12 @@ class TranslationResourceIT {
         translation.setEntityType(null);
 
         // Create the Translation, which fails.
+        TranslationDTO translationDTO = translationMapper.toDto(translation);
 
         restTranslationMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(translation)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(translationDTO))
+            )
             .andExpect(status().isBadRequest());
 
         List<Translation> translationList = translationRepository.findAll();
@@ -145,9 +159,12 @@ class TranslationResourceIT {
         translation.setEntityUuid(null);
 
         // Create the Translation, which fails.
+        TranslationDTO translationDTO = translationMapper.toDto(translation);
 
         restTranslationMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(translation)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(translationDTO))
+            )
             .andExpect(status().isBadRequest());
 
         List<Translation> translationList = translationRepository.findAll();
@@ -162,9 +179,12 @@ class TranslationResourceIT {
         translation.setValue(null);
 
         // Create the Translation, which fails.
+        TranslationDTO translationDTO = translationMapper.toDto(translation);
 
         restTranslationMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(translation)))
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(translationDTO))
+            )
             .andExpect(status().isBadRequest());
 
         List<Translation> translationList = translationRepository.findAll();
@@ -536,12 +556,13 @@ class TranslationResourceIT {
         // Disconnect from session so that the updates on updatedTranslation are not directly saved in db
         em.detach(updatedTranslation);
         updatedTranslation.entityType(UPDATED_ENTITY_TYPE).entityUuid(UPDATED_ENTITY_UUID).value(UPDATED_VALUE);
+        TranslationDTO translationDTO = translationMapper.toDto(updatedTranslation);
 
         restTranslationMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, updatedTranslation.getId())
+                put(ENTITY_API_URL_ID, translationDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(updatedTranslation))
+                    .content(TestUtil.convertObjectToJsonBytes(translationDTO))
             )
             .andExpect(status().isOk());
 
@@ -560,12 +581,15 @@ class TranslationResourceIT {
         int databaseSizeBeforeUpdate = translationRepository.findAll().size();
         translation.setId(count.incrementAndGet());
 
+        // Create the Translation
+        TranslationDTO translationDTO = translationMapper.toDto(translation);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTranslationMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, translation.getId())
+                put(ENTITY_API_URL_ID, translationDTO.getId())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(translation))
+                    .content(TestUtil.convertObjectToJsonBytes(translationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -580,12 +604,15 @@ class TranslationResourceIT {
         int databaseSizeBeforeUpdate = translationRepository.findAll().size();
         translation.setId(count.incrementAndGet());
 
+        // Create the Translation
+        TranslationDTO translationDTO = translationMapper.toDto(translation);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restTranslationMockMvc
             .perform(
                 put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(TestUtil.convertObjectToJsonBytes(translation))
+                    .content(TestUtil.convertObjectToJsonBytes(translationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -600,9 +627,12 @@ class TranslationResourceIT {
         int databaseSizeBeforeUpdate = translationRepository.findAll().size();
         translation.setId(count.incrementAndGet());
 
+        // Create the Translation
+        TranslationDTO translationDTO = translationMapper.toDto(translation);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restTranslationMockMvc
-            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(translation)))
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(translationDTO)))
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the Translation in the database
@@ -678,12 +708,15 @@ class TranslationResourceIT {
         int databaseSizeBeforeUpdate = translationRepository.findAll().size();
         translation.setId(count.incrementAndGet());
 
+        // Create the Translation
+        TranslationDTO translationDTO = translationMapper.toDto(translation);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTranslationMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, translation.getId())
+                patch(ENTITY_API_URL_ID, translationDTO.getId())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(translation))
+                    .content(TestUtil.convertObjectToJsonBytes(translationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -698,12 +731,15 @@ class TranslationResourceIT {
         int databaseSizeBeforeUpdate = translationRepository.findAll().size();
         translation.setId(count.incrementAndGet());
 
+        // Create the Translation
+        TranslationDTO translationDTO = translationMapper.toDto(translation);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restTranslationMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
-                    .content(TestUtil.convertObjectToJsonBytes(translation))
+                    .content(TestUtil.convertObjectToJsonBytes(translationDTO))
             )
             .andExpect(status().isBadRequest());
 
@@ -718,10 +754,13 @@ class TranslationResourceIT {
         int databaseSizeBeforeUpdate = translationRepository.findAll().size();
         translation.setId(count.incrementAndGet());
 
+        // Create the Translation
+        TranslationDTO translationDTO = translationMapper.toDto(translation);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restTranslationMockMvc
             .perform(
-                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(translation))
+                patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(translationDTO))
             )
             .andExpect(status().isMethodNotAllowed());
 

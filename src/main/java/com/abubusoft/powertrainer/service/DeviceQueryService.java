@@ -4,6 +4,8 @@ import com.abubusoft.powertrainer.domain.*; // for static metamodels
 import com.abubusoft.powertrainer.domain.Device;
 import com.abubusoft.powertrainer.repository.DeviceRepository;
 import com.abubusoft.powertrainer.service.criteria.DeviceCriteria;
+import com.abubusoft.powertrainer.service.dto.DeviceDTO;
+import com.abubusoft.powertrainer.service.mapper.DeviceMapper;
 import java.util.List;
 import javax.persistence.criteria.JoinType;
 import org.slf4j.Logger;
@@ -19,7 +21,7 @@ import tech.jhipster.service.QueryService;
  * Service for executing complex queries for {@link Device} entities in the database.
  * The main input is a {@link DeviceCriteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link List} of {@link Device} or a {@link Page} of {@link Device} which fulfills the criteria.
+ * It returns a {@link List} of {@link DeviceDTO} or a {@link Page} of {@link DeviceDTO} which fulfills the criteria.
  */
 @Service
 @Transactional(readOnly = true)
@@ -29,33 +31,36 @@ public class DeviceQueryService extends QueryService<Device> {
 
     private final DeviceRepository deviceRepository;
 
-    public DeviceQueryService(DeviceRepository deviceRepository) {
+    private final DeviceMapper deviceMapper;
+
+    public DeviceQueryService(DeviceRepository deviceRepository, DeviceMapper deviceMapper) {
         this.deviceRepository = deviceRepository;
+        this.deviceMapper = deviceMapper;
     }
 
     /**
-     * Return a {@link List} of {@link Device} which matches the criteria from the database.
+     * Return a {@link List} of {@link DeviceDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public List<Device> findByCriteria(DeviceCriteria criteria) {
+    public List<DeviceDTO> findByCriteria(DeviceCriteria criteria) {
         log.debug("find by criteria : {}", criteria);
         final Specification<Device> specification = createSpecification(criteria);
-        return deviceRepository.findAll(specification);
+        return deviceMapper.toDto(deviceRepository.findAll(specification));
     }
 
     /**
-     * Return a {@link Page} of {@link Device} which matches the criteria from the database.
+     * Return a {@link Page} of {@link DeviceDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public Page<Device> findByCriteria(DeviceCriteria criteria, Pageable page) {
+    public Page<DeviceDTO> findByCriteria(DeviceCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<Device> specification = createSpecification(criteria);
-        return deviceRepository.findAll(specification, page);
+        return deviceRepository.findAll(specification, page).map(deviceMapper::toDto);
     }
 
     /**

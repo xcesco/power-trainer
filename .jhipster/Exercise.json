@@ -55,7 +55,7 @@
     }
   ],
   "entityTableName": "exercises",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "pagination",
   "service": "serviceImpl",
   "jpaMetamodelFiltering": true,

@@ -3,6 +3,8 @@ package com.abubusoft.powertrainer.service.impl;
 import com.abubusoft.powertrainer.domain.Calendar;
 import com.abubusoft.powertrainer.repository.CalendarRepository;
 import com.abubusoft.powertrainer.service.CalendarService;
+import com.abubusoft.powertrainer.service.dto.CalendarDTO;
+import com.abubusoft.powertrainer.service.mapper.CalendarMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,52 +24,49 @@ public class CalendarServiceImpl implements CalendarService {
 
     private final CalendarRepository calendarRepository;
 
-    public CalendarServiceImpl(CalendarRepository calendarRepository) {
+    private final CalendarMapper calendarMapper;
+
+    public CalendarServiceImpl(CalendarRepository calendarRepository, CalendarMapper calendarMapper) {
         this.calendarRepository = calendarRepository;
+        this.calendarMapper = calendarMapper;
     }
 
     @Override
-    public Calendar save(Calendar calendar) {
-        log.debug("Request to save Calendar : {}", calendar);
-        return calendarRepository.save(calendar);
+    public CalendarDTO save(CalendarDTO calendarDTO) {
+        log.debug("Request to save Calendar : {}", calendarDTO);
+        Calendar calendar = calendarMapper.toEntity(calendarDTO);
+        calendar = calendarRepository.save(calendar);
+        return calendarMapper.toDto(calendar);
     }
 
     @Override
-    public Optional<Calendar> partialUpdate(Calendar calendar) {
-        log.debug("Request to partially update Calendar : {}", calendar);
+    public Optional<CalendarDTO> partialUpdate(CalendarDTO calendarDTO) {
+        log.debug("Request to partially update Calendar : {}", calendarDTO);
 
         return calendarRepository
-            .findById(calendar.getId())
+            .findById(calendarDTO.getId())
             .map(
                 existingCalendar -> {
-                    if (calendar.getUuid() != null) {
-                        existingCalendar.setUuid(calendar.getUuid());
-                    }
-                    if (calendar.getName() != null) {
-                        existingCalendar.setName(calendar.getName());
-                    }
-                    if (calendar.getOwner() != null) {
-                        existingCalendar.setOwner(calendar.getOwner());
-                    }
-
+                    calendarMapper.partialUpdate(existingCalendar, calendarDTO);
                     return existingCalendar;
                 }
             )
-            .map(calendarRepository::save);
+            .map(calendarRepository::save)
+            .map(calendarMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Calendar> findAll(Pageable pageable) {
+    public Page<CalendarDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Calendars");
-        return calendarRepository.findAll(pageable);
+        return calendarRepository.findAll(pageable).map(calendarMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Calendar> findOne(Long id) {
+    public Optional<CalendarDTO> findOne(Long id) {
         log.debug("Request to get Calendar : {}", id);
-        return calendarRepository.findById(id);
+        return calendarRepository.findById(id).map(calendarMapper::toDto);
     }
 
     @Override

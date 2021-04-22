@@ -3,6 +3,8 @@ package com.abubusoft.powertrainer.service.impl;
 import com.abubusoft.powertrainer.domain.Language;
 import com.abubusoft.powertrainer.repository.LanguageRepository;
 import com.abubusoft.powertrainer.service.LanguageService;
+import com.abubusoft.powertrainer.service.dto.LanguageDTO;
+import com.abubusoft.powertrainer.service.mapper.LanguageMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,49 +24,49 @@ public class LanguageServiceImpl implements LanguageService {
 
     private final LanguageRepository languageRepository;
 
-    public LanguageServiceImpl(LanguageRepository languageRepository) {
+    private final LanguageMapper languageMapper;
+
+    public LanguageServiceImpl(LanguageRepository languageRepository, LanguageMapper languageMapper) {
         this.languageRepository = languageRepository;
+        this.languageMapper = languageMapper;
     }
 
     @Override
-    public Language save(Language language) {
-        log.debug("Request to save Language : {}", language);
-        return languageRepository.save(language);
+    public LanguageDTO save(LanguageDTO languageDTO) {
+        log.debug("Request to save Language : {}", languageDTO);
+        Language language = languageMapper.toEntity(languageDTO);
+        language = languageRepository.save(language);
+        return languageMapper.toDto(language);
     }
 
     @Override
-    public Optional<Language> partialUpdate(Language language) {
-        log.debug("Request to partially update Language : {}", language);
+    public Optional<LanguageDTO> partialUpdate(LanguageDTO languageDTO) {
+        log.debug("Request to partially update Language : {}", languageDTO);
 
         return languageRepository
-            .findById(language.getId())
+            .findById(languageDTO.getId())
             .map(
                 existingLanguage -> {
-                    if (language.getCode() != null) {
-                        existingLanguage.setCode(language.getCode());
-                    }
-                    if (language.getName() != null) {
-                        existingLanguage.setName(language.getName());
-                    }
-
+                    languageMapper.partialUpdate(existingLanguage, languageDTO);
                     return existingLanguage;
                 }
             )
-            .map(languageRepository::save);
+            .map(languageRepository::save)
+            .map(languageMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Language> findAll(Pageable pageable) {
+    public Page<LanguageDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Languages");
-        return languageRepository.findAll(pageable);
+        return languageRepository.findAll(pageable).map(languageMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Language> findOne(Long id) {
+    public Optional<LanguageDTO> findOne(Long id) {
         log.debug("Request to get Language : {}", id);
-        return languageRepository.findById(id);
+        return languageRepository.findById(id).map(languageMapper::toDto);
     }
 
     @Override

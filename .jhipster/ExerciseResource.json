@@ -40,7 +40,7 @@
     }
   ],
   "entityTableName": "exercise_resources",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "pagination",
   "service": "serviceImpl",
   "jpaMetamodelFiltering": true,

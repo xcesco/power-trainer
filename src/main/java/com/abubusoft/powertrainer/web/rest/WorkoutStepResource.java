@@ -1,10 +1,10 @@
 package com.abubusoft.powertrainer.web.rest;
 
-import com.abubusoft.powertrainer.domain.WorkoutStep;
 import com.abubusoft.powertrainer.repository.WorkoutStepRepository;
 import com.abubusoft.powertrainer.service.WorkoutStepQueryService;
 import com.abubusoft.powertrainer.service.WorkoutStepService;
 import com.abubusoft.powertrainer.service.criteria.WorkoutStepCriteria;
+import com.abubusoft.powertrainer.service.dto.WorkoutStepDTO;
 import com.abubusoft.powertrainer.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -60,17 +60,17 @@ public class WorkoutStepResource {
     /**
      * {@code POST  /workout-steps} : Create a new workoutStep.
      *
-     * @param workoutStep the workoutStep to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new workoutStep, or with status {@code 400 (Bad Request)} if the workoutStep has already an ID.
+     * @param workoutStepDTO the workoutStepDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new workoutStepDTO, or with status {@code 400 (Bad Request)} if the workoutStep has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/workout-steps")
-    public ResponseEntity<WorkoutStep> createWorkoutStep(@Valid @RequestBody WorkoutStep workoutStep) throws URISyntaxException {
-        log.debug("REST request to save WorkoutStep : {}", workoutStep);
-        if (workoutStep.getId() != null) {
+    public ResponseEntity<WorkoutStepDTO> createWorkoutStep(@Valid @RequestBody WorkoutStepDTO workoutStepDTO) throws URISyntaxException {
+        log.debug("REST request to save WorkoutStep : {}", workoutStepDTO);
+        if (workoutStepDTO.getId() != null) {
             throw new BadRequestAlertException("A new workoutStep cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        WorkoutStep result = workoutStepService.save(workoutStep);
+        WorkoutStepDTO result = workoutStepService.save(workoutStepDTO);
         return ResponseEntity
             .created(new URI("/api/workout-steps/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -80,23 +80,23 @@ public class WorkoutStepResource {
     /**
      * {@code PUT  /workout-steps/:id} : Updates an existing workoutStep.
      *
-     * @param id the id of the workoutStep to save.
-     * @param workoutStep the workoutStep to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated workoutStep,
-     * or with status {@code 400 (Bad Request)} if the workoutStep is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the workoutStep couldn't be updated.
+     * @param id the id of the workoutStepDTO to save.
+     * @param workoutStepDTO the workoutStepDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated workoutStepDTO,
+     * or with status {@code 400 (Bad Request)} if the workoutStepDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the workoutStepDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/workout-steps/{id}")
-    public ResponseEntity<WorkoutStep> updateWorkoutStep(
+    public ResponseEntity<WorkoutStepDTO> updateWorkoutStep(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody WorkoutStep workoutStep
+        @Valid @RequestBody WorkoutStepDTO workoutStepDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update WorkoutStep : {}, {}", id, workoutStep);
-        if (workoutStep.getId() == null) {
+        log.debug("REST request to update WorkoutStep : {}, {}", id, workoutStepDTO);
+        if (workoutStepDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, workoutStep.getId())) {
+        if (!Objects.equals(id, workoutStepDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -104,34 +104,34 @@ public class WorkoutStepResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        WorkoutStep result = workoutStepService.save(workoutStep);
+        WorkoutStepDTO result = workoutStepService.save(workoutStepDTO);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, workoutStep.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, workoutStepDTO.getId().toString()))
             .body(result);
     }
 
     /**
      * {@code PATCH  /workout-steps/:id} : Partial updates given fields of an existing workoutStep, field will ignore if it is null
      *
-     * @param id the id of the workoutStep to save.
-     * @param workoutStep the workoutStep to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated workoutStep,
-     * or with status {@code 400 (Bad Request)} if the workoutStep is not valid,
-     * or with status {@code 404 (Not Found)} if the workoutStep is not found,
-     * or with status {@code 500 (Internal Server Error)} if the workoutStep couldn't be updated.
+     * @param id the id of the workoutStepDTO to save.
+     * @param workoutStepDTO the workoutStepDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated workoutStepDTO,
+     * or with status {@code 400 (Bad Request)} if the workoutStepDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the workoutStepDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the workoutStepDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/workout-steps/{id}", consumes = "application/merge-patch+json")
-    public ResponseEntity<WorkoutStep> partialUpdateWorkoutStep(
+    public ResponseEntity<WorkoutStepDTO> partialUpdateWorkoutStep(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody WorkoutStep workoutStep
+        @NotNull @RequestBody WorkoutStepDTO workoutStepDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update WorkoutStep partially : {}, {}", id, workoutStep);
-        if (workoutStep.getId() == null) {
+        log.debug("REST request to partial update WorkoutStep partially : {}, {}", id, workoutStepDTO);
+        if (workoutStepDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, workoutStep.getId())) {
+        if (!Objects.equals(id, workoutStepDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -139,11 +139,11 @@ public class WorkoutStepResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<WorkoutStep> result = workoutStepService.partialUpdate(workoutStep);
+        Optional<WorkoutStepDTO> result = workoutStepService.partialUpdate(workoutStepDTO);
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, workoutStep.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, workoutStepDTO.getId().toString())
         );
     }
 
@@ -155,9 +155,9 @@ public class WorkoutStepResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of workoutSteps in body.
      */
     @GetMapping("/workout-steps")
-    public ResponseEntity<List<WorkoutStep>> getAllWorkoutSteps(WorkoutStepCriteria criteria, Pageable pageable) {
+    public ResponseEntity<List<WorkoutStepDTO>> getAllWorkoutSteps(WorkoutStepCriteria criteria, Pageable pageable) {
         log.debug("REST request to get WorkoutSteps by criteria: {}", criteria);
-        Page<WorkoutStep> page = workoutStepQueryService.findByCriteria(criteria, pageable);
+        Page<WorkoutStepDTO> page = workoutStepQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -177,20 +177,20 @@ public class WorkoutStepResource {
     /**
      * {@code GET  /workout-steps/:id} : get the "id" workoutStep.
      *
-     * @param id the id of the workoutStep to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the workoutStep, or with status {@code 404 (Not Found)}.
+     * @param id the id of the workoutStepDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the workoutStepDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/workout-steps/{id}")
-    public ResponseEntity<WorkoutStep> getWorkoutStep(@PathVariable Long id) {
+    public ResponseEntity<WorkoutStepDTO> getWorkoutStep(@PathVariable Long id) {
         log.debug("REST request to get WorkoutStep : {}", id);
-        Optional<WorkoutStep> workoutStep = workoutStepService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(workoutStep);
+        Optional<WorkoutStepDTO> workoutStepDTO = workoutStepService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(workoutStepDTO);
     }
 
     /**
      * {@code DELETE  /workout-steps/:id} : delete the "id" workoutStep.
      *
-     * @param id the id of the workoutStep to delete.
+     * @param id the id of the workoutStepDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/workout-steps/{id}")
