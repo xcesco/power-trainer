@@ -2,6 +2,7 @@ import { IExerciseResource } from 'app/entities/exercise-resource/exercise-resou
 import { IMuscle } from 'app/entities/muscle/muscle.model';
 import { IExerciseTool } from 'app/entities/exercise-tool/exercise-tool.model';
 import { ValueType } from 'app/entities/enumerations/value-type.model';
+import { v4 as uuidFunction } from 'uuid';
 
 export interface IExercise {
   id?: number;
@@ -30,7 +31,11 @@ export class Exercise implements IExercise {
     public exerciseResources?: IExerciseResource[] | null,
     public muscles?: IMuscle[] | null,
     public exerciseTools?: IExerciseTool[] | null
-  ) {}
+  ) {
+    if (!this.uuid) {
+      this.uuid = uuidFunction().toString();
+    }
+  }
 }
 
 export function getExerciseIdentifier(exercise: IExercise): number | undefined {

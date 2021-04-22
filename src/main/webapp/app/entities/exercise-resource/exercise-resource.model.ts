@@ -1,5 +1,6 @@
 import { IExercise } from 'app/entities/exercise/exercise.model';
 import { ExerciseResourceType } from 'app/entities/enumerations/exercise-resource-type.model';
+import { v4 as uuidFunction } from 'uuid';
 
 export interface IExerciseResource {
   id?: number;
@@ -24,7 +25,11 @@ export class ExerciseResource implements IExerciseResource {
     public image?: string | null,
     public description?: string | null,
     public exercise?: IExercise | null
-  ) {}
+  ) {
+    if (!this.uuid) {
+      this.uuid = uuidFunction().toString();
+    }
+  }
 }
 
 export function getExerciseResourceIdentifier(exerciseResource: IExerciseResource): number | undefined {

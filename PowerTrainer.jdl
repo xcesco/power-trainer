@@ -238,6 +238,7 @@ relationship ManyToMany {
   Exercise to ExerciseTool
 }
 
+dto * with mapstruct
 paginate * with pagination
 service * with serviceImpl
 filter *

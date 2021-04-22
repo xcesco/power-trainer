@@ -1,4 +1,5 @@
 import { IExercise } from 'app/entities/exercise/exercise.model';
+import { v4 as uuidFunction } from 'uuid';
 
 export interface IMuscle {
   id?: number;
@@ -19,7 +20,11 @@ export class Muscle implements IMuscle {
     public image?: string | null,
     public note?: string | null,
     public exercises?: IExercise[] | null
-  ) {}
+  ) {
+    if (!this.uuid) {
+      this.uuid = uuidFunction().toString();
+    }
+  }
 }
 
 export function getMuscleIdentifier(muscle: IMuscle): number | undefined {

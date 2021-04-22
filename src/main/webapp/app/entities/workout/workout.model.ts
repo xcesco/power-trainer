@@ -3,6 +3,7 @@ import { IWorkoutStep } from 'app/entities/workout-step/workout-step.model';
 import { ICalendar } from 'app/entities/calendar/calendar.model';
 import { WorkoutType } from 'app/entities/enumerations/workout-type.model';
 import { WorkoutStatus } from 'app/entities/enumerations/workout-status.model';
+import { v4 as uuidFunction } from 'uuid';
 
 export interface IWorkout {
   id?: number;
@@ -35,7 +36,11 @@ export class Workout implements IWorkout {
     public note?: string | null,
     public workoutSteps?: IWorkoutStep[] | null,
     public calendar?: ICalendar | null
-  ) {}
+  ) {
+    if (!this.uuid) {
+      this.uuid = uuidFunction().toString();
+    }
+  }
 }
 
 export function getWorkoutIdentifier(workout: IWorkout): number | undefined {

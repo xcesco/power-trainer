@@ -151,7 +151,7 @@ export class ExerciseUpdateComponent implements OnInit {
   protected updateForm(exercise: IExercise): void {
     this.editForm.patchValue({
       id: exercise.id,
-      uuid: exercise.uuid ?? uuid().toString(),
+      uuid: exercise.uuid,
       image: exercise.image,
       imageContentType: exercise.imageContentType,
       name: exercise.name,

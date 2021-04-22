@@ -34,6 +34,11 @@ export class CalendarService {
     return this.http.get<ICalendar>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  findByOwner(owner: string): Observable<EntityArrayResponseType> {
+    const options = createRequestOption({ 'owner.equals': owner });
+    return this.http.get<ICalendar[]>(this.resourceUrl, { params: options, observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<ICalendar[]>(this.resourceUrl, { params: options, observe: 'response' });

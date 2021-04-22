@@ -1,6 +1,7 @@
 import * as dayjs from 'dayjs';
 import { ICalendar } from 'app/entities/calendar/calendar.model';
 import { IMisurationType } from 'app/entities/misuration-type/misuration-type.model';
+import { v4 as uuidFunction } from 'uuid';
 
 export interface IMisuration {
   id?: number;
@@ -25,7 +26,11 @@ export class Misuration implements IMisuration {
     public note?: string | null,
     public calendar?: ICalendar | null,
     public misurationType?: IMisurationType | null
-  ) {}
+  ) {
+    if (!this.uuid) {
+      this.uuid = uuidFunction().toString();
+    }
+  }
 }
 
 export function getMisurationIdentifier(misuration: IMisuration): number | undefined {

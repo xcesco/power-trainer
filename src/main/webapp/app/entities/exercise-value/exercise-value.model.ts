@@ -1,6 +1,7 @@
 import * as dayjs from 'dayjs';
 import { ICalendar } from 'app/entities/calendar/calendar.model';
 import { ValueType } from 'app/entities/enumerations/value-type.model';
+import { v4 as uuidFunction } from 'uuid';
 
 export interface IExerciseValue {
   id?: number;
@@ -23,7 +24,11 @@ export class ExerciseValue implements IExerciseValue {
     public exerciseValue?: number,
     public exerciseValueType?: ValueType,
     public calendar?: ICalendar | null
-  ) {}
+  ) {
+    if (!this.uuid) {
+      this.uuid = uuidFunction().toString();
+    }
+  }
 }
 
 export function getExerciseValueIdentifier(exerciseValue: IExerciseValue): number | undefined {

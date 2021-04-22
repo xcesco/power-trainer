@@ -33,11 +33,11 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="uuid">
-            <span jhiTranslate="powerTrainerApp.exercise.uuid">Uuid</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="image">
-            <span jhiTranslate="powerTrainerApp.exercise.image">Image</span> <fa-icon icon="sort"></fa-icon>
+          <!--          <th scope="col" jhiSortBy="uuid">-->
+          <!--            <span jhiTranslate="powerTrainerApp.exercise.uuid">Uuid</span> <fa-icon icon="sort"></fa-icon>-->
+          <!--          </th>-->
+          <th scope="col">
+            <span jhiTranslate="powerTrainerApp.exercise.image">Image</span>
           </th>
           <th scope="col" jhiSortBy="name">
             <span jhiTranslate="powerTrainerApp.exercise.name">Name</span> <fa-icon icon="sort"></fa-icon>
@@ -59,7 +59,7 @@
           <td>
             <a [routerLink]="['/exercise', exercise.id, 'view']">{{ exercise.id }}</a>
           </td>
-          <td>{{ exercise.uuid }}</td>
+          <!--          <td>{{ exercise.uuid }}</td>-->
           <td>
             <a *ngIf="exercise.image" (click)="openFile(exercise.image, exercise.imageContentType)">
               <img

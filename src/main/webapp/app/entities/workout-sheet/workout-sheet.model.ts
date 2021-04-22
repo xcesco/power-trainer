@@ -1,5 +1,6 @@
 import { IWorkoutSheetExercise } from 'app/entities/workout-sheet-exercise/workout-sheet-exercise.model';
 import { WorkoutType } from 'app/entities/enumerations/workout-type.model';
+import { v4 as uuidFunction } from 'uuid';
 
 export interface IWorkoutSheet {
   id?: number;
@@ -36,7 +37,11 @@ export class WorkoutSheet implements IWorkoutSheet {
     public setRestTime?: number | null,
     public type?: WorkoutType | null,
     public workoutSheetExercises?: IWorkoutSheetExercise[] | null
-  ) {}
+  ) {
+    if (!this.uuid) {
+      this.uuid = uuidFunction().toString();
+    }
+  }
 }
 
 export function getWorkoutSheetIdentifier(workoutSheet: IWorkoutSheet): number | undefined {
